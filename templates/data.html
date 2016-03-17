@@ -1,0 +1,717 @@
+{% extends 'layout.html' %} {% block style %}
+<style>
+#main {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+#plot11 {
+    width: 100%;
+    height: 300px;
+    background-color: #222 !important;
+}
+
+#plot12 {
+    width: 100%;
+    height: 300px;
+    background-color: #222 !important;
+}
+
+#plot21 {
+    width: 100%;
+    height: 500px;
+    background-color: #222 !important;
+}
+
+#plot22 {
+    width: 100%;
+    height: 225px;
+    background-color: #222 !important;
+}
+
+#plot23 {
+    width: 100%;
+    height: 225px;
+    background-color: #222 !important;
+}
+
+#plot3 {
+    width: 100%;
+    height: 500px;
+    background-color: #222 !important;
+    text-align: center;
+    position: relative;
+}
+
+#plot3 p {
+	position: absolute;
+	color: #759AA0;
+	left: 16px;
+	top: 13px;
+}
+
+#plot3 span {
+	position: absolute;
+	left: 14px;
+	top: 38px;
+	font-size: 14px;
+	color: #759AA0;
+	display: block;
+}
+#plot3 span:hover {
+	cursor: pointer;
+}
+
+#plot3 .foreground path {
+    fill: none;
+    stroke-opacity: .5;
+    stroke-width: 1.5px;
+}
+
+#plot3 .foreground path.fade {
+    stroke: #000;
+    stroke-opacity: .05;
+}
+
+#plot3 .brush .extent {
+    fill-opacity: .3;
+    stroke: #fff;
+    shape-rendering: crispEdges;
+}
+
+#plot3 .axis line,
+#plot3 .axis path {
+    fill: none;
+    stroke: rgba(240, 240, 240, 0.4);
+    shape-rendering: crispEdges;
+}
+
+#plot3 .axis .tick text {
+    fill-opacity: 0.4;
+    fill: #f2f2f2;
+    font-size: 12px;
+}
+</style>
+{% endblock %} {% block body %}
+<div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+        <div style="margin-bottom:30px;">
+            <div class="plot-title">累计平台数量</div>
+            <div id="plot11"></div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+        <div style="margin-bottom:30px;">
+            <div class="plot-title">新增平台数量</div>
+            <div id="plot12"></div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+        <div style="margin-bottom:30px;position:relative;">
+            <div class="plot-title">平台地理分布</div>
+            <div id="plot21"></div>
+            <div style="position:absolute;left:20px;top:35px;color:#f2f2f2;"></div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+        <div style="margin-bottom:23px;">
+            <div class="plot-title">当月问题平台类型</div>
+            <div id="plot22"></div>
+        </div>
+        <div style="margin-bottom:30px;">
+            <div class="plot-title">当月问题平台地区</div>
+            <div id="plot23"></div>
+        </div>
+    </div>
+</div>
+<div style="margin-bottom:30px;">
+    <div class="plot-title">热门平台历史指数</div>
+    <div id="plot3">
+    	<p></p>
+    	<span class="fa fa-fw fa-play"></span>
+        <svg width="1000px" height="500px">
+            <g></g>
+        </svg>
+    </div>
+</div>
+<script>
+$(document).ready(function() {
+    $('#nav2').addClass('active');
+
+    var platCount = eval({{platCount|safe}});
+    var plot11 = echarts.init(document.getElementById('plot11'), 'dark');
+    var option = {
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: ['全部平台', '问题平台'],
+            padding: [25, 10, 10, 10]
+        },
+        calculable: true,
+        grid: {
+            x: 65,
+            x2: 30,
+            y: 70,
+            y2: 50
+        },
+        xAxis: {
+            type: 'category',
+            data: platCount['x'],
+            axisTick: {
+                show: false
+            },
+            axisLine: {
+                show: false
+            }
+        },
+        yAxis: {
+            type: 'value',
+            axisTick: {
+                show: false
+            },
+            axisLine: {
+                show: false
+            },
+        },
+        series: [{
+            name: '全部平台',
+            type: 'line',
+            symbol: 'none',
+            smooth: true,
+            data: platCount['y1']
+        }, {
+            name: '问题平台',
+            type: 'line',
+            symbol: 'none',
+            smooth: true,
+            data: platCount['y3']
+        }]
+    };
+    plot11.setOption(option);
+    var plot12 = echarts.init(document.getElementById('plot12'), 'dark');
+    option = {
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: ['全部平台', '问题平台'],
+            padding: [25, 10, 10, 10]
+        },
+        calculable: true,
+        grid: {
+            x: 65,
+            x2: 30,
+            y: 70,
+            y2: 50
+        },
+        xAxis: {
+            type: 'category',
+            data: platCount['x'],
+            axisTick: {
+                show: false
+            },
+            axisLine: {
+                show: false
+            }
+        },
+        yAxis: {
+            type: 'value',
+            axisTick: {
+                show: false
+            },
+            axisLine: {
+                show: false
+            },
+        },
+        series: [{
+            name: '全部平台',
+            type: 'line',
+            symbol: 'none',
+            smooth: true,
+            data: platCount['y2']
+        }, {
+            name: '问题平台',
+            type: 'line',
+            symbol: 'none',
+            smooth: true,
+            data: platCount['y4']
+        }]
+    };
+    plot12.setOption(option);
+
+    var plot21 = echarts.init(document.getElementById('plot21'), 'dark');
+    setTimeout(function() {
+        $('#plot21').next('div').append('<p style="font-size:12px;margin-bottom:2px;">营业平台<span style="font-size:20px;margin-left:10px;color:rgba(84, 148, 191, 0.8);position:relative;top:2px;">' + platCount['map'][0].length + '</span></p>');
+        $('#plot21').next('div').append('<p style="font-size:12px;margin-bottom:2px;">停业平台<span style="font-size:20px;margin-left:10px;color:rgba(221, 107, 102, 0.8);position:relative;top:2px;">' + platCount['map'][1].length + '</span></p>');
+        $('#plot21').next('div').append('<p style="font-size:12px;margin-bottom:2px;">提现困难<span style="font-size:20px;margin-left:10px;color:rgba(230, 157, 135, 0.8);position:relative;top:2px;">' + platCount['map'][2].length + '</span></p>');
+        $('#plot21').next('div').append('<p style="font-size:12px;margin-bottom:2px;">跑路平台<span style="font-size:20px;margin-left:10px;color:rgba(234, 126, 83, 0.8);position:relative;top:2px;">' + platCount['map'][3].length + '</span></p>');
+        $('#plot21').next('div').append('<p style="font-size:12px;margin-bottom:2px;">经侦介入<span style="font-size:20px;margin-left:10px;color:rgba(243, 230, 162, 0.8);position:relative;top:2px;">' + platCount['map'][4].length + '</span></p>');
+        option = {
+            legend: {
+                left: 'left',
+                bottom: 'bottom',
+                padding: [20, 20, 20, 20],
+                data: ['营业', '停业', '提现困难', '跑路', '经侦介入'],
+            },
+            geo: {
+                type: 'scatter',
+                map: 'china',
+                label: {
+                    emphasis: {
+                        show: true,
+                        textStyle: {
+                            color: '#f2f2f2'
+                        }
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        areaColor: '#323c48',
+                        borderColor: 'rgba(20,20,20,0.2)'
+                    },
+                    emphasis: {
+                        areaColor: '#2a333d'
+                    }
+                }
+            },
+            series: [{
+                name: '营业',
+                type: 'scatter',
+                large: true,
+                coordinateSystem: 'geo',
+                symbolSize: 2,
+                legendHoverLink: false,
+                itemStyle: {
+                    normal: {
+                        shadowBlur: 2,
+                        shadowColor: 'rgba(84, 148, 191, 0.8)',
+                        color: 'rgba(84, 148, 191, 0.8)'
+                    }
+                },
+                data: platCount['map'][0]
+            }, {
+                name: '停业',
+                type: 'scatter',
+                large: true,
+                coordinateSystem: 'geo',
+                symbolSize: 2,
+                legendHoverLink: false,
+                itemStyle: {
+                    normal: {
+                        shadowBlur: 2,
+                        shadowColor: 'rgba(221, 107, 102, 0.8)',
+                        color: 'rgba(221, 107, 102, 0.8)'
+                    }
+                },
+                data: platCount['map'][1]
+            }, {
+                name: '提现困难',
+                type: 'scatter',
+                large: true,
+                coordinateSystem: 'geo',
+                symbolSize: 2,
+                legendHoverLink: false,
+                itemStyle: {
+                    normal: {
+                        shadowBlur: 2,
+                        shadowColor: 'rgba(230, 157, 135, 0.8)',
+                        color: 'rgba(230, 157, 135, 0.8)'
+                    }
+                },
+                data: platCount['map'][2]
+            }, {
+                name: '跑路',
+                type: 'scatter',
+                large: true,
+                coordinateSystem: 'geo',
+                symbolSize: 2,
+                legendHoverLink: false,
+                itemStyle: {
+                    normal: {
+                        shadowBlur: 2,
+                        shadowColor: 'rgba(234, 126, 83, 0.8)',
+                        color: 'rgba(234, 126, 83, 0.8)'
+                    }
+                },
+                data: platCount['map'][3]
+            }, {
+                name: '经侦介入',
+                type: 'scatter',
+                large: true,
+                coordinateSystem: 'geo',
+                symbolSize: 2,
+                legendHoverLink: false,
+                itemStyle: {
+                    normal: {
+                        shadowBlur: 2,
+                        shadowColor: 'rgba(243, 230, 162, 0.8)',
+                        color: 'rgba(243, 230, 162, 0.8)'
+                    }
+                },
+                data: platCount['map'][4]
+            }]
+        };
+        plot21.setOption(option);
+    }, 1200);
+    var plot22 = echarts.init(document.getElementById('plot22'), 'dark');
+    option = {
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        series: [{
+            name: '平台类型',
+            type: 'pie',
+            radius: '55%',
+            center: ['50%', '50%'],
+            data: [{
+                value: 32,
+                name: '停业'
+            }, {
+                value: 31,
+                name: '跑路'
+            }, {
+                value: 10,
+                name: '提现困难'
+            }, {
+                value: 1,
+                name: '经侦介入'
+            }],
+            itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }]
+    };
+    plot22.setOption(option);
+    var plot23 = echarts.init(document.getElementById('plot23'), 'dark');
+    option = {
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        series: [{
+            name: '平台地区',
+            type: 'pie',
+            radius: '55%',
+            center: ['50%', '50%'],
+            data: [{
+                value: 13,
+                name: '广东'
+            }, {
+                value: 9,
+                name: '北京'
+            }, {
+                value: 9,
+                name: '山东'
+            }, {
+                value: 9,
+                name: '其他'
+            }, {
+                value: 8,
+                name: '上海'
+            }, {
+                value: 7,
+                name: '安徽'
+            }, {
+                value: 6,
+                name: '浙江'
+            }, {
+                value: 5,
+                name: '江苏'
+            }, {
+                value: 5,
+                name: '湖北'
+            }, {
+                value: 3,
+                name: '河北'
+            }, {
+                value: 0,
+                name: '福建'
+            }],
+            itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }]
+    };
+    plot23.setOption(option);
+
+    var plot3_traits = ["rank", "score", "trade", "popularity", "weight", "distribution", "flooding", "opacity"];
+    var plot3_names = {
+        rank: '排名',
+        score: '发展指数',
+        trade: '成交',
+        popularity: '人气',
+        weight: '杠杆',
+        distribution: '分散度',
+        flooding: '流动性',
+        opacity: '透明度'
+    };
+    var margin = [60, 30, 30, 100];
+    var plot3_width = 1000 - margin[1] - margin[3];
+    var plot3_height = 500 - margin[0] - margin[2];
+    var plot3_x = d3.scale.ordinal().domain(plot3_traits).rangePoints([0, plot3_width]);
+    var plot3_y;
+    var plot3_y_reverse;
+    var plot3_line = d3.svg.line();
+    var plot3_axis = d3.svg.axis().orient("left").tickPadding([5]);
+    var plot3_foreground;
+    var plot3_num = 0;
+    var tmp = d3.interpolate(d3.rgb(192, 70, 77), d3.rgb(245, 236, 165));
+    var plot3_colors = [];
+    var plot3_data = [];
+    var platNames = [];
+    for (var i = 0; i < 20; i++) {
+        plot3_colors.push(tmp(i * 0.04));
+    }
+    d3.select('#plot3 svg g').attr("transform", "translate(" + margin[3] + "," + margin[0] + ")");
+    // add foreground
+    d3.select('#plot3 svg g').append("svg:g").attr("class", "foreground");
+    // add label
+    d3.select('#plot3 svg g').append('svg:g').attr('class', 'label');
+    // Add a group element for each trait.
+    d3.select('svg g').selectAll(".trait").data(plot3_traits).enter().append("svg:g").attr("class", "trait").attr("transform", function(d) {
+        return "translate(" + plot3_x(d) + ")";
+    }).call(d3.behavior.drag()
+        .origin(function(d) {
+            return {
+                x: plot3_x(d)
+            };
+        })
+        .on("dragstart", plot3_dragstart)
+        .on("drag", plot3_drag)
+        .on("dragend", plot3_dragend));
+    // Add an axis and title.
+    d3.select('#plot3 svg').selectAll('.trait').append("svg:g")
+        .attr("class", "axis")
+        .append("svg:text")
+        .attr("text-anchor", "middle")
+        .attr("y", -20)
+        .attr("fill", '#f2f2f2')
+        .attr("font-size", "12px")
+        .text(function(d) {
+            return plot3_names[d]
+        });
+    // Add a brush for each axis.
+    $('#plot3 svg .trait .brush').remove();
+    d3.select('#plot3 svg').selectAll('.trait').append("svg:g")
+        .attr("class", "brush");
+
+    plotRank();
+
+    var rankInterval = setInterval(function() {
+        plotRank();
+    }, 3000);
+
+    function plotRank() {
+        $('#plot3 svg g.foreground path').attr('class', '');
+
+        plot3_data = platCount['rank'][plot3_num];
+        $('#plot3 p').text(plot3_data[0].replace('年', '-').replace('月', ''));
+        platNames = [];
+        for (var i = 0; i < plot3_data[1].length; i++) {
+            platNames.push(plot3_data[1][i]['platName']);
+        }
+        plot3_y = {};
+        plot3_y_reverse = {};
+
+        // add a scale and brush for each trait.
+        plot3_traits.forEach(function(d) {
+            plot3_y[d] = d3.scale.linear().domain(d3.extent(plot3_data[1], function(p) {
+                return p[d];
+            })).range([plot3_height, 0]);
+            plot3_y_reverse[d] = d3.scale.linear().domain(d3.extent(plot3_data[1], function(p) {
+                return p[d];
+            })).range([0, plot3_height]);
+
+            plot3_y[d].brush = d3.svg.brush().y(plot3_y[d]).on("brush", plot3_brush);
+        });
+        d3.select('#plot3 svg').selectAll('g.axis').each(function(d) {
+            if (d == 'rank') {
+                d3.select(this).call(plot3_axis.scale(plot3_y_reverse[d]));
+            } else {
+                d3.select(this).call(plot3_axis.scale(plot3_y[d]));
+            }
+        });
+
+        $('#plot3 svg g .label').next('.trait').children('.axis').children('.tick').children('text').hide();
+
+        // Add foreground lines.
+        plot3_foreground = d3.select('#plot3 svg g.foreground').selectAll("path").data(platNames, function(d) {
+            return d;
+        });
+
+        plot3_foreground.transition().duration(800).attr('d', plot3_path).attr("stroke", function(d, i) {
+            return plot3_colors[i];
+        });
+
+        plot3_foreground.enter().append("svg:path").attr("d", plot3_path).attr("stroke", function(d, i) {
+            return plot3_colors[i];
+        }).attr('opacity', 0).transition().duration(800).attr('opacity', 1);
+
+        plot3_foreground.exit().transition().duration(800).attr('opacity', 0).remove();
+
+        d3.select("#plot3 svg").selectAll('g.brush').each(function(d) {
+            d3.select(this).call(plot3_y[d].brush);
+        }).selectAll("rect").attr("x", -8).attr("width", 16);
+
+        // add label text
+        var label = d3.select('#plot3 svg g.label').selectAll('text').data(platNames, function(d) {
+            return d;
+        });
+        label.transition().duration(800).attr('transform', function(d, i) {
+            var tmp = d.match(/[a-z0-9]/g);
+            if (tmp == null) {
+                tmp = 0;
+            } else {
+                tmp = tmp.length;
+            }
+            var tmp1 = d.match(/[A-Z]/g);
+            if (tmp1 == null) {
+                tmp1 = 0;
+            } else {
+                tmp1 = tmp1.length;
+            }
+            return 'translate(' + (tmp * 5 + tmp1 * 3 - d.length * 12 - 18) + ',' + (i * 21 + 5) + ')';
+        }).attr('fill', function(d, i) {
+            return plot3_colors[i];
+        });
+        label.enter().append('svg:text').text(function(d) {
+            return d;
+        }).attr({
+            fill: function(d, i) {
+                return plot3_colors[i];
+            },
+            'fill-opacity': 0,
+            'font-size': '12px',
+            'font-weight': 'lighter',
+            transform: function(d, i) {
+                var tmp = d.match(/[a-z0-9]/g);
+                if (tmp == null) {
+                    tmp = 0;
+                } else {
+                    tmp = tmp.length;
+                }
+                var tmp1 = d.match(/[A-Z]/g);
+                if (tmp1 == null) {
+                    tmp1 = 0;
+                } else {
+                    tmp1 = tmp1.length;
+                }
+                return 'translate(' + (tmp * 5 + tmp1 * 3 - d.length * 12 - 18) + ',' + (i * 21 + 26) + ')';
+            }
+        }).transition().duration(800).attr('transform', function(d, i) {
+            var tmp = d.match(/[a-z0-9]/g);
+            if (tmp == null) {
+                tmp = 0;
+            } else {
+                tmp = tmp.length;
+            }
+            var tmp1 = d.match(/[A-Z]/g);
+            if (tmp1 == null) {
+                tmp1 = 0;
+            } else {
+                tmp1 = tmp1.length;
+            }
+            return 'translate(' + (tmp * 5 + tmp1 * 3 - d.length * 12 - 18) + ',' + (i * 21 + 5) + ')';
+        }).attr('fill-opacity', 0.8);
+        label.exit().transition().duration(800).attr({
+            'transform': function(d, i) {
+                var tmp = d.match(/[a-z0-9]/g);
+                if (tmp == null) {
+                    tmp = 0;
+                } else {
+                    tmp = tmp.length;
+                }
+                var tmp1 = d.match(/[A-Z]/g);
+                if (tmp1 == null) {
+                    tmp1 = 0;
+                } else {
+                    tmp1 = tmp1.length;
+                }
+                return 'translate(' + (tmp * 5 + tmp1 * 3 - d.length * 12 - 68) + ',' + (i * 21 + 5) + ')';
+            },
+            'fill-opacity': 0
+        }).remove();
+
+        plot3_num = (plot3_num + 1) % 20;
+    }
+
+    function plot3_dragstart(d) {
+        i = plot3_traits.indexOf(d);
+    }
+
+    function plot3_drag(d) {
+        // plot3_x.range()[i] = d3.event.x;
+        // plot3_traits.sort(function(a, b) {
+        //     return plot3_x(a) - plot3_x(b);
+        // });
+        // d3.select('#plot3 svg').selectAll(".trait").attr("transform", function(d) {
+        //     return "translate(" + plot3_x(d) + ")";
+        // });
+        // plot3_foreground.attr("d", plot3_path);
+    }
+
+    function plot3_dragend(d) {
+        // plot3_x.domain(plot3_traits).rangePoints([0, plot3_width]);
+        // var t = d3.transition().duration(500);
+        // t.selectAll(".trait").attr("transform", function(d) {
+        //     return "translate(" + plot3_x(d) + ")";
+        // });
+        // t.selectAll(".foreground path").attr("d", plot3_path);
+    }
+
+    function plot3_path(d, i) {
+        return plot3_line(plot3_traits.map(function(p) {
+            // return [plot3_x(p), plot3_y[p](d[p])];
+            return [plot3_x(p), plot3_y[p](plot3_data[1][i][p])];
+        }));
+    }
+
+    // Handles a brush event, toggling the display of foreground lines.
+    function plot3_brush() {
+        var actives = plot3_traits.filter(function(p) {
+            return !plot3_y[p].brush.empty();
+        });
+        var extents = actives.map(function(p) {
+            return plot3_y[p].brush.extent();
+        });
+        // plot3_foreground.classed("fade", function(d) {
+        //     return !actives.every(function(p, i) {
+        //         return extents[i][0] <= d[p] && d[p] <= e xtents[i][1];
+        //     });
+        // });
+        plot3_foreground.classed("fade", function(d, j) {
+            return !actives.every(function(p, i) {
+                return extents[i][0] <= plot3_data[1][j][p] && plot3_data[1][j][p] <= extents[i][1];
+            });
+        });
+    }
+
+    $('#plot3 span').click(function(event) {
+    	if ($(this).hasClass('fa-play')) {
+    		$(this).removeClass('fa-play').addClass('fa-pause');
+    		clearInterval(rankInterval);
+    	}
+    	else {
+    		$(this).removeClass('fa-pause').addClass('fa-play');
+    		plotRank();
+    		rankInterval = setInterval(function() {
+    			plotRank();
+    		}, 3000);
+    	}
+    });
+
+});
+</script>
+{% endblock %}
