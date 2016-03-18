@@ -2,16 +2,11 @@
 <style>
 #main {
     max-width: 1200px;
+    min-width: 1020px;
     margin: 0 auto;
 }
 
-#plot11 {
-    width: 100%;
-    height: 300px;
-    background-color: #222 !important;
-}
-
-#plot12 {
+#plot1 {
     width: 100%;
     height: 300px;
     background-color: #222 !important;
@@ -44,22 +39,23 @@
 }
 
 #plot3 p {
-	position: absolute;
-	color: #759AA0;
-	left: 16px;
-	top: 13px;
+    position: absolute;
+    color: #759AA0;
+    left: 16px;
+    top: 13px;
 }
 
 #plot3 span {
-	position: absolute;
-	left: 14px;
-	top: 38px;
-	font-size: 14px;
-	color: #759AA0;
-	display: block;
+    position: absolute;
+    left: 14px;
+    top: 38px;
+    font-size: 14px;
+    color: #759AA0;
+    display: block;
 }
+
 #plot3 span:hover {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 #plot3 .foreground path {
@@ -91,19 +87,97 @@
     fill: #f2f2f2;
     font-size: 12px;
 }
+
+#plot41 {
+    width: 100%;
+    height: 400px;
+    background-color: #222 !important;
+}
+
+#plot42 {
+    width: 100%;
+    height: 400px;
+    background-color: #222 !important;
+}
+
+#params {
+    position: absolute;
+    left: 0;
+    top: 42px;
+    z-index: 99;
+    width: 100%;
+    text-align: center;
+}
+
+#params>div {
+    display: inline-block;
+    text-align: center;
+    color: #759AA0;
+    font-size: 12px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding-left: 2px;
+    padding-right: 2px;
+    border-bottom: 1px solid rgba(240, 240, 240, 0.6);
+    transition: color .3s;
+    -o-transition: color .3s;
+    -ms-transition: color .3s;
+    -moz-transition: color .3s;
+    -webkit-transition: color .3s;
+}
+
+#params>div:hover {
+    cursor: pointer;
+    color: #f2f2f2;
+}
+
+#params p {
+    margin-bottom: 3px;
+}
+
+#params span {
+    margin-left: 5px;
+}
+
+#mask {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(240, 240, 240, 0.8);
+    z-index: 999;
+    padding: 40px 60px;
+    text-align: center;
+    display: none;
+}
+
+#mask div {
+    display: inline-block;
+    padding: 8px 16px;
+    color: #333;
+    border: 1px solid #555;
+    border-radius: 3px;
+    margin: 10px;
+    font-size: 12px;
+    box-shadow: 1px 1px 2px rgba(20, 20, 20, 0.5);
+    transition: color, background-color .3s;
+    -o-transition: color, background-color .3s;
+    -ms-transition: color, background-color .3s;
+    -moz-transition: color, background-color .3s;
+    -webkit-transition: color, background-color .3s;
+}
+
+#mask div:hover {
+    color: #fff;
+    background-color: #333;
+    cursor: pointer;
+}
 </style>
 {% endblock %} {% block body %}
 <div class="row">
-    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div style="margin-bottom:30px;">
-            <div class="plot-title">累计平台数量</div>
-            <div id="plot11"></div>
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-        <div style="margin-bottom:30px;">
-            <div class="plot-title">新增平台数量</div>
-            <div id="plot12"></div>
+            <div class="plot-title">当月网贷指数</div>
+            <div id="plot1"></div>
         </div>
     </div>
 </div>
@@ -129,11 +203,45 @@
 <div style="margin-bottom:30px;">
     <div class="plot-title">热门平台历史指数</div>
     <div id="plot3">
-    	<p></p>
-    	<span class="fa fa-fw fa-play"></span>
+        <p></p>
+        <span class="fa fa-fw fa-play"></span>
         <svg width="1000px" height="500px">
             <g></g>
         </svg>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
+        <div class="plot-title">平台类型历史数据</div>
+        <div id="plot41"></div>
+    </div>
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
+        <div style="position:relative;overflow:hidden;">
+            <div class="plot-title">区域分布历史数据</div>
+            <div id="params">
+                <div id="param1">
+                    <p>X<span></span></p>
+                </div>
+                <div id="param2">
+                    <p>Y<span></span></p>
+                </div>
+                <div id="param3">
+                    <p>Size<span></span></p>
+                </div>
+            </div>
+            <div id="mask">
+                <div>成交量</div>
+                <div>运营平台数量</div>
+                <div>当月问题平台数量</div>
+                <div>累计问题平台数量</div>
+                <div>贷款余额</div>
+                <div>综合利率</div>
+                <div>平均借款期限</div>
+                <div>当月投资人数</div>
+                <div>当月借款人数</div>
+            </div>
+            <div id="plot42"></div>
+        </div>
     </div>
 </div>
 <script>
@@ -141,33 +249,40 @@ $(document).ready(function() {
     $('#nav2').addClass('active');
 
     var platCount = eval({{platCount|safe}});
-    var plot11 = echarts.init(document.getElementById('plot11'), 'dark');
+
+    var plot1 = echarts.init(document.getElementById('plot1'), 'dark');
     var option = {
         tooltip: {
             trigger: 'axis'
         },
         legend: {
-            data: ['全部平台', '问题平台'],
-            padding: [25, 10, 10, 10]
+            data: ['成交指数', '人气指数', '利率指数'],
+            padding: [27, 10, 10, 10],
+            selected: {
+                '利率指数': false
+            },
         },
         calculable: true,
         grid: {
             x: 65,
-            x2: 30,
-            y: 70,
-            y2: 50
+            x2: 50,
+            y: 60,
+            y2: 50,
         },
         xAxis: {
             type: 'category',
-            data: platCount['x'],
+            data: platCount['index'][0],
             axisTick: {
                 show: false
             },
             axisLine: {
                 show: false
+            },
+            axisLabel: {
+                margin: 12
             }
         },
-        yAxis: {
+        yAxis: [{
             type: 'value',
             axisTick: {
                 show: false
@@ -175,49 +290,7 @@ $(document).ready(function() {
             axisLine: {
                 show: false
             },
-        },
-        series: [{
-            name: '全部平台',
-            type: 'line',
-            symbol: 'none',
-            smooth: true,
-            data: platCount['y1']
         }, {
-            name: '问题平台',
-            type: 'line',
-            symbol: 'none',
-            smooth: true,
-            data: platCount['y3']
-        }]
-    };
-    plot11.setOption(option);
-    var plot12 = echarts.init(document.getElementById('plot12'), 'dark');
-    option = {
-        tooltip: {
-            trigger: 'axis'
-        },
-        legend: {
-            data: ['全部平台', '问题平台'],
-            padding: [25, 10, 10, 10]
-        },
-        calculable: true,
-        grid: {
-            x: 65,
-            x2: 30,
-            y: 70,
-            y2: 50
-        },
-        xAxis: {
-            type: 'category',
-            data: platCount['x'],
-            axisTick: {
-                show: false
-            },
-            axisLine: {
-                show: false
-            }
-        },
-        yAxis: {
             type: 'value',
             axisTick: {
                 show: false
@@ -225,22 +298,29 @@ $(document).ready(function() {
             axisLine: {
                 show: false
             },
-        },
+        }],
         series: [{
-            name: '全部平台',
+            name: '成交指数',
             type: 'line',
             symbol: 'none',
             smooth: true,
-            data: platCount['y2']
+            data: platCount['index'][3]
         }, {
-            name: '问题平台',
+            name: '利率指数',
+            yAxisIndex: 1,
             type: 'line',
             symbol: 'none',
             smooth: true,
-            data: platCount['y4']
+            data: platCount['index'][1]
+        }, {
+            name: '人气指数',
+            type: 'line',
+            symbol: 'none',
+            smooth: true,
+            data: platCount['index'][2]
         }]
     };
-    plot12.setOption(option);
+    plot1.setOption(option);
 
     var plot21 = echarts.init(document.getElementById('plot21'), 'dark');
     setTimeout(function() {
@@ -699,19 +779,445 @@ $(document).ready(function() {
     }
 
     $('#plot3 span').click(function(event) {
-    	if ($(this).hasClass('fa-play')) {
-    		$(this).removeClass('fa-play').addClass('fa-pause');
-    		clearInterval(rankInterval);
-    	}
-    	else {
-    		$(this).removeClass('fa-pause').addClass('fa-play');
-    		plotRank();
-    		rankInterval = setInterval(function() {
-    			plotRank();
-    		}, 3000);
-    	}
+        if ($(this).hasClass('fa-play')) {
+            $(this).removeClass('fa-play').addClass('fa-pause');
+            clearInterval(rankInterval);
+        } else {
+            $(this).removeClass('fa-pause').addClass('fa-play');
+            plotRank();
+            rankInterval = setInterval(function() {
+                plotRank();
+            }, 3000);
+        }
     });
 
+    var plot41 = echarts.init(document.getElementById('plot41'), 'dark');
+    console.log(platCount.types);
+    option = {
+        baseOption: {
+            color: ['rgba(84, 148, 191, 1)', 'rgba(221, 107, 102, 0.8)', 'rgba(230, 157, 135, 0.8)', 'rgba(234, 126, 83, 0.8)', 'rgba(243, 230, 162, 0.8)'],
+            timeline: {
+                axisType: 'category',
+                orient: 'vertical',
+                autoPlay: true,
+                inverse: true,
+                playInterval: 3000,
+                left: null,
+                right: 20,
+                top: 40,
+                bottom: 25,
+                width: 70,
+                height: null,
+                label: {
+                    normal: {
+                        textStyle: {
+                            color: '#999'
+                        }
+                    },
+                    emphasis: {
+                        textStyle: {
+                            color: '#eee'
+                        }
+                    }
+                },
+                symbol: 'none',
+                lineStyle: {
+                    color: '#555',
+                    width: 1
+                },
+                checkpointStyle: {
+                    color: '#bbb',
+                    borderColor: '#777',
+                    borderWidth: 2
+                },
+                controlStyle: {
+                    showNextBtn: false,
+                    showPrevBtn: false,
+                    normal: {
+                        color: '#666',
+                        borderColor: '#666',
+                        borderWidth: 1
+                    },
+                    emphasis: {
+                        color: '#aaa',
+                        borderColor: '#aaa',
+                        borderWidth: 1
+                    }
+                },
+                data: []
+            },
+            title: {
+                'text': platCount.places.months[0],
+                textAlign: 'center',
+                left: 70,
+                bottom: 20,
+                textStyle: {
+                    fontSize: 30,
+                    color: 'rgba(255, 255, 255, 0.7)'
+                }
+            },
+            tooltip: {
+                padding: 5,
+                backgroundColor: '#222',
+                formatter: function(obj) {
+                    var value = obj.value;
+                    return value;
+                }
+            },
+            calculable: true,
+            tooltip: {},
+            legend: {
+                data: ['民营', '银行', '上市公司', '国资', '风投'],
+                top: 20,
+                left: 20,
+                width: 200
+            },
+        },
+        options: []
+    };
+    for (var n = 0; n < platCount.types.months.length; n++) {
+        option.baseOption.timeline.data.push(platCount.types.months[n]);
+        option.options.push({
+            title: {
+                'text': platCount.types.months[n]
+            },
+            radar: {
+                indicator: [{
+                    name: '成交',
+                    max: platCount.types.max[n][1]
+                }, {
+                    name: '运营平台',
+                    max: platCount.types.max[n][2]
+                }, {
+                    name: '当月问题平台',
+                    max: platCount.types.max[n][3]
+                }, {
+                    name: '累计问题平台',
+                    max: platCount.types.max[n][4]
+                }, {
+                    name: '贷款余额',
+                    max: platCount.types.max[n][5]
+                }, {
+                    name: '综合利率',
+                    max: platCount.types.max[n][6]
+                }, {
+                    name: '平均借款期限',
+                    max: platCount.types.max[n][7]
+                }, {
+                    name: '当月投资人数',
+                    max: platCount.types.max[n][8]
+                }, {
+                    name: '当月借款人数',
+                    max: platCount.types.max[n][9]
+                }],
+                center: ['39%', '50%'],
+                radius: '40%',
+                splitArea: {
+                	show: false
+                },
+                shape: 'circle',
+            	startAngle: 180,
+                splitLine: {
+                	lineStyle: {
+                		color: ['rgba(200, 200, 200, 0.3)']
+                	}
+                },
+                axisLine: {
+                	lineStyle: {
+                		color: 'rgba(200, 200, 200, 0.3)'
+                	}
+                }
+            },
+            series: [{
+                name: platCount.types.months[n],
+                type: 'radar',
+                data: platCount.types.series[n],
+                symbol: 'none',
+            }],
+        });
+    }
+    plot41.setOption(option);
+
+    var plot42 = echarts.init(document.getElementById('plot42'), 'dark');
+    var plot42_mapping = [1, 6, 2];
+    var plot42_schema = [{
+        name: 'province',
+        index: 0,
+        text: '区域',
+        unit: ''
+    }, {
+        name: 'amount',
+        index: 1,
+        text: '成交量',
+        unit: '亿元'
+    }, {
+        name: 'operatePlatNumber',
+        index: 2,
+        text: '运营平台数量',
+        unit: '家'
+    }, {
+        name: 'problemPlatNumber',
+        index: 3,
+        text: '当月问题平台数量',
+        unit: '家'
+    }, {
+        name: 'problemPlatNumberTotal',
+        index: 4,
+        text: '累计问题平台数量',
+        unit: '家'
+    }, {
+        name: 'balanceLoans',
+        index: 5,
+        text: '贷款余额',
+        unit: '亿元'
+    }, {
+        name: 'incomeRate',
+        index: 6,
+        text: '综合利率',
+        unit: '%'
+    }, {
+        name: 'loanPeriod',
+        index: 7,
+        text: '平均借款期限',
+        unit: '月'
+    }, {
+        name: 'bidderNum',
+        index: 8,
+        text: '当月投资人数',
+        unit: '万人'
+    }, {
+        name: 'borrowerNum',
+        index: 9,
+        text: '当月借款人数',
+        unit: '万人'
+    }];
+
+    setParams();
+
+    function setParams() {
+        $('#param1 span').text(plot42_schema[plot42_mapping[0]].text);
+        $('#param2 span').text(plot42_schema[plot42_mapping[1]].text);
+        $('#param3 span').text(plot42_schema[plot42_mapping[2]].text);
+
+        var plot42_data = [];
+        for (var i = 0; i < platCount.places.series.length; i++) {
+            var tmp = [];
+            var tmp_data = platCount.places.series[i];
+            for (var j = 0; j < tmp_data.length; j++) {
+                tmp.push([tmp_data[j][plot42_mapping[0]], tmp_data[j][plot42_mapping[1]], tmp_data[j][plot42_mapping[2]], tmp_data[j][0]]);
+            }
+            plot42_data.push(tmp);
+        }
+
+        option = {
+            baseOption: {
+                timeline: {
+                    axisType: 'category',
+                    orient: 'vertical',
+                    autoPlay: true,
+                    inverse: true,
+                    playInterval: 3000,
+                    left: null,
+                    right: 20,
+                    top: 40,
+                    bottom: 25,
+                    width: 70,
+                    height: null,
+                    label: {
+                        normal: {
+                            textStyle: {
+                                color: '#999'
+                            }
+                        },
+                        emphasis: {
+                            textStyle: {
+                                color: '#eee'
+                            }
+                        }
+                    },
+                    symbol: 'none',
+                    lineStyle: {
+                        color: '#555',
+                        width: 1
+                    },
+                    checkpointStyle: {
+                        color: '#bbb',
+                        borderColor: '#777',
+                        borderWidth: 2
+                    },
+                    controlStyle: {
+                        showNextBtn: false,
+                        showPrevBtn: false,
+                        normal: {
+                            color: '#666',
+                            borderColor: '#666',
+                            borderWidth: 1
+                        },
+                        emphasis: {
+                            color: '#aaa',
+                            borderColor: '#aaa',
+                            borderWidth: 1
+                        }
+                    },
+                    data: []
+                },
+                title: {
+                    'text': platCount.places.months[0],
+                    textAlign: 'center',
+                    right: 60,
+                    bottom: 75,
+                    textStyle: {
+                        fontSize: 30,
+                        color: 'rgba(255, 255, 255, 0.7)'
+                    }
+                },
+                tooltip: {
+                    padding: 5,
+                    backgroundColor: '#222',
+                    formatter: function(obj) {
+                        var value = obj.value;
+                        return plot42_schema[0].text + '：' + value[3] + '<br>' + plot42_schema[plot42_mapping[1]].text + '：' + value[1] + plot42_schema[plot42_mapping[1]].unit + '<br>' + plot42_schema[plot42_mapping[0]].text + '：' + value[0] + plot42_schema[plot42_mapping[0]].unit + '<br>' + plot42_schema[plot42_mapping[2]].text + '：' + value[2] + plot42_schema[plot42_mapping[2]].unit + '<br>';
+                    }
+                },
+                grid: {
+                    x: 60,
+                    x2: 120,
+                    y: 40,
+                    y2: 50
+                },
+                xAxis: {
+                    type: 'value',
+                    splitLine: {
+                        show: false
+                    },
+                    axisTick: {
+                        lineStyle: {
+                            color: '#ccc'
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#ccc'
+                        }
+                    },
+                    axisLabel: {
+                        formatter: '{value} ' + plot42_schema[plot42_mapping[0]].unit,
+                        textStyle: {
+                            color: '#ccc'
+                        },
+                        margin: 12
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLine: {
+                        lineStyle: {
+                            color: '#ccc'
+                        }
+                    },
+                    axisTick: {
+                        lineStyle: {
+                            color: '#ccc'
+                        }
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                    axisLabel: {
+                        formatter: '{value} ' + plot42_schema[plot42_mapping[1]].unit,
+                        textStyle: {
+                            color: '#ccc'
+                        },
+                        margin: 12
+                    }
+                },
+                visualMap: [{
+                    show: false,
+                    dimension: 3,
+                    categories: platCount.places.places,
+                    calculable: true,
+                    precision: 0.1,
+                    textGap: 30,
+                    textStyle: {
+                        color: '#ccc'
+                    },
+                    inRange: {
+                        color: ['#bcd3bb', '#e88f70', '#edc1a5', '#9dc5c8', '#e1e8c8', '#7b7c68', '#e5b5b5', '#f0b489', '#928ea8', '#bda29a']
+                    }
+                }],
+                series: [{
+                    type: 'scatter',
+                    itemStyle: {
+                        normal: {
+                            opacity: 0.8,
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 0,
+                            shadowColor: 'rgba(255, 255, 255, 0.5)'
+                        }
+                    },
+                    data: plot42_data[0],
+                    symbolSize: function(val) {
+                        return 90 * parseFloat(val[2]) / parseFloat(platCount.places.max[plot42_mapping[2]]) + 10;
+                    }
+                }],
+                animationDurationUpdate: 1000,
+                animationEasingUpdate: 'quinticInOut'
+            },
+            options: []
+        };
+
+        for (var n = 0; n < platCount.places.months.length; n++) {
+            option.baseOption.timeline.data.push(platCount.places.months[n]);
+            option.options.push({
+                title: {
+                    show: true,
+                    'text': platCount.places.months[n]
+                },
+                series: {
+                    name: platCount.places.months[n],
+                    type: 'scatter',
+                    itemStyle: {
+                        normal: {
+                            opacity: 0.8,
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    },
+                    data: plot42_data[n],
+                    symbolSize: function(val) {
+                        return 90 * parseFloat(val[2]) / parseFloat(platCount.places.max[plot42_mapping[2]]) + 10;
+                    }
+                }
+            });
+        }
+        plot42.setOption(option);
+    }
+    var plot42_param = '';
+    $('#params>div').click(function(event) {
+        plot42_param = $(this).attr('id');
+        $('#mask').fadeIn('fast');
+    });
+    $('#mask div').click(function(event) {
+        var tmp = $(this).text();
+        for (var i = 0; i < plot42_schema.length; i++) {
+            if (plot42_schema[i].text == tmp) {
+                if (plot42_param == 'param1') {
+                    plot42_mapping[0] = i;
+                } else if (plot42_param == 'param2') {
+                    plot42_mapping[1] = i;
+                } else if (plot42_param == 'param3') {
+                    plot42_mapping[2] = i;
+                }
+                break;
+            }
+        }
+        $('#mask').fadeOut('fast', function() {
+            setParams();
+        });
+    });
 });
 </script>
 {% endblock %}

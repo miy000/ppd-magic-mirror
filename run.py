@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # coding:utf8
 
+import time
 import sys
 reload(sys)
 sys.setdefaultencoding( "utf8" )
@@ -9,6 +10,7 @@ import warnings
 warnings.filterwarnings("ignore")
 import MySQLdb
 import MySQLdb.cursors
+import numpy as np
 from config import *
 import pprint
 
@@ -46,24 +48,12 @@ def knowledge():
 @app.route('/data')
 def data():
 	(db, cursor) = connectdb()
-	cursor.execute("select * from overalldata where name='platform_of_last_12_month'")
-	tmp1 = json.loads(cursor.fetchone()['content'])
 	cursor.execute("select * from overalldata where name='platform_with_problem_of_last_12_month'")
-	tmp2 = json.loads(cursor.fetchone()['content'])
+	tmp = json.loads(cursor.fetchone()['content'])
 
 	platCount = {}
-	platCount['x'] = tmp1['x']
-	platCount['x'].reverse()
-	platCount['y1'] = tmp1['y2']
-	platCount['y1'].reverse()
-	platCount['y2'] = tmp1['y1']
-	platCount['y2'].reverse()
-	platCount['y3'] = tmp2['y1']
-	platCount['y3'].reverse()
-	platCount['y4'] = tmp2['y2']
-	platCount['y4'].reverse()
-	platCount['pie1'] = tmp2['pie1']
-	platCount['pie2'] = tmp2['pie2']
+	platCount['pie1'] = tmp['pie1']
+	platCount['pie2'] = tmp['pie2']
 
 	cursor.execute("select tags,lng,lat from platform where address != ''")
 	tmp = cursor.fetchall()
@@ -100,6 +90,96 @@ def data():
 			t1[x]['trade'] = float(t1[x]['trade'])
 			t1[x]['weight'] = float(t1[x]['weight'])
 		platCount['rank'].append([t, t1])
+
+	cursor.execute("select * from overalldata where name='index_of_last_one_month'")
+	tmp = json.loads(cursor.fetchone()['content'])
+	platCount['index'] = [tmp['date'], tmp['interestRate'], tmp['popularity'], tmp['volume']]
+
+	cursor.execute("select * from overalldata where name like 'place_%%'")
+	tmp = cursor.fetchall()
+	result = []
+	for item in tmp:
+		month = item['name'].split('_')[1]
+		month = int(time.mktime(time.strptime(month, '%Y-%m')))
+		result.append([month, json.loads(item['content'])])
+	result.sort(lambda x,y:cmp(x[0],y[0]))	
+	platCount['places'] = {'places':[],'series':[],'months':[]}
+	for item in result[0][1]:
+		if item['province'] == '全国':
+			continue
+		platCount['places']['places'].append(item['province'])
+
+	maxnum = [0,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+	for item in result:
+		platCount['places']['months'].append(time.strftime('%Y-%m', time.localtime(float(item[0]))))
+		tmp = item[1]
+		tmp.sort(lambda x,y:cmp(x['province'],y['province']), reverse=True)
+		tmp1 = []
+		for t in tmp:
+			if t['province'] == '全国':
+				continue
+			tmp1.append([t['province'],t['amount'],t['operatePlatNumber'],t['problemPlatNumber'],t['problemPlatNumberTotal'],t['balanceLoans'],t['incomeRate'],t['loanPeriod'],t['bidderNum'],t['borrowerNum']])
+			if t['amount'] > maxnum[1]:
+				maxnum[1] = t['amount']
+			if t['operatePlatNumber'] > maxnum[2]:
+				maxnum[2] = t['operatePlatNumber']
+			if t['problemPlatNumber'] > maxnum[3]:
+				maxnum[3] = t['problemPlatNumber']
+			if t['problemPlatNumberTotal'] > maxnum[4]:
+				maxnum[4] = t['problemPlatNumberTotal']
+			if t['balanceLoans'] > maxnum[5]:
+				maxnum[5] = t['balanceLoans']
+			if t['incomeRate'] > maxnum[6]:
+				maxnum[6] = t['incomeRate']
+			if t['loanPeriod'] > maxnum[7]:
+				maxnum[7] = t['loanPeriod']
+			if t['bidderNum'] > maxnum[8]:
+				maxnum[8] = t['bidderNum']
+			if t['borrowerNum'] > maxnum[9]:
+				maxnum[9] = t['borrowerNum']
+		platCount['places']['series'].append(tmp1)
+	platCount['places']['max'] = maxnum
+
+	cursor.execute("select * from overalldata where name like 'type_%%'")
+	tmp = cursor.fetchall()
+	result = []
+	for item in tmp:
+		month = item['name'].split('_')[1]
+		month = int(time.mktime(time.strptime(month, '%Y-%m')))
+		result.append([month, json.loads(item['content'])])
+	result.sort(lambda x,y:cmp(x[0],y[0]))	
+	platCount['types'] = {'types':[],'series':[],'months':[], 'max':[]}
+	for item in result[0][1]:
+		platCount['types']['types'].append({'name':item['province']})
+
+	for item in result:
+		platCount['types']['months'].append(time.strftime('%Y-%m', time.localtime(float(item[0]))))
+		tmp = item[1]
+		tmp.sort(lambda x,y:cmp(x['province'],y['province']), reverse=True)
+		tmp1 = []
+		maxnum = [0,-1,-1,-1,-1,-1,-1,-1,-1,-1]
+		for t in tmp:
+			tmp1.append({'value':[t['amount'],t['operatePlatNumber'],t['problemPlatNumber'],t['problemPlatNumberTotal'],t['balanceLoans'],t['incomeRate'],t['loanPeriod'],t['bidderNum'],t['borrowerNum']], 'name':t['province'].rstrip('系')})
+			if t['amount'] > maxnum[1]:
+				maxnum[1] = t['amount']
+			if t['operatePlatNumber'] > maxnum[2]:
+				maxnum[2] = t['operatePlatNumber']
+			if t['problemPlatNumber'] > maxnum[3]:
+				maxnum[3] = t['problemPlatNumber']
+			if t['problemPlatNumberTotal'] > maxnum[4]:
+				maxnum[4] = t['problemPlatNumberTotal']
+			if t['balanceLoans'] > maxnum[5]:
+				maxnum[5] = t['balanceLoans']
+			if t['incomeRate'] > maxnum[6]:
+				maxnum[6] = t['incomeRate']
+			if t['loanPeriod'] > maxnum[7]:
+				maxnum[7] = t['loanPeriod']
+			if t['bidderNum'] > maxnum[8]:
+				maxnum[8] = t['bidderNum']
+			if t['borrowerNum'] > maxnum[9]:
+				maxnum[9] = t['borrowerNum']
+		platCount['types']['series'].append(tmp1)
+		platCount['types']['max'].append(maxnum)
 
 	closedb(db, cursor)
 
