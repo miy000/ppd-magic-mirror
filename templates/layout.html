@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>拍拍贷 | 数据产品分析可视化平台</title>
+    <title>魔镜杯 | 数据产品分析可视化平台</title>
     <meta name="description" content="" />
     <meta name="keywords" content="" />
     <meta name="author" content="" />
@@ -14,10 +14,12 @@
     <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" />
     <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <link href="{{url_for('static',filename='fa/css/font-awesome.min.css')}}" rel="stylesheet">
+    <link href='http://api.youziku.com/webfont/CSS/56f953c3f629d809ec4a5b84' rel='stylesheet' type='text/css' />
     <script src="{{url_for('static',filename='js/d3.min.js')}}"></script>
     <script src="{{url_for('static',filename='js/echarts.min.js')}}"></script>
     <script src="{{url_for('static',filename='js/dark.js')}}"></script>
     <script src="{{url_for('static',filename='js/china.js')}}"></script>
+
     <style>
     body {
         font-family: Microsoft Yahei;
@@ -29,13 +31,14 @@
         padding: 20px 40px;
         position: relative;
         border-bottom: 1px solid rgba(220, 220, 220, 0.2);
+        font-family:'minijianxixingk263187a6420c3';
     }
     
     #header #nav {
         position: absolute;
         right: 60px;
         top: 18px;
-        font-size: 15px;
+        font-size: 20px;
     }
     
     #header #nav a {
@@ -61,7 +64,7 @@
     #header h1 {
         color: #eee;
         margin-bottom: 30px;
-        font-size: 20px;
+        font-size: 25px;
         display: inline-block;
         margin-top: 0;
         margin-bottom: 0;
@@ -69,7 +72,7 @@
     
     #header p {
         color: #eee;
-        font-size: 20px;
+        font-size: 25px;
         margin-right: 200px;
         margin-left: 25px;
         display: inline-block;
@@ -141,7 +144,7 @@
 
 <body>
     <div id="header">
-        <h1>若愚</h1>
+        <h1>魔镜杯</h1>
         <p>P2P分析可视化平台</p>
         <div id="nav">
             <a href="{{url_for('index')}}" id="nav1">
@@ -150,12 +153,12 @@
             <a href="{{url_for('data')}}" id="nav2">
                 数据
             </a>
-            <a href="{{url_for('platform')}}" id="nav3">
-                透视
+            <a href="{{url_for('platform', platName='拍拍贷')}}" id="nav3">
+                详情
             </a>
-            <a href="{{url_for('compare')}}" id="nav4">
+            <!-- <a href="{{url_for('compare')}}" id="nav4">
                 对比
-            </a>
+            </a> -->
         </div>
     </div>
     <div style="padding:50px 60px;">

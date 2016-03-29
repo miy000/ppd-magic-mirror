@@ -1,17 +1,147 @@
 {% extends 'layout.html' %} {% block style %}
 <style>
 #main {
-	max-width: 1200px;
-	margin: 0 auto;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+#select text {
+    transition: fill, font-size .3s;
+    -o-transition: fill, font-size .3s;
+    -ms-transition: fill, font-size .3s;
+    -moz-transition: fill, font-size .3s;
+    -webkit-transition: fill, font-size .3s;
+}
+
+#select text.inactive:hover {
+    fill: rgba(230, 157, 135, 1);
+    fill-opacity: 1;
+    cursor: pointer;
+    z-index: 999;
+    font-size: 30px;
+}
+
+#select text.active {
+    fill: rgba(221, 107, 102, 1);
+    fill-opacity: 1;
+    z-index: 999;
+    font-size: 40px;
 }
 </style>
-{% endblock %}
-
-{% block body %}
-compare
+{% endblock %} {% block body %}
+<div style="min-height:500px;text-align:center;">
+	<svg width="1000px" height="500px">
+		<g id="select"></g>
+		<g id="compare"></g>
+	</svg>
+</div>
 <script>
 $(document).ready(function() {
-	$('#nav4').addClass('active');
-});	
+    $('#nav4').addClass('active');
+
+    var selectCount = 0;
+    var platform1 = '';
+    var platform2 = '';
+
+    var platforms = eval({{platforms|safe}});
+    var platNames = [];
+    var positions = [];
+    for (var i = 0; i < platforms.length; i++) {
+        platNames.push(platforms[i].platName);
+        positions.push([platforms[i].x, platforms[i].y]);
+    }
+
+    d3.select('g#select').selectAll('text').data(platNames).enter().append('text').text(function(d) {
+        return d;
+    }).attr('transform', function(d) {
+        var tmp = Math.random();
+        if (tmp > 0.75) {
+            return 'translate(0, 0)';
+        } else if (tmp > 0.5) {
+            return 'translate(0, 500)';
+        } else if (tmp > 0.25) {
+            return 'translate(1000, 0)';
+        } else {
+            return 'translate(1000, 500)';
+        }
+
+    }).attr('fill', '#f2f2f2').attr({
+        'fill-opacity': 0
+    }).attr('id', function(d) {
+        return d;
+    }).attr('class', 'inactive').transition().duration(800).attr({
+        'font-size': function(d, i) {
+            return 20 * parseFloat(platforms[i].score) + 10;
+        },
+        'fill-opacity': function(d, i) {
+            return parseFloat(platforms[i].score);
+        }
+    }).attr('transform', function(d, i) {
+        return 'translate(' + (positions[i][0] + Math.random() * 60 - 30) + ',' + (positions[i][1] + Math.random() * 40 - 20) + ')';
+    });
+
+    $('#select text').click(function(event) {
+        if (selectCount == 0) {
+            d3.select('#select text#' + $(this).attr('id')).attr('class', 'active').transition().duration(600).attr('transform', 'translate(200, 230)');
+            selectCount += 1;
+            platform1 = $(this).text();
+        } else if (selectCount == 1) {
+            d3.select('#select text#' + $(this).attr('id')).attr('class', 'active').transition().duration(600).attr('transform', 'translate(600, 230)');
+            selectCount += 1;
+            platform2 = $(this).text();
+            setTimeout(function() {
+                d3.selectAll('#select text.inactive').transition().duration(600).attr({
+                    'fill-opacity': 0,
+                    'class': '',
+                    'transform': function() {
+                        var tmp = Math.random();
+                        if (tmp > 0.75) {
+                            return 'translate(0, 0)';
+                        } else if (tmp > 0.5) {
+                            return 'translate(0, 500)';
+                        } else if (tmp > 0.25) {
+                            return 'translate(1000, 0)';
+                        } else {
+                            return 'translate(1000, 500)';
+                        }
+                    }
+                });
+            }, 300);
+            setTimeout(function() {
+                d3.selectAll('#select text.active').attr({
+                    'fill': 'rgba(221, 107, 102, 1)',
+                    'fill-opacity': 1,
+                    'font-size': 40,
+                    'class': '',
+                }).transition().duration(600).attr({
+                    'transform': 'translate(400, 230)',
+                    'fill-opacity': 0
+                });
+            }, 600);
+
+            setTimeout(function() {
+                compare();
+            }, 1200);
+        }
+    });
+	
+	function compare() {
+		var tmp1 = '';
+		var tmp2 = '';
+		for (var i = 0; i < platforms.length; i++) {
+			if (platforms[i].platName == platform1) {
+				tmp1 = platforms[i];
+				break;
+			}
+		}
+		for (var i = 0; i < platforms.length; i++) {
+			if (platforms[i].platName == platform2) {
+				tmp2 = platforms[i];
+				break;
+			}
+		}
+		var content = [tmp1.platName, tmp2.platName];
+	}
+});
 </script>
 {% endblock %}

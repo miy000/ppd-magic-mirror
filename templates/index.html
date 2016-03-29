@@ -1,159 +1,816 @@
 {% extends 'layout.html' %} {% block style %}
 <style>
 #main {
-	max-width: 1200px;
-	margin: 0 auto;
+    max-width: 1200px;
+    min-width: 1020px;
+    margin: 0 auto;
 }
+
 #scatter {
-	position: relative;
-	width: 100%;
-	height: 527px;
-	background-color: #222;
-	margin-bottom: 30px;
+    position: relative;
+    width: 100%;
+    height: 527px;
+    background-color: #222;
+    margin-bottom: 30px;
+}
+
+#knowledgegraph .link {
+    stroke: #999;
+    stroke-opacity: .5;
+}
+
+#knowledgegraph rect.active {
+    stroke: rgba(240, 240, 240, 0.7);
+    stroke-width: 1.5;
+}
+
+#knowledgegraph rect:hover {
+    cursor: pointer;
+}
+
+#knowledgegraph text:hover {
+    cursor: pointer;
 }
 
 #modes {
-	position: absolute;
-	left: 22px;
-	top: 49px;
-	border: 1px solid #f5f5f5;
-	border-radius: 3px;
-	font-size: 12px;
+    position: absolute;
+    left: 22px;
+    top: 49px;
+    border: 1px solid #f5f5f5;
+    border-radius: 3px;
+    font-size: 12px;
 }
+
 #modes div {
-	display: inline-block;
-	color: #f5f5f5;
-	padding: 6px 12px;
-	font-size: 12px;
-	transition: color, background-color .3s;
+    display: inline-block;
+    color: #f5f5f5;
+    padding: 6px 12px;
+    font-size: 12px;
+    transition: color, background-color .3s;
     -o-transition: color, background-color .3s;
     -ms-transition: color, background-color .3s;
     -moz-transition: color, background-color .3s;
     -webkit-transition: color, background-color .3s;
 }
 
-#modes div.active, #modes div:hover {
-	color: #333;
-	background-color: #f5f5f5;
+#modes div.active,
+#modes div:hover {
+    color: #333;
+    background-color: #f5f5f5;
 }
 
 #modes div:hover {
-	cursor: pointer;
+    cursor: pointer;
+}
+
+#info {
+    display: none;
+    border: 1px solid #eee;
+    background-color: rgba(20, 20, 20, 0.8);
+    padding: 15px;
+    max-width: 400px;
+    position: absolute;
+    color: #ddd;
+    font-size: 12px;
+}
+
+#info #portrait {
+    border-radius: 3px;
+}
+
+#info h4,
+#info h5 {
+    color: #eee;
+    font-size: 14px;
+    display: inline-block;
+    margin-left: 15px;
+    margin-top: 0;
+}
+
+#info h4 span {
+    margin-left: 12px;
+    color: rgba(84, 148, 191, 1);
+    font-size: 30px;
+    position: relative;
+    top: 3px;
+}
+
+#info p {
+    margin-bottom: 5px;
+}
+
+#info p span {
+    color: #999;
+    margin-left: 12px;
 }
 
 #ranks {
-	position: absolute;
-	top: 47px;
-	right: 20px;
-	height: 340px;
-	overflow-y: scroll;
-	border: 1px solid rgba(200,200,200,0.6);
-	border-radius: 3px;
-	font-size: 13px;
+    position: absolute;
+    top: 47px;
+    right: 20px;
+    height: 340px;
+    overflow-y: scroll;
+    border: 1px solid rgba(200, 200, 200, 0.6);
+    border-radius: 3px;
+    font-size: 13px;
 }
+
 #ranks div {
-	color: #eee;
-	padding: 8px 24px;
-	text-align: center;
-	transition: color, background-color .3s;
+    color: #eee;
+    padding: 8px 24px;
+    text-align: center;
+    transition: color, background-color .3s;
     -o-transition: color, background-color .3s;
     -ms-transition: color, background-color .3s;
     -moz-transition: color, background-color .3s;
     -webkit-transition: color, background-color .3s;
 }
-#ranks div.active, #ranks div:hover {
-	color: #333;
-	background-color: #f5f5f5;
+
+#ranks div.active,
+#ranks div:hover {
+    color: #333;
+    background-color: #f5f5f5;
 }
 
 #ranks div:hover {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 #news {
-	width: 100%;
-	height: 327px;
-	background-color: #222; 
-	margin-bottom: 30px;
+    width: 100%;
+    height: 327px;
+    margin-bottom: 30px;
+}
+
+#plot2 {
+    width: 100%;
+    height: 300px;
+    background-color: #222 !important;
 }
 
 #comments {
-	width: 100%;
-	height: 327px;
-	background-color: #222;
+    width: 100%;
+    height: 327px;
+}
+
+#plot3 {
+    width: 100%;
+    height: 300px;
+    background-color: #222 !important;
 }
 </style>
-{% endblock %}
-
-{% block body %}
+{% endblock %} {% block body %}
 <div id="scatter">
-	<div class="plot-title">知识图谱和关键词云舆情可视化</div>
-	<div id="modes">
-		<div class="active">知识图谱</div>
-		<div>关键词云</div>
-	</div>
-	<div id="ranks">
-		{% for t in platforms %}
-		<div>{{t.platName}}</div>
-		{% endfor %}
-	</div>
-	<svg></svg>
+    <div class="plot-title">知识图谱和关键词云舆情可视化</div>
+    <div id="modes">
+        <div class="active">知识图谱</div>
+        <div>关键词云</div>
+    </div>
+    <div id="ranks">
+        {% for t in platNames %}
+        <div>{{t}}</div>
+        {% endfor %}
+    </div>
+    <svg width="1000px" height="500px">
+        <g id="knowledgegraph"></g>
+        <g id="wordcloud">
+            <g id="newskeyword"></g>
+            <g id="commentkeyword"></g>
+        </g>
+    </svg>
+    <div id="info">
+        <div style="margin-bottom:15px;">
+            <img id="portrait" src="" alt="">
+            <h4>发展指数<span></span></h4>
+            <h5></h5>
+        </div>
+        <div style="border-bottom:1px solid rgba(240,240,240,0.4);margin-bottom:10px;padding-bottom:5px;" id="info1">
+            <p id="averageProfit">平均收益<span></span></p>
+            <p id="lauchTime">上线时间<span></span></p>
+            <p id="registMoney">注册资金<span></span></p>
+            <p id="homepage">平台官网<a href=""><span></span></a></p>
+            <p id="address">联系地址<span></span></p>
+        </div>
+        <div id="info2">
+            <p id="autobid">自动投标<span></span></p>
+            <p id="stockTransfer">债券转让<span></span></p>
+            <p id="fundsToken">资金托管<span></span></p>
+            <p id="bidGuarantee">投标保障<span></span></p>
+            <p id="guaranteeMode">保障模式<span></span></p>
+            <p id="guaranteeOrg" style="margin-bottom:0;">担保机构<span></span></p>
+        </div>
+        <p id="description" style="margin-bottom:0;"></p>
+    </div>
 </div>
-
 <div id="news">
 	<div class="plot-title">媒体新闻情感分析</div>
+	<div id="plot2"></div>
 </div>
-
 <div id="comments">
-	<div class="plot-title">大众评论情感分析</div>
+	<div class="plot-title">用户评论情感分析</div>
+	<div id="plot3"></div>
 </div>
-
 <script>
 $(document).ready(function() {
-	$('#nav1').addClass('active');
+    $('#nav1').addClass('active');
 
-	$('#modes div').click(function(event) {
-		$('#modes div').removeClass('active');
-		$(this).addClass('active');
-	});
+    var mode = 1;
+    var platName = '拍拍贷';
 
-	$('#ranks div:first-child').addClass('active');
+    $('#modes div').click(function(event) {
+        $('#modes div').removeClass('active');
+        $(this).addClass('active');
+        if ($(this).text() == '知识图谱') {
+            mode = 1;
+        } else {
+            mode = 2;
+        }
+        draw(platName);
+    });
 
-	$('#ranks div').click(function(event) {
-		$('#ranks div').removeClass('active');
-		$(this).addClass('active');
-		var platName = $(this).text();
+    $('#ranks div:nth-of-type(3)').addClass('active');
 
-		var diff =  $(this).offset().top - $('#ranks').offset().top;
+    $('#ranks div').click(function(event) {
+        $('#ranks div').removeClass('active');
+        $(this).addClass('active');
+        platName = $(this).text();
+
+        var diff = $(this).offset().top - $('#ranks').offset().top;
         if (diff >= 101) {
             $('#ranks').animate({
                 scrollTop: $('#ranks').scrollTop() + diff - 34
             }, 300);
         }
+        draw(platName);
+    });
 
-        $.ajax({
-        	url: '{{url_for("knowledge")}}',
-        	type: 'POST',
-        	dataType: 'json',
-        	data: {
-        		name: platName
-        	},
-        })
-        .done(function(data) {
+    var platforms = eval({{platforms|safe}});
+    var platNamesJson = eval({{platNamesJson|safe}});
 
-        })
-        .fail(function() {
-        	console.log("error");
-        })
-        .always(function() {
-        	console.log("complete");
-        }); 
-	});
+    var plot1_margin = [80, 120, 30, 30];
+    var plot1_width = 1000 - plot1_margin[1] - plot1_margin[3];
+    var plot1_height = 500 - plot1_margin[0] - plot1_margin[2];
 
-	var mode = true;
-	function draw(name){
+    var forces;
 
-	}
-});	
+    var plot2 = echarts.init(document.getElementById('plot2'), 'dark');
+    var option2 = {
+        grid: {
+            x: 70,
+            x2: 40,
+            y: 60,
+            y2: 95,
+        },
+        tooltip: {
+            trigger: 'axis',
+            formatter: function(params) {
+                return params[0].name + '<br/>' + params[0].seriesName + ' : ' + params[0].value + '<br/>' + params[1].seriesName + ' : ' + params[1].value;
+            },
+        },
+        legend: {
+            data: ['平台积极', '平台消极', '行业积极', '行业消极'],
+            padding: [27, 10, 10, 10],
+            selected: {
+                '行业积极': false,
+                '行业消极': false
+            },
+        },
+        dataZoom: [{
+            show: true,
+            realtime: true,
+            start: 96,
+            end: 100,
+            bottom: 25,
+            fillerColor: 'rgba(0, 0, 0, 0.4)',
+            handleColor: 'rgba(0, 0, 0, 0.8)',
+            showDetail: false
+        }],
+        xAxis: [{
+            type: 'category',
+            boundaryGap: false,
+            axisLine: {
+                onZero: false
+            },
+            axisLabel: {
+                margin: 12
+            },
+            data: platforms['days']
+        }],
+        yAxis: [{
+            type: 'value',
+            axisLabel: {
+                margin: 12
+            },
+            splitLine: {
+                show: false
+            }
+        }],
+        series: [{
+            name: '行业积极',
+            symbol: 'none',
+            smooth: true,
+            type: 'line',
+            data: platforms['p2p']['newspositive']
+        }, {
+            name: '行业消极',
+            symbol: 'none',
+            smooth: true,
+            type: 'line',
+            data: platforms['p2p']['newsnegative']
+        }, {
+            name: '平台积极',
+            symbol: 'none',
+            smooth: true,
+            type: 'line',
+            data: platforms[platName]['newspositive']
+        }, {
+            name: '平台消极',
+            symbol: 'none',
+            smooth: true,
+            type: 'line',
+            data: platforms[platName]['newsnegative']
+        }]
+    };
+
+    var plot3 = echarts.init(document.getElementById('plot3'), 'dark');
+    var option3 = {
+        grid: {
+            x: 70,
+            x2: 40,
+            y: 60,
+            y2: 95,
+        },
+        tooltip: {
+            trigger: 'axis',
+            formatter: function(params) {
+                return params[0].name + '<br/>' + params[0].seriesName + ' : ' + params[0].value + '<br/>' + params[1].seriesName + ' : ' + params[1].value;
+            },
+        },
+        legend: {
+            data: ['平台积极', '平台消极', '行业积极', '行业消极'],
+            padding: [27, 10, 10, 10],
+            selected: {
+                '行业积极': false,
+                '行业消极': false
+            },
+        },
+        dataZoom: [{
+            show: true,
+            realtime: true,
+            start: 96,
+            end: 100,
+            bottom: 25,
+            fillerColor: 'rgba(0, 0, 0, 0.4)',
+            handleColor: 'rgba(0, 0, 0, 0.8)',
+            showDetail: false
+        }],
+        xAxis: [{
+            type: 'category',
+            boundaryGap: false,
+            axisLine: {
+                onZero: false
+            },
+            axisLabel: {
+                margin: 12
+            },
+            data: platforms['days']
+        }],
+        yAxis: [{
+            type: 'value',
+            axisLabel: {
+                margin: 12
+            },
+            splitLine: {
+                show: false
+            }
+        }],
+        series: [{
+            name: '行业积极',
+            symbol: 'none',
+            smooth: true,
+            type: 'line',
+            data: platforms['p2p']['commentpositive']
+        }, {
+            name: '行业消极',
+            symbol: 'none',
+            smooth: true,
+            type: 'line',
+            data: platforms['p2p']['commentnegative']
+        }, {
+            name: '平台积极',
+            symbol: 'none',
+            smooth: true,
+            type: 'line',
+            data: platforms[platName]['commentpositive']
+        }, {
+            name: '平台消极',
+            symbol: 'none',
+            smooth: true,
+            type: 'line',
+            data: platforms[platName]['commentnegative']
+        }]
+    };
+
+    draw('拍拍贷');
+
+    function draw(keyword) {
+        $('#knowledgegraph .link').remove();
+        $('#knowledgegraph .text').remove();
+        $('#knowledgegraph .node').remove();
+        if (mode == 1) {
+            $.ajax({
+                    url: '{{url_for("knowledge")}}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        name: keyword
+                    },
+                })
+                .done(function(data) {
+                    forces = eval(data['knowledge']);
+                    var colors = ['rgba(84, 148, 191, 0.9)', 'rgba(221, 107, 102, 0.9)', 'rgba(230, 157, 135, 0.9)', 'rgba(234, 126, 83, 0.9)', 'rgba(243, 230, 162, 0.9)', 'rgba(215, 135, 230, 0.9)'];
+                    var force = d3.layout.force().charge(-480).linkDistance(160).size([1000, 500]);
+
+                    force.nodes(forces.nodes).links(forces.links).start();
+
+                    var link = d3.select("#knowledgegraph").selectAll(".link").data(forces.links);
+                    link.enter().append("line").attr("class", "link").style("stroke-width", function(d) {
+                        return Math.sqrt(d.value);
+                    });
+
+                    var node = d3.select("#knowledgegraph").selectAll(".node").data(forces.nodes);
+                    node.enter().append("rect").attr('class', 'node').attr("type", function(d) {
+                        if (d.group == 1) {
+                            return 'platform';
+                        } else if (d.group == 2) {
+                            return 'person';
+                        } else {
+                            return '';
+                        }
+                    }).attr('name', function(d, i) {
+                        return i;
+                    }).attr("width", function(d) {
+                        var tmp = d.name;
+                        var n1 = tmp.match(/[a-z0-9]/g);
+                        if (n1 == null) {
+                            n1 = 0;
+                        } else {
+                            n1 = n1.length;
+                        }
+                        var n2 = tmp.match(/[A-Z]/g);
+                        if (n2 == null) {
+                            n2 = 0;
+                        } else {
+                            n2 = n2.length;
+                        }
+                        var n3 = tmp.match(/[\0]/g);
+                        if (n3 == null) {
+                            n3 = 0;
+                        } else {
+                            n3 = n3.length;
+                        }
+                        return tmp.length * 12 - n1 * 6 - n2 * 4 - n3 * 4 + 30;
+
+                    }).attr('height', 30).style("fill", function(d) {
+                        return colors[d.group - 1];
+                    }).call(force.drag);
+
+                    var text = d3.select("#knowledgegraph").selectAll(".text").data(forces.nodes);
+                    text.enter().append("text").attr('class', 'text').attr("type", function(d) {
+                        if (d.group == 1) {
+                            return 'platform';
+                        } else if (d.group == 2) {
+                            return 'person';
+                        } else {
+                            return '';
+                        }
+                    }).attr('name', function(d, i) {
+                        return i;
+                    }).text(function(d) {
+                        return d.name;
+                    }).style("fill", "#fff").style("font-size", "12px").call(force.drag);
+
+                    force.on("tick", function() {
+                        link.attr("x1", function(d) {
+                            return d.source.x;
+                        }).attr("y1", function(d) {
+                            return d.source.y;
+                        }).attr("x2", function(d) {
+                            return d.target.x;
+                        }).attr("y2", function(d) {
+                            return d.target.y;
+                        });
+
+                        node.attr("x", function(d) {
+                            var tmp = d.name;
+                            var n1 = tmp.match(/[a-z0-9]/g);
+                            if (n1 == null) {
+                                n1 = 0;
+                            } else {
+                                n1 = n1.length;
+                            }
+                            var n2 = tmp.match(/[A-Z]/g);
+                            if (n2 == null) {
+                                n2 = 0;
+                            } else {
+                                n2 = n2.length;
+                            }
+                            var n3 = tmp.match(/[\0]/g);
+                            if (n3 == null) {
+                                n3 = 0;
+                            } else {
+                                n3 = n3.length;
+                            }
+                            return d.x - 0.5 * (tmp.length * 12 - n1 * 6 - n2 * 4 - n3 * 4 + 30);
+                        }).attr("y", function(d) {
+                            return d.y - 13;
+                        });
+
+                        text.attr("x", function(d) {
+                            var tmp = d.name;
+                            var n1 = tmp.match(/[a-z0-9]/g);
+                            if (n1 == null) {
+                                n1 = 0;
+                            } else {
+                                n1 = n1.length;
+                            }
+                            var n2 = tmp.match(/[A-Z]/g);
+                            if (n2 == null) {
+                                n2 = 0;
+                            } else {
+                                n2 = n2.length;
+                            }
+                            var n3 = tmp.match(/[\0]/g);
+                            if (n3 == null) {
+                                n3 = 0;
+                            } else {
+                                n3 = n3.length;
+                            }
+                            return d.x - 0.5 * (tmp.length * 12 - n1 * 6 - n2 * 4 - n3 * 4);
+                        }).attr("y", function(d) {
+                            return d.y + 6;
+                        }).style('background-color', '#f5f5f5');
+                    });
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+                .always(function() {
+                    console.log("complete");
+                });
+        }
+
+        if (mode == 1) {
+            var newskeyword = d3.select('#wordcloud #newskeyword').selectAll('text').data([], function(d) {
+                return d;
+            });
+        } else {
+            var newskeyword = d3.select('#wordcloud #newskeyword').selectAll('text').data(platforms[keyword].newskeywords[0], function(d) {
+                return d;
+            });
+        }
+        newskeyword.transition().delay(function(d, i) {
+            return i * 10;
+        }).duration(1000).attr({
+            'font-size': function(d, i) {
+                return parseInt(platforms[keyword].newskeywords[1][i] * 40 + 10);
+            },
+            'fill-opacity': function(d, i) {
+                return platforms[keyword].newskeywords[1][i] * 0.9 + 0.1;
+            }
+        }).attr('transform', function() {
+            return 'translate(' + parseInt(Math.random() * plot1_width + plot1_margin[3]) + ',' + parseInt(Math.random() * plot1_height + plot1_margin[0]) + ')';
+        });
+        newskeyword.enter().append('text').text(function(d) {
+            return d;
+        }).attr({
+            fill: '#B85D59',
+            transform: function() {
+                return 'translate(' + parseInt(Math.random() * plot1_width + plot1_margin[3]) + ',' + parseInt(Math.random() * plot1_height + plot1_margin[0]) + ')';
+            },
+            'font-size': function(d, i) {
+                return parseInt(platforms[keyword].newskeywords[1][i] * 40 + 10);
+            },
+            'fill-opacity': 0,
+        }).transition().delay(function(d, i) {
+            return i * 10;
+        }).duration(1000).attr('fill-opacity', function(d, i) {
+            return platforms[keyword].newskeywords[1][i] * 0.9 + 0.1;
+        });
+        newskeyword.exit().transition().duration(1000).attr({
+            'font-size': 0,
+            'fill-opacity': 0
+        }).remove();
+
+        if (mode == 1) {
+            var commentkeyword = d3.select('#wordcloud #commentkeyword').selectAll('text').data([], function(d) {
+                return d;
+            });
+        } else {
+            var commentkeyword = d3.select('#wordcloud #commentkeyword').selectAll('text').data(platforms[keyword].commentkeywords[0], function(d) {
+                return d;
+            });
+        }
+        commentkeyword.transition().delay(function(d, i) {
+            return i * 10;
+        }).duration(1000).attr({
+            'font-size': function(d, i) {
+                return parseInt(platforms[keyword].commentkeywords[1][i] * 25 + 10);
+            },
+            'fill-opacity': function(d, i) {
+                return platforms[keyword].commentkeywords[1][i] * 0.9 + 0.1;
+            }
+        }).attr('transform', function() {
+            return 'translate(' + parseInt(Math.random() * plot1_width + plot1_margin[3]) + ',' + parseInt(Math.random() * plot1_height + plot1_margin[0]) + ')';
+        });
+        commentkeyword.enter().append('text').text(function(d) {
+            return d;
+        }).attr({
+            fill: '#4A7DA0',
+            transform: function() {
+                return 'translate(' + parseInt(Math.random() * plot1_width + plot1_margin[3]) + ',' + parseInt(Math.random() * plot1_height + plot1_margin[0]) + ')';
+            },
+            'font-size': function(d, i) {
+                return parseInt(platforms[keyword].commentkeywords[1][i] * 25 + 10);
+            },
+            'fill-opacity': 0,
+        }).transition().delay(function(d, i) {
+            return i * 10;
+        }).duration(1000).attr('fill-opacity', function(d, i) {
+            return platforms[keyword].commentkeywords[1][i] * 0.9 + 0.1;
+        });
+        commentkeyword.exit().transition().duration(1000).attr({
+            'font-size': 0,
+            'fill-opacity': 0
+        }).remove();
+
+        option2.series[2].data = platforms[platName]['newspositive'];
+        option2.series[3].data = platforms[platName]['newsnegative'];
+        plot2.setOption(option2);
+        option3.series[2].data = platforms[platName]['commentpositive'];
+        option3.series[3].data = platforms[platName]['commentnegative'];
+        plot3.setOption(option3);
+    }
+
+    $('#knowledgegraph').on('mouseover', 'rect', function(event) {
+        $(this).attr('class', 'node active');
+    });
+
+    $('#knowledgegraph').on('mouseout', 'rect', function(event) {
+        $(this).attr('class', 'node');
+    });
+
+    $('#knowledgegraph').on('mouseover', 'text', function(event) {
+        $('#knowledgegraph rect[name="' + $(this).attr('name') + '"]').attr('class', 'node active');
+    });
+
+    $('#knowledgegraph').on('mouseout', 'text', function(event) {
+        $('#knowledgegraph rect[name="' + $(this).attr('name') + '"]').attr('class', 'node');
+    });
+
+    $('#knowledgegraph').on('mouseover', 'rect', function(event) {
+        var node_id = $(this).attr('name');
+        var $obj = $(this);
+        var x = parseInt($obj.attr('x'));
+        var y = parseInt($obj.attr('y'));
+        if (forces.nodes[node_id].group == 1) {
+            $('#info #info1').show();
+            $('#info #info2').show();
+            $('#info h4').show();
+            $('#info h5').hide();
+            $('#info #description').hide();
+
+            $('#info #portrait').css('width', '100px').attr('src', forces.nodes[node_id].logo);
+            $('#info h4 span').text(forces.nodes[node_id].score);
+            $('#info #averageProfit span').text(forces.nodes[node_id].averageProfit);
+            $('#info #lauchTime span').text(forces.nodes[node_id].lauchTime);
+            $('#info #registMoney span').text(forces.nodes[node_id].registMoney);
+            $('#info #homepage span').text(forces.nodes[node_id].homepage);
+            $('#info #address span').text(forces.nodes[node_id].address);
+            $('#info #autobid span').text(forces.nodes[node_id].autobid);
+            $('#info #stockTransfer span').text(forces.nodes[node_id].stockTransfer);
+            $('#info #fundsToken span').text(forces.nodes[node_id].fundsToken);
+            $('#info #bidGuarantee span').text(forces.nodes[node_id].bidGuarantee);
+            $('#info #guaranteeMode span').text(forces.nodes[node_id].guaranteeMode);
+            $('#info #guaranteeOrg span').text(forces.nodes[node_id].guaranteeOrg);
+
+            $('#info').css({
+                left: x + parseInt($obj.attr('width')) + 20,
+                top: y + 27 - 150
+            }).show();
+        } else if (forces.nodes[node_id].group == 2) {
+            $('#info #portrait').css('width', '60px').attr('src', forces.nodes[node_id].portrait);
+            $('#info #info1').hide();
+            $('#info #info2').hide();
+            $('#info h4').hide();
+            $('#info h5').text(forces.nodes[node_id].name).show();
+            $('#info #description').text(forces.nodes[node_id].description).show();
+
+            $('#info').css({
+                left: x + parseInt($obj.attr('width')) + 20,
+                top: y + 27 - 150
+            }).show();
+        }
+    })
+
+    $('#knowledgegraph').on('mouseout', 'rect', function(event) {
+        $('#info').hide();
+    });
+
+    $('#knowledgegraph').on('mouseover', 'text', function(event) {
+        var node_id = $(this).attr('name');
+        var $obj = $('#knowledgegraph rect[name="' + node_id + '"]');
+        var x = parseInt($obj.attr('x'));
+        var y = parseInt($obj.attr('y'));
+        if (forces.nodes[node_id].group == 1) {
+            $('#info #info1').show();
+            $('#info #info2').show();
+            $('#info h4').show();
+            $('#info h5').hide();
+            $('#info #description').hide();
+
+            $('#info #portrait').css('width', '100px').attr('src', forces.nodes[node_id].logo);
+            $('#info h4 span').text(forces.nodes[node_id].score);
+            $('#info #averageProfit span').text(forces.nodes[node_id].averageProfit);
+            $('#info #lauchTime span').text(forces.nodes[node_id].lauchTime);
+            $('#info #registMoney span').text(forces.nodes[node_id].registMoney);
+            $('#info #homepage span').text(forces.nodes[node_id].homepage);
+            $('#info #address span').text(forces.nodes[node_id].address);
+            $('#info #autobid span').text(forces.nodes[node_id].autobid);
+            $('#info #stockTransfer span').text(forces.nodes[node_id].stockTransfer);
+            $('#info #fundsToken span').text(forces.nodes[node_id].fundsToken);
+            $('#info #bidGuarantee span').text(forces.nodes[node_id].bidGuarantee);
+            $('#info #guaranteeMode span').text(forces.nodes[node_id].guaranteeMode);
+            $('#info #guaranteeOrg span').text(forces.nodes[node_id].guaranteeOrg);
+
+            $('#info').css({
+                left: x + parseInt($obj.attr('width')) + 20,
+                top: y + 27 - 150
+            }).show();
+        } else if (forces.nodes[node_id].group == 2) {
+            $('#info #portrait').css('width', '60px').attr('src', forces.nodes[node_id].portrait);
+            $('#info #info1').hide();
+            $('#info #info2').hide();
+            $('#info h4').hide();
+            $('#info h5').text(forces.nodes[node_id].name).show();
+            $('#info #description').text(forces.nodes[node_id].description).show();
+
+            $('#info').css({
+                left: x + parseInt($obj.attr('width')) + 20,
+                top: y + 27 - 150
+            }).show();
+        }
+    })
+
+    $('#knowledgegraph').on('mouseout', 'text', function(event) {
+        $('#info').hide();
+    });
+
+    $('#knowledgegraph').on('click', 'rect', function(event) {
+        var node_id = $(this).attr('name');
+        if (forces.nodes[node_id].group == 1 && $.inArray(forces.nodes[node_id].name, platNamesJson)) {
+            $('#ranks div').each(function(index, el) {
+                if ($(this).text() == forces.nodes[node_id].name) {
+                    $('#ranks div').removeClass('active');
+                    $(this).addClass('active');
+                    var diff = $(this).offset().top - $('#ranks').offset().top;
+                    if (diff >= 101) {
+                        $('#ranks').animate({
+                            scrollTop: $('#ranks').scrollTop() + diff - 34
+                        }, 300);
+                    }
+                }
+            });
+            platName = forces.nodes[node_id].name;
+        }
+        if (forces.nodes[node_id].group == 1 || forces.nodes[node_id].group == 2) {
+            $('#info').hide();
+            draw(forces.nodes[node_id].name);
+        }
+    });
+
+    $('#knowledgegraph').on('click', 'text', function(event) {
+        var node_id = $(this).attr('name');
+        if (forces.nodes[node_id].group == 1 && $.inArray(forces.nodes[node_id].name, platNamesJson)) {
+            $('#ranks div').each(function(index, el) {
+                if ($(this).text() == forces.nodes[node_id].name) {
+                    $('#ranks div').removeClass('active');
+                    $(this).addClass('active');
+                    var diff = $(this).offset().top - $('#ranks').offset().top;
+                    if (diff >= 101) {
+                        $('#ranks').animate({
+                            scrollTop: $('#ranks').scrollTop() + diff - 34
+                        }, 300);
+                    }
+                }
+            });
+            platName = forces.nodes[node_id].name;
+        }
+        if (forces.nodes[node_id].group == 1 || forces.nodes[node_id].group == 2) {
+            $('#info').hide();
+            draw(forces.nodes[node_id].name);
+        }
+    });
+});
 </script>
 {% endblock %}

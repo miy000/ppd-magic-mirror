@@ -4,3 +4,7 @@ USER = 'root'
 PASSWORD = 'root'
 DATABASE = 'dbname'
 CHARSET = 'utf8'
+
+NEOHOST = 'localhost'
+NEOUSER = 'root'
+NEOPASSWORD = 'root'
