@@ -47,6 +47,7 @@ def index():
 	tmp.append('p2p')
 	cursor.execute("select * from sentiment where keyword in %s", [tmp])
 	sentiments = cursor.fetchall()
+
 	closedb(db, cursor)
 
 	tmp = {}
@@ -65,10 +66,20 @@ def index():
 	for item in sentiments:
 		if item['type'] == 'newskeyword':
 			if item['content'] == '':
-				platforms[item['keyword']]['newskeywords'] = [[], []]
+				platforms[item['keyword']]['newskeywords'] = [[], [], [], []]
 				continue
 			tmp = item['content'].split(',')
- 			platforms[item['keyword']]['newskeywords'] = [[x.split(':')[0] for x in tmp], [x.split(':')[1] for x in tmp]]
+			t1 = []
+			t2 = []
+			t3 = []
+			t4 = []
+			for x in tmp:
+				x = x.split(':')
+				t1.append(x[0])
+				t2.append(x[1])
+				t3.append(x[2])
+				t4.append(x[3])
+ 			platforms[item['keyword']]['newskeywords'] = [t1, t2, t3, t4]
 		if item['type'] == 'newspositive':
 			if item['content'] == '':
 				platforms[item['keyword']]['newspositive'] = [0 for x in xrange(0, len(days))]
@@ -101,10 +112,20 @@ def index():
 			platforms[item['keyword']]['newsnegative'] = tmp2
 		if item['type'] == 'commentkeyword':
 			if item['content'] == '':
-				platforms[item['keyword']]['commentkeywords'] = [[], []]
+				platforms[item['keyword']]['commentkeywords'] = [[], [], [], []]
 				continue
 			tmp = item['content'].split(',')
-			platforms[item['keyword']]['commentkeywords'] = [[x.split(':')[0] for x in tmp], [x.split(':')[1] for x in tmp]]
+			t1 = []
+			t2 = []
+			t3 = []
+			t4 = []
+			for x in tmp:
+				x = x.split(':')
+				t1.append(x[0])
+				t2.append(x[1])
+				t3.append(x[2])
+				t4.append(x[3])
+			platforms[item['keyword']]['commentkeywords'] = [t1, t2, t3, t4]
 		if item['type'] == 'commentpositive':
 			if item['content'] == '':
 				platforms[item['keyword']]['commentpositive'] = [0 for x in xrange(0, len(days))]
@@ -237,6 +258,66 @@ def knowledge():
 		if flag:
 			forces['links'].append({'source': nodes_idx[item[0].properties['name']], 'target': nodes_idx[item[1].properties['name']], 'value': 1})
 	return json.dumps({"ok": True, "knowledge": forces})
+
+@app.route('/news', methods=['POST'])
+def news():
+	data = request.form
+	(db, cursor) = connectdb()
+	cursor.execute("select timestamp, title from news where keyword=%s order by timestamp asc", [data['keyword']])
+	news = cursor.fetchall()
+	closedb(db, cursor)
+
+	tmp = {}
+	for x in xrange(0, len(news)):
+		news[x]['x'] = random.random()
+		news[x]['y'] = random.random()
+		news[x]['timestamp'] = int(news[x]['timestamp'])
+		if news[x]['title'].find(data['keyword']) >= 0:
+			if not tmp.has_key(str(news[x]['timestamp'])):
+				tmp[str(news[x]['timestamp'])] = []
+			tmp[str(news[x]['timestamp'])].append(news[x])
+
+	news = []
+	for key, value in tmp.items():
+		if len(value) > 10:
+			for x in xrange(0, len(value)):
+				news.append(value[x])
+		else:
+			for item in value:
+				news.append(item)
+
+	news.sort(lambda x,y:cmp(x['timestamp'],y['timestamp']))
+
+	begintime = np.min([x['timestamp'] for x in news])
+	endtime = np.max([x['timestamp'] for x in news])
+	interval = (endtime - begintime) / 10
+	axis = []
+	for x in xrange(0, 11):
+		axis.append(time.strftime('%Y-%m-%d', time.localtime(float(begintime + interval * x))))
+
+	interval = (endtime - begintime) / 100
+	news_count = []
+	tmp = 0
+	last_timestamp = begintime + interval
+	current = 0
+	while current < len(news):
+		item = news[current]
+		if item['timestamp'] > last_timestamp:
+			news_count.append(tmp)
+			tmp = 0
+			last_timestamp += interval
+		else:
+			tmp += 1
+			current += 1
+
+	curve = []
+	curve.append([50, 440])
+	max_count = np.max(news_count)
+	for x in xrange(0, len(news_count)):
+		curve.append([59 + x * 9, 440 - 440 * float(news_count[x]) / max_count])
+	curve.append([59 + (len(news_count) - 1) * 9, 440])
+
+	return json.dumps({"ok": True, "news": news, "axis": axis, "curve": curve})
 
 @app.route('/data')
 def data():
@@ -374,6 +455,12 @@ def data():
 		platCount['types']['series'].append(tmp1)
 		platCount['types']['max'].append(maxnum)
 
+	cursor.execute("select * from flow")
+	flows = cursor.fetchall()
+	for x in xrange(0, len(flows)):
+		flows[x]['content'] = json.loads(flows[x]['content'])
+	platCount['flow'] = flows
+
 	closedb(db, cursor)
 
 	return render_template('data.html', platCount=json.dumps(platCount))
@@ -393,6 +480,10 @@ def platform(platName):
 
 	if platform['score'] == '':
 		platform['score'] == '暂无'
+
+	if platform['lng'] == '':
+		platform['lng'] = 121.48
+		platform['lat'] = 31.22
 
 	platform['homepage'] = platform['homepage'].split('/')[-1]
 
@@ -422,7 +513,10 @@ def platform(platName):
 	platformJson['newsCount'] = len(news)
 	tmp = {}
 	news_tmp = []
-	news_ratio = 1 - 100 / float(np.sum([x['title'].find(platform['platName']) >= 0 for x in news]))
+	if np.sum([x['title'].find(platform['platName']) >= 0 for x in news]) == 0:
+		news_ratio = -1
+	else:
+		news_ratio = 1 - 100 / float(np.sum([x['title'].find(platform['platName']) >= 0 for x in news]))
 	for item in news:
 		if not tmp.has_key(item['source']):
 			tmp[item['source']] = 0
@@ -455,6 +549,8 @@ def platform(platName):
 	for item in platformdata:
 		if int(item['type']) > 12:
 			continue
+		if item['content'] == '':
+			continue
 		data = json.loads(item['content'])
 		if not tmp.has_key('x'):
 			tmp['x'] = data['x']
@@ -462,6 +558,29 @@ def platform(platName):
 	platformdata = tmp
 	
 	platformJson['platformdata'] = platformdata
+
+	cursor.execute("select * from timeline")
+	timeline = list(cursor.fetchall())
+	for x in xrange(0, len(timeline)):
+		timestamp = timeline[x]['timestamp']
+		timeline[x]['x'] = (0.5 + float(timestamp[:4]) - 2007) / 9.0
+		timeline[x]['y'] = int(timestamp[5:])
+		timeline[x]['timestamp'] = int(time.mktime(time.strptime(timeline[x]['timestamp'], '%Y-%m')))
+	timeline.sort(lambda x,y:cmp(float(x['timestamp']),float(y['timestamp'])))
+	for x in xrange(0, len(timeline)):
+		timeline[x]['timestamp'] = time.strftime('%Y-%m', time.localtime(float(timeline[x]['timestamp'])))
+	tmp = {}
+	for x in xrange(0, len(timeline)):
+		timestamp = timeline[x]['timestamp'][:4]
+		if not tmp.has_key(timestamp):
+			tmp[timestamp] = 0
+		timeline[x]['y'] = tmp[timestamp]
+		tmp[timestamp] += 1
+	max_y = np.max([x['y'] for x in timeline]) + 1
+	for x in xrange(0, len(timeline)):
+		timeline[x]['y'] = float(timeline[x]['y']) / max_y
+
+	platformJson['timeline'] = timeline
 
 	closedb(db, cursor)
 
@@ -474,8 +593,48 @@ def compare():
 	platforms = list(cursor.fetchall())
 
 	for x in xrange(0, len(platforms)):
+		if platforms[x]['tags'] == '':
+			platforms[x]['tags'] = []
+		else:
+			platforms[x]['tags'] = platforms[x]['tags'].split(',')
+		platforms[x]['score'] = float(platforms[x]['score'])
 		platforms[x]['bidDistribution'] = json.loads(platforms[x]['bidDistribution'])
 		platforms[x]['basicdata'] = json.loads(platforms[x]['basicdata'])
+		platforms[x]['averageProfit'] = float(platforms[x]['averageProfit'][:-1])
+		platforms[x]['registMoney'] = float(platforms[x]['registMoney'][:platforms[x]['registMoney'].find('万元')])
+		platforms[x]['location'] = platforms[x]['location'].replace('|', ' ')
+		if platforms[x]['location'] == '':
+			platforms[x]['location'] = '-'
+		platforms[x]['location'] = platforms[x]['location'].strip('')
+		if platforms[x]['category'] == '':
+			platforms[x]['category'] = '-'
+		platforms[x]['category'] = platforms[x]['category'].replace(' ', '')
+		if platforms[x]['autobid'] == '':
+			platforms[x]['autobid'] = '-'
+		platforms[x]['autobid'] = platforms[x]['autobid'].replace(' ', '')
+		if platforms[x]['stockTransfer'] == '':
+			platforms[x]['stockTransfer'] = '-'
+		platforms[x]['stockTransfer'] = platforms[x]['stockTransfer'].replace(' ', '')
+		if platforms[x]['fundsToken'] == '':
+			platforms[x]['fundsToken'] = '-'
+		if len(platforms[x]['fundsToken']) > 15:
+			platforms[x]['fundsToken'] = platforms[x]['fundsToken'][:15] + '...'
+		platforms[x]['fundsToken'] = platforms[x]['fundsToken'].replace(' ', '')
+		if platforms[x]['bidGuarantee'] == '':
+			platforms[x]['bidGuarantee'] = '-'
+		if len(platforms[x]['bidGuarantee']) > 15:
+			platforms[x]['bidGuarantee'] = platforms[x]['bidGuarantee'][:15] + '...'
+		platforms[x]['bidGuarantee'] = platforms[x]['bidGuarantee'].replace(' ', '')
+		if platforms[x]['guaranteeMode'] == '':
+			platforms[x]['guaranteeMode'] = '-'
+		if len(platforms[x]['guaranteeMode']) > 15:
+			platforms[x]['guaranteeMode'] = platforms[x]['guaranteeMode'][:15] + '...'
+		platforms[x]['guaranteeMode'] = platforms[x]['guaranteeMode'].replace(' ', '')
+		if platforms[x]['guaranteeOrg'] == '':
+			platforms[x]['guaranteeOrg'] = '-'
+		if len(platforms[x]['guaranteeOrg']) > 15:
+			platforms[x]['guaranteeOrg'] = platforms[x]['guaranteeOrg'][:15] + '...'
+		platforms[x]['guaranteeOrg'] = platforms[x]['guaranteeOrg'].replace(' ', '')
 	platforms.sort(lambda x,y:cmp(float(x['score']),float(y['score'])), reverse=True)
 
 	xmin = np.min([float(x['tSNEx']) for x in platforms])
@@ -486,12 +645,16 @@ def compare():
 	smax = np.max([float(x['score']) for x in platforms])
 
 	for x in xrange(0, len(platforms)):
-		platforms[x]['x'] = 10 + (float(platforms[x]['tSNEx']) - xmin) * 880 / (xmax - xmin)
-		platforms[x]['y'] = 490 - (float(platforms[x]['tSNEy']) - ymin) * 460 / (ymax - ymin)
-		platforms[x]['score'] = (float(platforms[x]['score']) - smin) / (smax - smin)
+		platforms[x]['x'] = 60 + (float(platforms[x]['tSNEx']) - xmin) * 820 / (xmax - xmin)
+		platforms[x]['y'] = 580 - (float(platforms[x]['tSNEy']) - ymin) * 540 / (ymax - ymin)
+		platforms[x]['nscore'] = (float(platforms[x]['score']) - smin) / (smax - smin)
 
 	closedb(db, cursor)
 	return render_template('compare.html', platforms=json.dumps(platforms))
+
+@app.route('/question')
+def question():
+	return render_template('question.html')
 
 if __name__ == '__main__':
 	app.run(debug=True)

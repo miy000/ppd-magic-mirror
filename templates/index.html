@@ -1,4 +1,5 @@
 {% extends 'layout.html' %} {% block style %}
+<link rel="stylesheet" href="{{url_for('static', filename='css/jquery.nstSlider.css')}}">
 <style>
 #main {
     max-width: 1200px;
@@ -12,6 +13,7 @@
     height: 527px;
     background-color: #222;
     margin-bottom: 30px;
+    text-align: center;
 }
 
 #knowledgegraph .link {
@@ -72,10 +74,12 @@
     position: absolute;
     color: #ddd;
     font-size: 12px;
+    text-align: left;
 }
 
 #info #portrait {
     border-radius: 3px;
+    background-color: #fff;
 }
 
 #info h4,
@@ -139,7 +143,6 @@
 #news {
     width: 100%;
     height: 327px;
-    margin-bottom: 30px;
 }
 
 #plot2 {
@@ -157,6 +160,65 @@
     width: 100%;
     height: 300px;
     background-color: #222 !important;
+}
+
+#flow {
+    width: 100%;
+    height: 527px;
+    background-color: #222 !important;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+#plot4 {
+    width: 100%;
+    height: 500px;
+    background-color: #222 !important;
+    position: relative;
+}
+
+.nstSlider {
+    width: 900px;
+    position: absolute;
+    bottom: 52px;
+    left: 50%;
+    margin-left: -450px;
+    background-color: transparent;
+}
+
+.nstSlider:hover {
+    cursor: default;
+}
+
+.leftGrip {
+    outline: none;
+    background-color: transparent;
+    color: #fff;
+    font-size: 25px;
+    opacity: 0;
+    top: -15px;
+}
+
+#control {
+    color: rgba(84, 148, 191, 0.8);
+    position: absolute;
+    left: 80px;
+    bottom: 80px;
+}
+
+#control span.fa {
+    padding: 6px;
+    opacity: 0;
+    transition: color .3s;
+    -o-transition: color .3s;
+    -ms-transition: color .3s;
+    -moz-transition: color .3s;
+    -webkit-transition: color .3s;
+}
+
+#control span.fa:hover {
+    cursor: pointer;
+    color: #fff;
 }
 </style>
 {% endblock %} {% block body %}
@@ -202,17 +264,167 @@
         <p id="description" style="margin-bottom:0;"></p>
     </div>
 </div>
-<div id="news">
-	<div class="plot-title">媒体新闻情感分析</div>
-	<div id="plot2"></div>
+<div id="flow">
+    <div class="plot-title">新闻时间流</div>
+    <div id="plot4">
+        <div class="nstSlider" data-range_min="0" data-range_max="100" data-cur_min="0" data-cur_max="100">
+            <div class="leftGrip fa fa-fw fa-commenting"></div>
+        </div>
+        <div id="control">
+            <span class="fa fa-fw fa-chevron-left"></span>
+            <span class="fa fa-fw fa-pause"></span>
+            <span class="fa fa-fw fa-chevron-right"></span>
+        </div>
+        <svg width="1000px" height="500px">
+            <g id="axis"></g>
+            <g id="wordflow"></g>
+        </svg>
+    </div>
 </div>
-<div id="comments">
-	<div class="plot-title">用户评论情感分析</div>
-	<div id="plot3"></div>
+<div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+        <div id="news">
+            <div class="plot-title">媒体新闻情感分析</div>
+            <div id="plot2"></div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+        <div id="comments">
+            <div class="plot-title">用户评论情感分析</div>
+            <div id="plot3"></div>
+        </div>
+    </div>
 </div>
+<script src="{{url_for('static',filename='js/jquery.nstSlider.min.js')}}"></script>
 <script>
 $(document).ready(function() {
     $('#nav1').addClass('active');
+
+    var news_now = 0.85;
+    var news_flow = [];
+    var news_index = [];
+    var flow_speed_up = 1;
+    var flow_step = 0;
+    var lock = true;
+    var change_platName = true;
+    $('.nstSlider').nstSlider({
+        "left_grip_selector": ".leftGrip",
+        "value_changed_callback": function(cause, leftValue, rightValue) {}
+    });
+    $('.nstSlider').nstSlider('disable');
+
+    var flow_is_pause = 0;
+    var flow_interval = setInterval(function() {
+        if (!lock) {
+            var left = parseInt($('#flow .leftGrip').css('left'));
+            if (news_index.length == 0) {
+                flow_speed_up = flow_speed_up * 2;
+            } else {
+                flow_speed_up = 1;
+            }
+            news_now += flow_step * flow_speed_up;
+            left = news_now * 900;
+            if (left >= 900) {
+                left -= 900;
+                news_now -= 1;
+            }
+            $('#flow .leftGrip').animate({
+                left: left
+            }, 1200);
+            flow();
+        }
+    }, 1600);
+
+    $('#flow').on('click', '.fa-pause', function(event) {
+        clearInterval(flow_interval);
+        flow_is_pause = 1;
+        $(this).removeClass('fa-pause').addClass('fa-play');
+    });
+
+    $('#flow').on('click', '.fa-play', function(event) {
+        $(this).removeClass('fa-play').addClass('fa-pause');
+        flow_is_pause = 0;
+        if (!lock) {
+            var left = parseInt($('#flow .leftGrip').css('left'));
+            if (news_index.length == 0) {
+                flow_speed_up = flow_speed_up * 2;
+            } else {
+                flow_speed_up = 1;
+            }
+            news_now += flow_step * flow_speed_up;
+            left = news_now * 900;
+            if (left >= 900) {
+                left -= 900;
+                news_now -= 1;
+            }
+            $('#flow .leftGrip').animate({
+                left: left
+            }, 1200);
+            flow();
+        }
+        flow_interval = setInterval(function() {
+            if (!lock) {
+                var left = parseInt($('#flow .leftGrip').css('left'));
+                if (news_index.length == 0) {
+                    flow_speed_up = flow_speed_up * 2;
+                } else {
+                    flow_speed_up = 1;
+                }
+                news_now += flow_step * flow_speed_up;
+                left = news_now * 900;
+                if (left >= 900) {
+                    left -= 900;
+                    news_now -= 1;
+                }
+                $('#flow .leftGrip').animate({
+                    left: left
+                }, 1200);
+                flow();
+            }
+        }, 1600);
+    });
+
+    $('#flow .fa-chevron-left').click(function() {
+        if (!lock && flow_is_pause) {
+            var left = parseInt($('#flow .leftGrip').css('left'));
+            if (news_index.length == 0) {
+                flow_speed_up = flow_speed_up * 2;
+            } else {
+                flow_speed_up = 1;
+            }
+            news_now -= flow_step * flow_speed_up;
+            left = news_now * 900;
+            if (left < 0) {
+                left += 900;
+                news_now += 1;
+            }
+            $('#flow .leftGrip').animate({
+                left: left
+            }, 1200);
+            flow();
+        }
+    });
+
+    $('#flow .fa-chevron-right').click(function() {
+        if (!lock && flow_is_pause) {
+            var left = parseInt($('#flow .leftGrip').css('left'));
+            if (news_index.length == 0) {
+                flow_speed_up = flow_speed_up * 2;
+            } else {
+                flow_speed_up = 1;
+            }
+            news_now += flow_step * flow_speed_up;
+            left = news_now * 900;
+            if (left >= 900) {
+                left -= 900;
+                news_now -= 1;
+            }
+            $('#flow .leftGrip').animate({
+                left: left
+            }, 1200);
+            flow();
+        }
+    });
 
     var mode = 1;
     var platName = '拍拍贷';
@@ -225,6 +437,7 @@ $(document).ready(function() {
         } else {
             mode = 2;
         }
+        change_platName = false;
         draw(platName);
     });
 
@@ -241,13 +454,14 @@ $(document).ready(function() {
                 scrollTop: $('#ranks').scrollTop() + diff - 34
             }, 300);
         }
+        change_platName = true;
         draw(platName);
     });
 
     var platforms = eval({{platforms|safe}});
     var platNamesJson = eval({{platNamesJson|safe}});
 
-    var plot1_margin = [80, 120, 30, 30];
+    var plot1_margin = [70, 140, 30, 40];
     var plot1_width = 1000 - plot1_margin[1] - plot1_margin[3];
     var plot1_height = 500 - plot1_margin[0] - plot1_margin[2];
 
@@ -256,16 +470,16 @@ $(document).ready(function() {
     var plot2 = echarts.init(document.getElementById('plot2'), 'dark');
     var option2 = {
         grid: {
-            x: 70,
+            x: 60,
             x2: 40,
             y: 60,
             y2: 95,
         },
         tooltip: {
             trigger: 'axis',
-            formatter: function(params) {
-                return params[0].name + '<br/>' + params[0].seriesName + ' : ' + params[0].value + '<br/>' + params[1].seriesName + ' : ' + params[1].value;
-            },
+            // formatter: function(params) {
+            //     return params[0].name + '<br/>' + params[0].seriesName + ' : ' + params[0].value + '<br/>' + params[1].seriesName + ' : ' + params[1].value;
+            // },
         },
         legend: {
             data: ['平台积极', '平台消极', '行业积极', '行业消极'],
@@ -335,16 +549,16 @@ $(document).ready(function() {
     var plot3 = echarts.init(document.getElementById('plot3'), 'dark');
     var option3 = {
         grid: {
-            x: 70,
+            x: 60,
             x2: 40,
             y: 60,
             y2: 95,
         },
         tooltip: {
             trigger: 'axis',
-            formatter: function(params) {
-                return params[0].name + '<br/>' + params[0].seriesName + ' : ' + params[0].value + '<br/>' + params[1].seriesName + ' : ' + params[1].value;
-            },
+            // formatter: function(params) {
+            //     return params[0].name + '<br/>' + params[0].seriesName + ' : ' + params[0].value + '<br/>' + params[1].seriesName + ' : ' + params[1].value;
+            // },
         },
         legend: {
             data: ['平台积极', '平台消极', '行业积极', '行业消极'],
@@ -411,9 +625,216 @@ $(document).ready(function() {
         }]
     };
 
+    // 新闻时间流
+    function flow() {
+        news_index = [];
+        var tmp = news_now * (news_flow[news_flow.length - 1]['timestamp'] - news_flow[0]['timestamp']) + news_flow[0]['timestamp'];
+        for (var i = 0; i < news_flow.length; i++) {
+            var gap = parseFloat(news_flow[i]['timestamp'] - tmp) / 3600 / 24;
+            if (gap < 0) {
+                news_flow[i]['opacity'] = 1 + 0.3 * gap;
+                if (news_flow[i]['opacity'] < 0) {
+                    news_flow[i]['opacity'] = 0;
+                }
+                news_flow[i]['ratio'] = (1 - 0.1 * gap) * 0.8;
+            } else if (gap >= 0) {
+                news_flow[i]['opacity'] = 1 - 0.15 * gap;
+                if (news_flow[i]['opacity'] < 0) {
+                    news_flow[i]['opacity'] = 0;
+                }
+                news_flow[i]['ratio'] = (1 - 0.1 * gap) * 0.8;
+                if (news_flow[i]['ratio'] < 0) {
+                    news_flow[i]['ratio'] = 0;
+                }
+            }
+            news_flow[i]['gap'] = 16 - gap * 2;
+            // news_flow[i]['gap'] = 15;
+            if (news_flow[i]['gap'] < 0) {
+                news_flow[i]['gap'] = 0;
+            }
+
+            if (gap >= -5 && gap <= 10) {
+                if (news_index.length <= 30) {
+                    news_index.push(i);
+                }
+            }
+        }
+
+        news_index.reverse();
+
+        var wordflow = d3.select('#flow #wordflow').selectAll('text').data(news_index, function(d) {
+            return d;
+        });
+        wordflow.transition().duration(1000).attr({
+            x: function(d) {
+                return 300 + news_flow[d].ratio * (news_flow[d].x - 0.5) * 660;
+            },
+            y: function(d) {
+                return 230 + news_flow[d].ratio * (news_flow[d].y - 0.5) * 420;
+            },
+            'fill-opacity': function(d) {
+                return news_flow[d].opacity;
+            },
+            'font-size': function(d) {
+                return news_flow[d].gap;
+            }
+        });
+        wordflow.enter().append('text').attr({
+            x: function(d) {
+                return 300;
+            },
+            y: 230,
+            'fill': '#fff',
+            'fill-opacity': 0,
+            'font-size': function(d) {
+                return news_flow[d].gap;
+            }
+        }).transition().duration(1000).attr({
+            x: function(d) {
+                return 300 + news_flow[d].ratio * (news_flow[d].x - 0.5) * 660;
+            },
+            y: function(d) {
+                return 230 + news_flow[d].ratio * (news_flow[d].y - 0.5) * 420;
+            },
+            'fill-opacity': function(d) {
+                return news_flow[d].opacity;
+            },
+            'font-size': function(d) {
+                return news_flow[d].gap;
+            }
+        }).text(function(d) {
+            return news_flow[d].title;
+        });
+        wordflow.exit().transition().duration(1000).attr({
+            x: function(d) {
+                return 300 + news_flow[d].ratio * (news_flow[d].x - 0.5) * 660;
+            },
+            y: function(d) {
+                return 230 + news_flow[d].ratio * (news_flow[d].y - 0.5) * 420;
+            },
+            'fill-opacity': function(d) {
+                return news_flow[d].opacity;
+            },
+            'font-size': function(d) {
+                return news_flow[d].gap;
+            }
+        }).remove();
+    }
+
     draw('拍拍贷');
 
+    // 改变平台关键词
     function draw(keyword) {
+        if (change_platName) {
+            $('#flow #control span.fa').css('opacity', 0).animate({
+                opacity: 1
+            }, 1200);
+            news_now = 0.85;
+            $('#flow .leftGrip').css('opacity', 0).css('left', '765px');
+            $('#flow #wordflow text').remove();
+            $.ajax({
+                    url: '{{url_for("news")}}',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        keyword: keyword
+                    },
+                })
+                .done(function(data) {
+                    news_flow = data['news'];
+                    flow_step = parseFloat(news_flow[news_flow.length - 1]['timestamp'] - news_flow[0]['timestamp']) / 3600 / 24 / 14;
+                    flow_step = 1 / flow_step;
+                    lock = false;
+                    $('#flow g#axis').empty();
+
+                    var axis = [{
+                        'x10': 500,
+                        'x20': 500,
+                        'y10': 440,
+                        'y20': 440,
+                        'x11': 50,
+                        'x21': 950,
+                        'y11': 440,
+                        'y21': 440,
+                    }];
+
+                    for (var i = 1; i < data['axis'].length - 1; i++) {
+                        axis.push({
+                            'x10': 50 + i * 90,
+                            'x20': 50 + i * 90,
+                            'y10': 440,
+                            'y20': 440,
+                            'x11': 50 + i * 90,
+                            'x21': 50 + i * 90,
+                            'y11': 440,
+                            'y21': 434,
+                        });
+                    }
+
+                    d3.select('#flow #axis').selectAll('line').data(axis).enter().append('line').attr({
+                        'x1': function(d) {
+                            return d.x10;
+                        },
+                        'y1': function(d) {
+                            return d.y10;
+                        },
+                        'x2': function(d) {
+                            return d.x20;
+                        },
+                        'y2': function(d) {
+                            return d.y20;
+                        },
+                        'stroke': 'rgba(250,250,250,0.5)',
+                        'stroke-width': 1,
+                        'shape-rendering': 'crispEdges'
+                    }).transition().duration(600).attr({
+                        'x1': function(d) {
+                            return d.x11;
+                        },
+                        'y1': function(d) {
+                            return d.y11;
+                        },
+                        'x2': function(d) {
+                            return d.x21;
+                        },
+                        'y2': function(d) {
+                            return d.y21;
+                        },
+                    });
+                    d3.select('#flow #axis').selectAll('text').data([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).enter().append('text').text(function(d) {
+                        return data['axis'][d];
+                    }).attr({
+                        'fill': '#fff',
+                        'fill-opacity': 0,
+                        'x': function(d, i) {
+                            return 50 + i * 90 - 33.3;
+                        },
+                        'y': 460,
+                        'font-size': 12
+                    }).transition().duration(600).attr('fill-opacity', .8);
+
+                    $('#flow .leftGrip').animate({
+                        opacity: 0.9
+                    }, 800);
+
+                    var curve = d3.svg.line().x(function(d) {
+                        return d[0];
+                    }).y(function(d) {
+                        return d[1];
+                    }).interpolate('basis');
+
+                    d3.select('#flow #axis').append('path').style("opacity", 1e-6).attr('d', curve(data['curve'])).attr({
+                        stroke: 'rgba(221, 107, 102, 0.6)',
+                        'fill': 'rgba(221, 107, 102, 0.3)',
+                    }).transition().duration(600).style("opacity", 1).style("z-index", 0);
+
+                    flow();
+                })
+                .fail(function() {})
+                .always(function() {});
+        }
+
+        // 知识图谱和关键词云
         $('#knowledgegraph .link').remove();
         $('#knowledgegraph .text').remove();
         $('#knowledgegraph .node').remove();
@@ -552,12 +973,8 @@ $(document).ready(function() {
                         }).style('background-color', '#f5f5f5');
                     });
                 })
-                .fail(function() {
-                    console.log("error");
-                })
-                .always(function() {
-                    console.log("complete");
-                });
+                .fail(function() {})
+                .always(function() {});
         }
 
         if (mode == 1) {
@@ -578,15 +995,15 @@ $(document).ready(function() {
             'fill-opacity': function(d, i) {
                 return platforms[keyword].newskeywords[1][i] * 0.9 + 0.1;
             }
-        }).attr('transform', function() {
-            return 'translate(' + parseInt(Math.random() * plot1_width + plot1_margin[3]) + ',' + parseInt(Math.random() * plot1_height + plot1_margin[0]) + ')';
+        }).attr('transform', function(d,i) {
+            return 'translate(' + parseInt(platforms[keyword].newskeywords[2][i] * plot1_width + plot1_margin[3]) + ',' + parseInt(platforms[keyword].newskeywords[3][i] * plot1_height + plot1_margin[0]) + ')';
         });
         newskeyword.enter().append('text').text(function(d) {
             return d;
         }).attr({
             fill: '#B85D59',
-            transform: function() {
-                return 'translate(' + parseInt(Math.random() * plot1_width + plot1_margin[3]) + ',' + parseInt(Math.random() * plot1_height + plot1_margin[0]) + ')';
+            transform: function(d,i) {
+                return 'translate(' + parseInt(platforms[keyword].newskeywords[2][i] * plot1_width + plot1_margin[3]) + ',' + parseInt(platforms[keyword].newskeywords[3][i] * plot1_height + plot1_margin[0]) + ')';
             },
             'font-size': function(d, i) {
                 return parseInt(platforms[keyword].newskeywords[1][i] * 40 + 10);
@@ -620,15 +1037,15 @@ $(document).ready(function() {
             'fill-opacity': function(d, i) {
                 return platforms[keyword].commentkeywords[1][i] * 0.9 + 0.1;
             }
-        }).attr('transform', function() {
-            return 'translate(' + parseInt(Math.random() * plot1_width + plot1_margin[3]) + ',' + parseInt(Math.random() * plot1_height + plot1_margin[0]) + ')';
+        }).attr('transform', function(d,i) {
+            return 'translate(' + parseInt(platforms[keyword].commentkeywords[2][i] * plot1_width + plot1_margin[3]) + ',' + parseInt(platforms[keyword].newskeywords[3][i] * plot1_height + plot1_margin[0]) + ')';
         });
         commentkeyword.enter().append('text').text(function(d) {
             return d;
         }).attr({
             fill: '#4A7DA0',
-            transform: function() {
-                return 'translate(' + parseInt(Math.random() * plot1_width + plot1_margin[3]) + ',' + parseInt(Math.random() * plot1_height + plot1_margin[0]) + ')';
+            transform: function(d,i) {
+                return 'translate(' + parseInt(platforms[keyword].commentkeywords[2][i] * plot1_width + plot1_margin[3]) + ',' + parseInt(platforms[keyword].newskeywords[3][i] * plot1_height + plot1_margin[0]) + ')';
             },
             'font-size': function(d, i) {
                 return parseInt(platforms[keyword].commentkeywords[1][i] * 25 + 10);
@@ -695,7 +1112,7 @@ $(document).ready(function() {
             $('#info #guaranteeOrg span').text(forces.nodes[node_id].guaranteeOrg);
 
             $('#info').css({
-                left: x + parseInt($obj.attr('width')) + 20,
+                left: x + parseInt($obj.attr('width')) + 120,
                 top: y + 27 - 150
             }).show();
         } else if (forces.nodes[node_id].group == 2) {
@@ -707,7 +1124,7 @@ $(document).ready(function() {
             $('#info #description').text(forces.nodes[node_id].description).show();
 
             $('#info').css({
-                left: x + parseInt($obj.attr('width')) + 20,
+                left: x + parseInt($obj.attr('width')) + 120,
                 top: y + 27 - 150
             }).show();
         }
@@ -744,7 +1161,7 @@ $(document).ready(function() {
             $('#info #guaranteeOrg span').text(forces.nodes[node_id].guaranteeOrg);
 
             $('#info').css({
-                left: x + parseInt($obj.attr('width')) + 20,
+                left: x + parseInt($obj.attr('width')) + 120,
                 top: y + 27 - 150
             }).show();
         } else if (forces.nodes[node_id].group == 2) {
@@ -756,7 +1173,7 @@ $(document).ready(function() {
             $('#info #description').text(forces.nodes[node_id].description).show();
 
             $('#info').css({
-                left: x + parseInt($obj.attr('width')) + 20,
+                left: x + parseInt($obj.attr('width')) + 120,
                 top: y + 27 - 150
             }).show();
         }
@@ -782,6 +1199,7 @@ $(document).ready(function() {
                 }
             });
             platName = forces.nodes[node_id].name;
+            change_platName = true;
         }
         if (forces.nodes[node_id].group == 1 || forces.nodes[node_id].group == 2) {
             $('#info').hide();
@@ -805,6 +1223,7 @@ $(document).ready(function() {
                 }
             });
             platName = forces.nodes[node_id].name;
+            change_platName = true;
         }
         if (forces.nodes[node_id].group == 1 || forces.nodes[node_id].group == 2) {
             $('#info').hide();

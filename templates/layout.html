@@ -14,13 +14,21 @@
     <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" />
     <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <link href="{{url_for('static',filename='fa/css/font-awesome.min.css')}}" rel="stylesheet">
-    <link href='http://api.youziku.com/webfont/CSS/56f953c3f629d809ec4a5b84' rel='stylesheet' type='text/css' />
     <script src="{{url_for('static',filename='js/d3.min.js')}}"></script>
     <script src="{{url_for('static',filename='js/echarts.min.js')}}"></script>
     <script src="{{url_for('static',filename='js/dark.js')}}"></script>
     <script src="{{url_for('static',filename='js/china.js')}}"></script>
-
     <style>
+    @font-face {
+        font-family: 'mnjxxk';
+        src: url("{{url_for('static', filename='font/mnjxxk.eot')}}") format("embedded-opentype"),
+        url("{{url_for('static', filename='font/mnjxxk.woff')}}") format('woff'),
+        url("{{url_for('static', filename='font/mnjxxk.ttf')}}") format('truetype'),
+        url("{{url_for('static', filename='font/mnjxxk.svg')}}") format('svg');
+        font-weight: normal;
+        font-style: normal;
+    }
+    
     body {
         font-family: Microsoft Yahei;
         background-color: #1b1b1b;
@@ -31,7 +39,7 @@
         padding: 20px 40px;
         position: relative;
         border-bottom: 1px solid rgba(220, 220, 220, 0.2);
-        font-family:'minijianxixingk263187a6420c3';
+        font-family: 'mnjxxk', Microsoft Yahei;
     }
     
     #header #nav {
@@ -156,9 +164,12 @@
             <a href="{{url_for('platform', platName='拍拍贷')}}" id="nav3">
                 详情
             </a>
-            <!-- <a href="{{url_for('compare')}}" id="nav4">
+            <a href="{{url_for('compare')}}" id="nav4">
                 对比
-            </a> -->
+            </a>
+            <a href="{{url_for('question')}}" id="nav5">
+                问答
+            </a>
         </div>
     </div>
     <div style="padding:50px 60px;">

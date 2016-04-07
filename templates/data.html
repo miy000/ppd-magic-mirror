@@ -171,6 +171,38 @@
     background-color: #333;
     cursor: pointer;
 }
+
+#plot5 {
+    width: 100%;
+    height: 500px;
+    background-color: #222 !important;
+    text-align: center;
+    position: relative;
+}
+
+#plot5 text.platName:hover {
+    cursor: pointer;
+}
+#plot5 #flow_control {
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    color: #759AA0;
+    font-size: 13px;
+}
+#plot5 .fa {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    transition: color .3s;
+    -o-transition: color .3s;
+    -ms-transition: color .3s;
+    -moz-transition: color .3s;
+    -webkit-transition: color .3s;
+}
+#plot5 .fa:hover {
+    cursor: pointer;
+    color: #fff;
+}
 </style>
 {% endblock %} {% block body %}
 <div class="row">
@@ -205,6 +237,21 @@
     <div id="plot3">
         <p></p>
         <span class="fa fa-fw fa-play"></span>
+        <svg width="1000px" height="500px">
+            <g></g>
+        </svg>
+    </div>
+</div>
+<div style="margin-bottom:30px;">
+    <div class="plot-title">热门平台指数趋势</div>
+    <div id="plot5">
+        <div id="flow_control">
+            <span class="fa fa-fw fa-chevron-left" style="padding-right:6px;"></span>
+            <span class="param"> </span>
+            <span class="fa fa-fw fa-chevron-right" style="padding-left:6px;"></span>
+        </div>
+        <!-- <p></p>
+        <span class="fa fa-fw fa-play"></span> -->
         <svg width="1000px" height="500px">
             <g></g>
         </svg>
@@ -918,19 +965,19 @@ $(document).ready(function() {
                 center: ['39%', '50%'],
                 radius: '40%',
                 splitArea: {
-                	show: false
+                    show: false
                 },
                 shape: 'circle',
-            	startAngle: 180,
+                startAngle: 180,
                 splitLine: {
-                	lineStyle: {
-                		color: ['rgba(200, 200, 200, 0.3)']
-                	}
+                    lineStyle: {
+                        color: ['rgba(200, 200, 200, 0.3)']
+                    }
                 },
                 axisLine: {
-                	lineStyle: {
-                		color: 'rgba(200, 200, 200, 0.3)'
-                	}
+                    lineStyle: {
+                        color: 'rgba(200, 200, 200, 0.3)'
+                    }
                 }
             },
             series: [{
@@ -1222,6 +1269,151 @@ $(document).ready(function() {
         $('#mask').fadeOut('fast', function() {
             setParams();
         });
+    });
+
+    var plot5_margin = [54, 100, 30, 30];
+    var plot5_index = 0;
+    var plot5_width = 1000 - plot5_margin[1] - plot5_margin[3];
+    var plot5_height = 500 - plot5_margin[0] - plot5_margin[2];
+    var tmp = d3.interpolate(d3.rgb(68, 111, 177), d3.rgb(181, 252, 255));
+    var plot5_colors = [];
+    for (var i = 0; i < 20; i++) {
+        plot5_colors.push(tmp(i * 0.04));
+    }
+    var plot5_platNames = ['陆金所', '人人贷', '宜人贷', '拍拍贷', '点融网', '微贷网', '积木盒子', '有利网', '投哪网', '开鑫贷', '易贷网', '翼龙贷', '京东金融', '爱钱进', '红岭创投', 'PPmoney万惠', '你我贷', '团贷网', '鑫合汇', '和信贷'];
+    var plot5_params = ['发展指数', '成交', '人气', '杠杆', '分散度', '流动性', '透明度'];
+
+    var curve = d3.svg.line().x(function(d) {
+        return plot5_width * d[0] + plot5_margin[3];
+    }).y(function(d) {
+        return plot5_height * (1 - d[1]) + plot5_margin[0];
+        // }).interpolate('linear');
+    }).interpolate('monotone');
+
+    $('#plot5 .param').text(plot5_params[plot5_index]);
+
+    $('#plot5 .fa-chevron-left').click(function(event) {
+        plot5_index -= 1;
+        if (plot5_index < 0) {
+            plot5_index = 6; 
+        }
+        $('#plot5 .param').text(plot5_params[plot5_index]);
+        flow();
+    });
+
+    $('#plot5 .fa-chevron-right').click(function(event) {
+        plot5_index += 1;
+        if (plot5_index == 7) {
+            plot5_index = 0;
+        }
+        $('#plot5 .param').text(plot5_params[plot5_index]);
+        flow();
+    });
+
+    var plot5_paths = d3.select('#plot5 svg g').selectAll('path').data(plot5_platNames, function(d) {
+        return d;
+    });
+    plot5_paths.enter().append('path').attr('d', function(d, i) {
+        return curve(platCount['flow'][plot5_index]['content'][i][0]);
+    }).attr('name', function(d) {
+        return d;
+    }).attr('fill', function(d, i) {
+        return plot3_colors[platCount['flow'][plot5_index]['content'][i][1]];
+    }).attr('fill-opacity', 0).transition().duration(800).attr('fill-opacity', function(d, i) {
+        return 1 - 0.01 * platCount['flow'][plot5_index]['content'][i][1];
+    });
+
+    var plot5_text = d3.select('#plot5 svg g').selectAll('text.platName').data(plot5_platNames, function(d) {
+        return d;
+    });
+    plot5_text.enter().append('text').text(function(d) {
+        return d;
+    }).attr('transform', function(d, i) {
+        return 'translate(' + (plot5_width + plot5_margin[3] + 15) + ',' + (plot5_height + plot5_margin[0] - platCount['flow'][plot5_index]['content'][i][1] * 20 + 21) + ')';
+    }).attr({
+        'fill-opacity': '0',
+        'font-size': '12px',
+        'class': 'platName',
+        'fill': function(d, i) {
+            return plot3_colors[platCount['flow'][plot5_index]['content'][i][1]];
+        }
+    }).transition().duration(800).attr('transform', function(d, i) {
+        return 'translate(' + (plot5_width + plot5_margin[3] + 15) + ',' + (plot5_height + plot5_margin[0] - platCount['flow'][plot5_index]['content'][i][1] * 20) + ')';
+    }).attr('fill-opacity', 0.8);
+
+    function flow() {
+        plot5_paths.transition().duration(800).attr('d', function(d, i) {
+            return curve(platCount['flow'][plot5_index]['content'][i][0]);
+        }).attr('fill', function(d, i) {
+            return plot3_colors[platCount['flow'][plot5_index]['content'][i][1]];
+        }).attr('fill-opacity', function(d, i) {
+            return 1 - 0.01 * platCount['flow'][plot5_index]['content'][i][1];
+        });
+
+        plot5_text.transition().duration(800).attr('transform', function(d, i) {
+            return 'translate(' + (plot5_width + plot5_margin[3] + 15) + ',' + (plot5_height + plot5_margin[0] - platCount['flow'][plot5_index]['content'][i][1] * 20) + ')';
+        }).attr('fill', function(d,i){
+            return plot3_colors[platCount['flow'][plot5_index]['content'][i][1]];
+        });
+    }
+
+    var tmp = [];
+    for (var i = 0; i < 31; i++) {
+        tmp.push(i);
+    }
+    d3.select('#plot5 svg g').selectAll('line').data(tmp).enter().append('line').attr({
+        x1: function(d) {
+            return plot5_margin[3] + d * parseFloat(plot5_width) / (platCount['flow'][plot5_index]['content'][0][0].length / 2 - 1);
+        },
+        x2: function(d) {
+            return plot5_margin[3] + d * parseFloat(plot5_width) / (platCount['flow'][plot5_index]['content'][0][0].length / 2 - 1);
+        },
+        'y1': plot5_margin[0],
+        'y2': plot5_margin[0] + plot5_height,
+        'stroke': 'rgba(240, 240, 240, 0)',
+        'stroke-width': 1,
+        'shape-rendering': 'crispEdges',
+    }).transition().duration(800).attr('stroke', function(d,i){
+        if (i % 3 == 0) {
+            return 'rgba(240, 240, 240, 0.4)';
+        }
+        else {
+            return 'rgba(240, 240, 240, 0.1)';
+        }
+        
+    });
+
+    var tmp = ['2013-08', '2013-11', '2014-02', '2014-05', '2014-08', '2014-11', '2015-02', '2015-05', '2015-08', '2015-11', '2016-02'];
+    d3.select('#plot5 svg g').selectAll('text.month').data(tmp).enter().append('text').attr({
+        x: function(d, i) {
+            return plot5_margin[3] + 3 * i * parseFloat(plot5_width) / (platCount['flow'][plot5_index]['content'][0][0].length / 2 - 1) - 30;
+        },
+        y: 40,
+        'fill-opacity': 0,
+        'fill': '#fff',
+        'class': 'month',
+        'font-size': '12px'
+    }).text(function(d) {
+        return d;
+    }).transition().duration(800).attr('fill-opacity', '0.8');
+
+    $('#plot5 text.platName').hover(function() {
+        var tmp = $(this).text();
+        $('#plot5 text.platName').attr('class', 'platName inactive');
+        $(this).attr('class', 'platName active');
+        $('#plot5 path').attr('class', 'inactive');
+        $('#plot5 path[name="' + tmp + '"]').attr('class', 'active');
+        d3.selectAll('#plot5 path.inactive').transition().duration(600).attr('fill-opacity', 0.05);
+        d3.selectAll('#plot5 path.active').transition().duration(600).attr('fill-opacity', 1);
+        d3.selectAll('#plot5 text.inactive').transition().duration(600).attr('fill-opacity', 0.2);
+        d3.selectAll('#plot5 text.active').transition().duration(600).attr('fill-opacity', 1);
+    }, function() {
+        $('#plot5 path').attr('class', '');
+        $('#plot5 text.platName').attr('class', 'platName');
+        d3.select('#plot5 svg g').selectAll('path').transition().duration(600).attr('fill-opacity', function(d, i) {
+            return 1 - 0.01 * platCount['flow'][plot5_index]['content'][i][1];
+        });
+        d3.select('#plot5 svg g').selectAll('text.platName').transition().duration(600).attr('fill-opacity', 0.8);
     });
 });
 </script>

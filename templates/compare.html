@@ -5,6 +5,10 @@
     margin: 0 auto;
 }
 
+#select {
+    background-color: #222 !important;
+}
+
 #select text {
     transition: fill, font-size .3s;
     -o-transition: fill, font-size .3s;
@@ -27,13 +31,57 @@
     z-index: 999;
     font-size: 40px;
 }
+
+#compare {
+    display: none;
+}
+#compare #plot1 {
+    width: 100%;
+    height: 527px;
+    background-color: #222;
+    margin-bottom: 30px;
+}
+
+#compare #plot21 {
+    width: 100%;
+    height: 300px;
+    background-color: #222 !important;
+}
+
+#compare #plot22 {
+    width: 100%;
+    height: 300px;
+    background-color: #222 !important;
+}
 </style>
 {% endblock %} {% block body %}
-<div style="min-height:500px;text-align:center;">
-	<svg width="1000px" height="500px">
-		<g id="select"></g>
-		<g id="compare"></g>
-	</svg>
+<div style="text-align:center;">
+    <div id="select">
+        <div class="plot-title">选择对比平台</div>
+        <svg width="1000px" height="600px" style="margin-top:30px;margin-bottom:30px;">
+            <g></g>
+        </svg>
+    </div>
+    <div id="compare">
+        <div id="plot1">
+            <div class="plot-title">平台基本信息对比</div>
+            <div>
+                <svg width="1000px" height="500px">
+                    <g></g>
+                </svg>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <div class="plot-title">标的期限分布对比</div>
+                <div id="plot21"></div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <div class="plot-title">标的金额分布对比</div>
+                <div id="plot22"></div>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
 $(document).ready(function() {
@@ -51,7 +99,7 @@ $(document).ready(function() {
         positions.push([platforms[i].x, platforms[i].y]);
     }
 
-    d3.select('g#select').selectAll('text').data(platNames).enter().append('text').text(function(d) {
+    d3.select('#select svg g').selectAll('text').data(platNames).enter().append('text').text(function(d) {
         return d;
     }).attr('transform', function(d) {
         var tmp = Math.random();
@@ -71,22 +119,22 @@ $(document).ready(function() {
         return d;
     }).attr('class', 'inactive').transition().duration(800).attr({
         'font-size': function(d, i) {
-            return 20 * parseFloat(platforms[i].score) + 10;
+            return 20 * parseFloat(platforms[i].nscore) + 10;
         },
         'fill-opacity': function(d, i) {
-            return parseFloat(platforms[i].score);
+            return parseFloat(platforms[i].nscore);
         }
     }).attr('transform', function(d, i) {
-        return 'translate(' + (positions[i][0] + Math.random() * 60 - 30) + ',' + (positions[i][1] + Math.random() * 40 - 20) + ')';
+        return 'translate(' + (positions[i][0] + Math.random() * 80 - 40) + ',' + (positions[i][1] + Math.random() * 40 - 20) + ')';
     });
 
     $('#select text').click(function(event) {
         if (selectCount == 0) {
-            d3.select('#select text#' + $(this).attr('id')).attr('class', 'active').transition().duration(600).attr('transform', 'translate(200, 230)');
+            d3.select('#select text#' + $(this).attr('id')).attr('class', 'active').transition().duration(600).attr('transform', 'translate(250, 230)');
             selectCount += 1;
             platform1 = $(this).text();
         } else if (selectCount == 1) {
-            d3.select('#select text#' + $(this).attr('id')).attr('class', 'active').transition().duration(600).attr('transform', 'translate(600, 230)');
+            d3.select('#select text#' + $(this).attr('id')).attr('class', 'active').transition().duration(600).attr('transform', 'translate(650, 230)');
             selectCount += 1;
             platform2 = $(this).text();
             setTimeout(function() {
@@ -114,7 +162,7 @@ $(document).ready(function() {
                     'font-size': 40,
                     'class': '',
                 }).transition().duration(600).attr({
-                    'transform': 'translate(400, 230)',
+                    'transform': 'translate(430, 230)',
                     'fill-opacity': 0
                 });
             }, 600);
@@ -124,24 +172,457 @@ $(document).ready(function() {
             }, 1200);
         }
     });
-	
-	function compare() {
-		var tmp1 = '';
-		var tmp2 = '';
-		for (var i = 0; i < platforms.length; i++) {
-			if (platforms[i].platName == platform1) {
-				tmp1 = platforms[i];
-				break;
-			}
-		}
-		for (var i = 0; i < platforms.length; i++) {
-			if (platforms[i].platName == platform2) {
-				tmp2 = platforms[i];
-				break;
-			}
-		}
-		var content = [tmp1.platName, tmp2.platName];
-	}
+
+    function compare() {
+        var tmp1 = '';
+        var tmp2 = '';
+        for (var i = 0; i < platforms.length; i++) {
+            if (platforms[i].platName == platform1) {
+                tmp1 = platforms[i];
+                break;
+            }
+        }
+        for (var i = 0; i < platforms.length; i++) {
+            if (platforms[i].platName == platform2) {
+                tmp2 = platforms[i];
+                break;
+            }
+        }
+        var content = [tmp1.platName, tmp2.platName];
+        $('#select').hide();
+        $('#compare').show();
+
+        console.log(tmp1);
+        console.log(tmp2);
+
+        // $('#compare #platName #plat1').attr('href', "{{url_for('platform', platName='')}}" + content[0]);
+        // $('#compare #platName #plat1 h5 span').text(content[0]).animate({
+        //     opacity: 1
+        // }, 400);
+        // $('#compare #platName #plat1 h5 img').attr('src', tmp1['logo']).animate({
+        //     opacity: 1
+        // }, 400);
+        // for (var i = 0; i < tmp1['tags'].length; i++) {
+        //     $('#compare #tags #tag1').append('<div class="tag">' + tmp1['tags'][i] + '</div>');
+        // }
+
+        // $('#compare #platName #plat2').attr('href', "{{url_for('platform', platName='')}}" + content[1]);
+        // $('#compare #platName #plat2 h5 span').text(content[1]).animate({
+        //     opacity: 1
+        // }, 400);
+        // $('#compare #platName #plat2 h5 img').attr('src', tmp2['logo']).animate({
+        //     opacity: 1
+        // }, 400);
+        // for (var i = 0; i < tmp2['tags'].length; i++) {
+        //     $('#compare #tags #tag2').append('<div class="tag">' + tmp2['tags'][i] + '</div>');
+        // }
+
+        var plot1_margin = [30,30,30,30];
+        var plot1_width = 1000 - plot1_margin[3] - plot1_margin[1];
+        var plot1_height = 500 - plot1_margin[0] - plot1_margin[2];
+        var plot1_data = [];
+        var plot1_x = [0.2,0.12,0.06,0.025,0,0.025,0.06,0.12,0.2];
+        var plot1_y = [0.06,0.17,0.28,0.39,0.5,0.61,0.72,0.83,0.94];
+        var tmp_names = ['上线时间', '地理位置', '公司类型', '自动投标', '债权转让', '资金托管', '投标保障', '保障模式', '担保机构'];
+        var tmp_params = ['lauchTime', 'location', 'category', 'autobid', 'stockTransfer', 'fundsToken', 'bidGuarantee', 'guaranteeMode', 'guaranteeOrg'];
+        var tmp = d3.interpolate(d3.rgb(192, 70, 77), d3.rgb(245, 236, 165));
+        var plot1_colors = [];
+        for (var i = 0; i < 10; i++) {
+            plot1_colors.push(tmp(i * 0.11));
+        }
+
+        plot1_data.push({
+            name: tmp1['platName'],
+            x: 0.25,
+            y: 0.4,
+            size: 24,
+            group: 0,
+            orient: 1
+        });
+        plot1_data.push({
+            name: tmp2['platName'],
+            x: 0.75,
+            y: 0.4,
+            size: 24,
+            group: 9,
+            orient: 0
+        });
+        for (var i = 0; i < tmp_names.length; i++) {
+            plot1_data.push({
+                name: tmp_names[i] + '：' + tmp1[tmp_params[i]],
+                x: plot1_x[i] * 0.5,
+                y: plot1_y[i],
+                size: 12,
+                group: i + 1,
+                orient: 0
+            });
+
+            plot1_data.push({
+                name: tmp_names[i] + '：' + tmp2[tmp_params[i]],
+                x: 1 - plot1_x[i] * 0.5,
+                y: plot1_y[i],
+                size: 12,
+                group: 9 - (i + 1),
+                orient: 1
+            });
+        }
+
+        d3.select('#plot1 svg g').selectAll('text.field').data(plot1_data).enter().append('text').text(function(d){
+            return d.name;
+        }).attr({
+            x: 500,
+            'text-anchor': function(d){
+                if (d.orient == 0) {
+                    return 'start';
+                }
+                else {
+                    return 'end';
+                }
+            },
+            y: 250,
+            'dominant-baseline': 'middle',
+            'fill': function(d){
+                return plot1_colors[d.group];
+            },
+            'fill-opacity': 0,
+            'font-size': function(d){
+                return d.size;
+            },
+            'class': 'field'
+        }).transition().delay(function(d,i){
+            return i * 20;
+        }).duration(600).attr({
+            x: function(d){
+                return plot1_margin[3] + d.x * plot1_width;
+            },
+            y: function(d){
+                return plot1_margin[0] + d.y * plot1_height;
+            },
+            'fill-opacity': 1
+        });
+
+        var curve = d3.svg.line().x(function(d) {
+            return plot1_width * d[0] + plot1_margin[3];
+        }).y(function(d) {
+            return plot1_height * d[1] + plot1_margin[0];
+        }).interpolate('linear');
+
+        var bar_data = [];
+        var bar_names = ['发展指数','平均利润/%','注册资金/万元','成交量/万元','历史待还/万元','资金净流入/万元','投资人数/人','借款人数/人','待收投资人数/人','待还借款人数/人','借款标数/个','人均投资金额/元','人均借款金额/万元','平均借款期限/月'];
+        var tmp_list = ['score','averageProfit','registMoney'];
+        for (var i = 0; i < tmp_list.length; i++) {
+            var length1 = tmp1[tmp_list[i]] / (tmp1[tmp_list[i]] + tmp2[tmp_list[i]]);
+            var length2 = tmp2[tmp_list[i]] / (tmp1[tmp_list[i]] + tmp2[tmp_list[i]]);
+            if (length1 < 0.01) {
+                length1 = 0.01;
+            }
+            if (length2 < 0.01) {
+                length2 = 0.01;
+            }
+            if (length1.toString() == 'NaN' && length2.toString() == 'NaN') {
+                length1 = 0.5;
+                length2 = 0.5;
+            }
+            bar_data.push([length1,length2,tmp1[tmp_list[i]],tmp2[tmp_list[i]]])
+        }
+        tmp_list = [0,2,3,4,5,10,11,8,6,7,9];
+        for (var i = 0; i < tmp_list.length; i++) {
+            var length1 = tmp1['basicdata']['data']['y1'][tmp_list[i]] / (tmp1['basicdata']['data']['y1'][tmp_list[i]] + tmp2['basicdata']['data']['y1'][tmp_list[i]]);
+            var length2 = tmp2['basicdata']['data']['y1'][tmp_list[i]] / (tmp1['basicdata']['data']['y1'][tmp_list[i]] + tmp2['basicdata']['data']['y1'][tmp_list[i]]);
+            if (length1 < 0.01) {
+                length1 = 0.01;
+            }
+            if (length2 < 0.01) {
+                length2 = 0.01;
+            }
+            if (length1.toString() == 'NaN' && length2.toString() == 'NaN') {
+                length1 = 0.5;
+                length2 = 0.5;
+            }
+            bar_data.push([length1,length2,tmp1['basicdata']['data']['y1'][tmp_list[i]],tmp1['basicdata']['data']['y1'][tmp_list[i]]]);
+        }
+        var curve_data = [];
+        for (var i = 0; i < bar_data.length; i++) {
+            var d = [];
+            d.push([0.27, 0.40]);
+            d.push([0.32, 0.10 + 0.7 * parseFloat(i) / bar_data.length]);
+            d.push([0.32 + 0.36 * bar_data[i][0], 0.10 + 0.7 * parseFloat(i) / bar_data.length]);
+            d.push([0.32 + 0.36 * bar_data[i][0], 0.10 + 0.7 * parseFloat(i) / bar_data.length + 0.04]);
+            d.push([0.32, 0.10 + 0.7 * parseFloat(i) / bar_data.length + 0.04]);
+            d.push([0.27, 0.40]);
+            curve_data.push([d,0]);
+
+            var d = [];
+            d.push([0.73, 0.40]);
+            d.push([0.68, 0.10 + 0.7 * parseFloat(i) / bar_data.length]);
+            d.push([0.68 - 0.36 * bar_data[i][1], 0.10 + 0.7 * parseFloat(i) / bar_data.length]);
+            d.push([0.68 - 0.36 * bar_data[i][1], 0.10 + 0.7 * parseFloat(i) / bar_data.length + 0.04]);
+            d.push([0.68, 0.10 + 0.7 * parseFloat(i) / bar_data.length + 0.04]);
+            d.push([0.73, 0.40]);
+            curve_data.push([d,1]);
+        }
+
+        var plot1_colors1 = [];
+        var plot1_colors2 = [];
+        var tmpc1 = d3.interpolate(d3.rgb(192, 70, 77), d3.rgb(221, 161, 125));
+        var tmpc2 = d3.interpolate(d3.rgb(221, 161, 125), d3.rgb(245, 236, 165));
+        for (var i = 0; i < bar_data.length; i++) {
+            plot1_colors1.push(tmpc1(parseFloat(i) / bar_data.length));
+            plot1_colors2.push(tmpc2(parseFloat(i) / bar_data.length));
+        }
+        
+        d3.select('#plot1 svg g').selectAll('path').data(curve_data).enter().append('path').attr('fill', function(d,i){
+            if (!d[1]) {
+                console.log(i/2);
+                return plot1_colors1[Math.floor(i / 2)];
+            }
+            else {
+                console.log(i/2);
+                return plot1_colors2[Math.floor(i / 2)];
+            }
+        }).attr('fill-opacity', 0).attr('d', function(d){
+            if (!d[1]) {
+                return curve([[0.25,0.4],[0.25,0.4],[0.25,0.4],[0.25,0.4],[0.25,0.4],[0.25,0.4]]);
+            }
+            else {
+                return curve([[0.75,0.4],[0.75,0.4],[0.75,0.4],[0.75,0.4],[0.75,0.4],[0.75,0.4]]);
+            }
+        }).transition().delay(function(d,i){
+            return i * 20;
+        }).duration(600).attr('d', function(d,i){
+            return curve(d[0]);
+        }).attr('fill-opacity', 0.9);
+
+        d3.select('#plot1 svg g').selectAll('text.param').data(bar_names).enter().append('text').attr({
+            x: 500,
+            y: function(d,i){
+                return plot1_height * (0.10 + 0.7 * parseFloat(i) / bar_data.length) + plot1_margin[0] + 13;
+            },
+            'text-anchor': 'middle',
+            'fill': '#222',
+            'font-size': '12px',
+            'fill-opacity': 0,
+            'class': 'param'
+        }).text(function(d){
+            return d;
+        }).transition().delay(function(d,i){
+            return 400 + i * 40;
+        }).duration(800).attr('fill-opacity', 1);
+
+        var curve_value = [];
+        for (var i = 0; i < bar_data.length; i++) {
+            curve_value.push([bar_data[i][2],i,0]);
+            curve_value.push([bar_data[i][3],i,1]);
+        }
+        d3.select('#plot1 svg g').selectAll('text.value').data(curve_value).enter().append('text').attr({
+            x: function(d){
+                if (!d[2]) {
+                    return plot1_width * 0.32 + plot1_margin[3] + 20;
+                }
+                else {
+                    return plot1_width * 0.68 + plot1_margin[3] - 20;
+                }
+            },
+            y: function(d,i){
+                return plot1_height * (0.10 + 0.7 * parseFloat(d[1]) / bar_data.length) + plot1_margin[0] + 13;
+            },
+            'text-anchor': function(d){
+                if (!d[2]) {
+                    return 'start';
+                }
+                else {
+                    return 'end';
+                }
+            },
+            'fill': '#222',
+            'font-size': '12px',
+            'fill-opacity': 0,
+            'class': 'value'
+        }).text(function(d){
+            return d[0];
+        }).transition().delay(function(d,i){
+            return 200 + i * 20;
+        }).duration(800).attr('fill-opacity', 1).attr('x', function(d){
+            if (!d[2]) {
+                return plot1_width * 0.32 + plot1_margin[3] + 5;
+            }
+            else {
+                return plot1_width * 0.68 + plot1_margin[3] - 5;
+            }
+        });
+    
+        // var plot11 = echarts.init(document.getElementById('plot11'), 'dark');
+        // var option = {
+        //     tooltip: {
+        //         trigger: 'axis',
+        //         axisPointer: { // 坐标轴指示器，坐标轴触发有效
+        //             type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+        //         }
+        //     },
+        //     legend: {
+        //         data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎', '百度', '谷歌', '必应', '其他']
+        //     },
+        //     grid: {
+        //         left: '3%',
+        //         right: '4%',
+        //         bottom: '3%',
+        //         containLabel: true
+        //     },
+        //     xAxis: [{
+        //         type: 'category',
+        //         data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+        //     }],
+        //     yAxis: [{
+        //         type: 'value'
+        //     }],
+        //     series: [{
+        //         name: '直接访问',
+        //         type: 'bar',
+        //         data: [320, 332, 301, 334, 390, 330, 320]
+        //     }, {
+        //         name: '邮件营销',
+        //         type: 'bar',
+        //         stack: '广告',
+        //         data: [120, 132, 101, 134, 90, 230, 210]
+        //     }, {
+        //         name: '联盟广告',
+        //         type: 'bar',
+        //         stack: '广告',
+        //         data: [220, 182, 191, 234, 290, 330, 310]
+        //     }, {
+        //         name: '视频广告',
+        //         type: 'bar',
+        //         stack: '广告',
+        //         data: [150, 232, 201, 154, 190, 330, 410]
+        //     }, {
+        //         name: '搜索引擎',
+        //         type: 'bar',
+        //         data: [862, 1018, 964, 1026, 1679, 1600, 1570],
+        //         markLine: {
+        //             lineStyle: {
+        //                 normal: {
+        //                     type: 'dashed'
+        //                 }
+        //             },
+        //             data: [
+        //                 [{
+        //                     type: 'min'
+        //                 }, {
+        //                     type: 'max'
+        //                 }]
+        //             ]
+        //         }
+        //     }, {
+        //         name: '百度',
+        //         type: 'bar',
+        //         barWidth: 5,
+        //         stack: '搜索引擎',
+        //         data: [620, 732, 701, 734, 1090, 1130, 1120]
+        //     }, {
+        //         name: '谷歌',
+        //         type: 'bar',
+        //         stack: '搜索引擎',
+        //         data: [120, 132, 101, 134, 290, 230, 220]
+        //     }, {
+        //         name: '必应',
+        //         type: 'bar',
+        //         stack: '搜索引擎',
+        //         data: [60, 72, 71, 74, 190, 130, 110]
+        //     }, {
+        //         name: '其他',
+        //         type: 'bar',
+        //         stack: '搜索引擎',
+        //         data: [62, 82, 91, 84, 109, 110, 120]
+        //     }]
+        // };
+        // plot11.setOption(option);
+
+        // var plot12 = echarts.init(document.getElementById('plot12'), 'dark');
+        // option = {
+        //     tooltip: {
+        //         trigger: 'axis',
+        //         axisPointer: { // 坐标轴指示器，坐标轴触发有效
+        //             type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+        //         }
+        //     },
+        //     legend: {
+        //         data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎', '百度', '谷歌', '必应', '其他']
+        //     },
+        //     grid: {
+        //         left: '3%',
+        //         right: '4%',
+        //         bottom: '3%',
+        //         containLabel: true
+        //     },
+        //     xAxis: [{
+        //         type: 'category',
+        //         data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+        //     }],
+        //     yAxis: [{
+        //         type: 'value'
+        //     }],
+        //     series: [{
+        //         name: '直接访问',
+        //         type: 'bar',
+        //         data: [320, 332, 301, 334, 390, 330, 320]
+        //     }, {
+        //         name: '邮件营销',
+        //         type: 'bar',
+        //         stack: '广告',
+        //         data: [120, 132, 101, 134, 90, 230, 210]
+        //     }, {
+        //         name: '联盟广告',
+        //         type: 'bar',
+        //         stack: '广告',
+        //         data: [220, 182, 191, 234, 290, 330, 310]
+        //     }, {
+        //         name: '视频广告',
+        //         type: 'bar',
+        //         stack: '广告',
+        //         data: [150, 232, 201, 154, 190, 330, 410]
+        //     }, {
+        //         name: '搜索引擎',
+        //         type: 'bar',
+        //         data: [862, 1018, 964, 1026, 1679, 1600, 1570],
+        //         markLine: {
+        //             lineStyle: {
+        //                 normal: {
+        //                     type: 'dashed'
+        //                 }
+        //             },
+        //             data: [
+        //                 [{
+        //                     type: 'min'
+        //                 }, {
+        //                     type: 'max'
+        //                 }]
+        //             ]
+        //         }
+        //     }, {
+        //         name: '百度',
+        //         type: 'bar',
+        //         barWidth: 5,
+        //         stack: '搜索引擎',
+        //         data: [620, 732, 701, 734, 1090, 1130, 1120]
+        //     }, {
+        //         name: '谷歌',
+        //         type: 'bar',
+        //         stack: '搜索引擎',
+        //         data: [120, 132, 101, 134, 290, 230, 220]
+        //     }, {
+        //         name: '必应',
+        //         type: 'bar',
+        //         stack: '搜索引擎',
+        //         data: [60, 72, 71, 74, 190, 130, 110]
+        //     }, {
+        //         name: '其他',
+        //         type: 'bar',
+        //         stack: '搜索引擎',
+        //         data: [62, 82, 91, 84, 109, 110, 120]
+        //     }]
+        // };
+        // plot12.setOption(option);
+    }
 });
 </script>
 {% endblock %}
