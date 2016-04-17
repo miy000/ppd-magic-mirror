@@ -16,6 +16,22 @@
     text-align: center;
 }
 
+#legends {
+    position: absolute;
+    bottom: 20px;
+    left: 30px;
+    font-size: 12px;
+    color: #888;
+    text-align: left;
+    width: 300px;
+}
+#legends .legend {
+    margin-bottom: 5px;
+}
+#legends .legend span {
+    color: #f2f2f2;
+}
+
 #knowledgegraph .link {
     stroke: #999;
     stroke-opacity: .5;
@@ -59,6 +75,7 @@
 #modes div:hover {
     color: #333;
     background-color: #f5f5f5;
+    cursor: pointer;
 }
 
 #modes div:hover {
@@ -109,14 +126,16 @@
 }
 
 #ranks {
-    position: absolute;
-    top: 47px;
-    right: 20px;
+    position: fixed;
+    top: 119px;
+    right: 0px;
     height: 340px;
     overflow-y: scroll;
     border: 1px solid rgba(200, 200, 200, 0.6);
     border-radius: 3px;
     font-size: 13px;
+    z-index: 999;
+    background-color: rgba(32,32,32,0.6);
 }
 
 #ranks div {
@@ -143,17 +162,20 @@
 #news {
     width: 100%;
     height: 327px;
+    margin-bottom: 30px;
 }
 
 #plot2 {
     width: 100%;
     height: 300px;
     background-color: #222 !important;
+    margin-bottom: 30px;
 }
 
 #comments {
     width: 100%;
     height: 327px;
+    margin-bottom: 30px;
 }
 
 #plot3 {
@@ -220,6 +242,205 @@
     cursor: pointer;
     color: #fff;
 }
+
+/* data */
+#plot5 {
+    width: 100%;
+    height: 300px;
+    background-color: #222 !important;
+}
+
+#plot61 {
+    width: 100%;
+    height: 500px;
+    background-color: #222 !important;
+}
+
+#plot62 {
+    width: 100%;
+    height: 225px;
+    background-color: #222 !important;
+}
+
+#plot63 {
+    width: 100%;
+    height: 225px;
+    background-color: #222 !important;
+}
+
+#plot7 {
+    width: 100%;
+    height: 500px;
+    background-color: #222 !important;
+    text-align: center;
+    position: relative;
+}
+
+#plot7 p {
+    position: absolute;
+    color: #759AA0;
+    left: 16px;
+    top: 13px;
+}
+
+#plot7 span {
+    position: absolute;
+    left: 14px;
+    top: 38px;
+    font-size: 14px;
+    color: #759AA0;
+    display: block;
+}
+
+#plot7 span:hover {
+    cursor: pointer;
+}
+
+#plot7 .foreground path {
+    fill: none;
+    stroke-opacity: .5;
+    stroke-width: 1.5px;
+}
+
+#plot7 .foreground path.fade {
+    stroke: #000;
+    stroke-opacity: .05;
+}
+
+#plot7 .brush .extent {
+    fill-opacity: .3;
+    stroke: #fff;
+    shape-rendering: crispEdges;
+}
+
+#plot7 .axis line,
+#plot7 .axis path {
+    fill: none;
+    stroke: rgba(240, 240, 240, 0.4);
+    shape-rendering: crispEdges;
+}
+
+#plot7 .axis .tick text {
+    fill-opacity: 0.4;
+    fill: #f2f2f2;
+    font-size: 12px;
+}
+
+#plot8 {
+    width: 100%;
+    height: 500px;
+    background-color: #222 !important;
+    text-align: center;
+    position: relative;
+}
+
+#plot8 text.platName:hover {
+    cursor: pointer;
+}
+#plot8 #flow_control {
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    color: rgba(230, 157, 135, 0.8);
+    font-size: 13px;
+}
+#plot8 .fa {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    transition: color .3s;
+    -o-transition: color .3s;
+    -ms-transition: color .3s;
+    -moz-transition: color .3s;
+    -webkit-transition: color .3s;
+}
+#plot8 .fa:hover {
+    cursor: pointer;
+    color: #fff;
+}
+
+#plot91 {
+    width: 100%;
+    height: 400px;
+    background-color: #222 !important;
+}
+
+#plot92 {
+    width: 100%;
+    height: 400px;
+    background-color: #222 !important;
+}
+
+#params {
+    position: absolute;
+    left: 0;
+    top: 42px;
+    z-index: 99;
+    width: 100%;
+    text-align: center;
+}
+
+#params>div {
+    display: inline-block;
+    text-align: center;
+    color: #759AA0;
+    font-size: 12px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding-left: 2px;
+    padding-right: 2px;
+    border-bottom: 1px solid rgba(240, 240, 240, 0.6);
+    transition: color .3s;
+    -o-transition: color .3s;
+    -ms-transition: color .3s;
+    -moz-transition: color .3s;
+    -webkit-transition: color .3s;
+}
+
+#params>div:hover {
+    cursor: pointer;
+    color: #f2f2f2;
+}
+
+#params p {
+    margin-bottom: 3px;
+}
+
+#params span {
+    margin-left: 5px;
+}
+
+#mask {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(240, 240, 240, 0.8);
+    z-index: 999;
+    padding: 40px 60px;
+    text-align: center;
+    display: none;
+}
+
+#mask div {
+    display: inline-block;
+    padding: 8px 16px;
+    color: #333;
+    border: 1px solid #555;
+    border-radius: 3px;
+    margin: 10px;
+    font-size: 12px;
+    box-shadow: 1px 1px 2px rgba(20, 20, 20, 0.5);
+    transition: color, background-color .3s;
+    -o-transition: color, background-color .3s;
+    -ms-transition: color, background-color .3s;
+    -moz-transition: color, background-color .3s;
+    -webkit-transition: color, background-color .3s;
+}
+
+#mask div:hover {
+    color: #fff;
+    background-color: #333;
+    cursor: pointer;
+}
 </style>
 {% endblock %} {% block body %}
 <div id="scatter">
@@ -240,6 +461,39 @@
             <g id="commentkeyword"></g>
         </g>
     </svg>
+    <div id="legends">
+        <div class="legend">
+            点击某一 <span>平台</span> 或 <span>人员</span> 即可切换至对应知识图谱
+        </div>
+        <div class="legend">
+            <div style="display:inline-block;background-color:rgba(84, 148, 191, 0.9);width:20px;height:16px;position:relative;top:4px;margin-right:10px;"></div>
+            <span>3050</span> 家P2P平台的注册信息和详细资料
+        </div>
+        <div class="legend">
+            <div style="display:inline-block;background-color:rgba(221, 107, 102, 0.9);width:20px;height:16px;position:relative;top:4px;margin-right:10px;"></div>
+            <span>6512</span> 名P2P平台高管人员的基本信息
+        </div>
+        <div class="legend">
+            <div style="display:inline-block;background-color:rgba(230, 157, 135, 0.9);width:20px;height:16px;position:relative;top:4px;margin-right:10px;"></div>
+            <span>股份制</span>、<span>私营</span>、<span>联营</span>、<span>国有</span> 等公司类型
+        </div>
+        <div class="legend">
+            <div style="display:inline-block;background-color:rgba(234, 126, 83, 0.9);width:20px;height:16px;position:relative;top:4px;margin-right:10px;"></div>
+            平台所在 <span>省份</span> 或 <span>地区</span>
+        </div>
+        <div class="legend">
+            <div style="display:inline-block;background-color:rgba(243, 230, 162, 0.9);width:20px;height:16px;position:relative;top:4px;margin-right:10px;"></div>
+            <span>股权上市</span>、<span>加入协会</span>、<span>国资</span> 等平台标签
+        </div>
+        <div class="legend">
+            <div style="display:inline-block;background-color:rgba(215, 135, 230, 0.9);width:20px;height:16px;position:relative;top:4px;margin-right:10px;"></div>
+            平台上线时间，从 <span>2007</span> 年至 <span>2016</span> 年
+        </div>
+        <div class="legend">
+            <div style="display:inline-block;background-color:rgba(117, 179, 117, 0.9);width:20px;height:16px;position:relative;top:4px;margin-right:10px;"></div>
+            平台人员职位信息，如 <span>CEO</span>、<span>CTO</span>、<span>COO</span> 等
+        </div>
+    </div>
     <div id="info">
         <div style="margin-bottom:15px;">
             <img id="portrait" src="" alt="">
@@ -272,7 +526,7 @@
         </div>
         <div id="control">
             <span class="fa fa-fw fa-chevron-left"></span>
-            <span class="fa fa-fw fa-pause"></span>
+            <span class="fa fa-fw fa-play"></span>
             <span class="fa fa-fw fa-chevron-right"></span>
         </div>
         <svg width="1000px" height="500px">
@@ -295,10 +549,103 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div style="margin-bottom:30px;">
+            <div class="plot-title">当月网贷指数</div>
+            <div id="plot5"></div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+        <div style="margin-bottom:30px;position:relative;">
+            <div class="plot-title">平台地理分布</div>
+            <div id="plot61"></div>
+            <div style="position:absolute;left:20px;top:35px;color:#f2f2f2;"></div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+        <div style="margin-bottom:23px;">
+            <div class="plot-title">当月问题平台类型</div>
+            <div id="plot62"></div>
+        </div>
+        <div style="margin-bottom:30px;">
+            <div class="plot-title">当月问题平台地区</div>
+            <div id="plot63"></div>
+        </div>
+    </div>
+</div>
+<div style="margin-bottom:30px;">
+    <div class="plot-title">热门平台历史指数</div>
+    <div id="plot7">
+        <p></p>
+        <span class="fa fa-fw fa-play"></span>
+        <svg width="1000px" height="500px">
+            <g></g>
+        </svg>
+    </div>
+</div>
+<div style="margin-bottom:30px;">
+    <div class="plot-title">热门平台指数趋势</div>
+    <div id="plot8">
+        <div id="flow_control">
+            <span class="fa fa-fw fa-chevron-left" style="padding-right:6px;"></span>
+            <span class="param"> </span>
+            <span class="fa fa-fw fa-chevron-right" style="padding-left:6px;"></span>
+        </div>
+        <svg width="1000px" height="500px">
+            <g></g>
+        </svg>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
+        <div class="plot-title">平台类型历史数据</div>
+        <div id="plot91"></div>
+    </div>
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
+        <div style="position:relative;overflow:hidden;">
+            <div class="plot-title">区域分布历史数据</div>
+            <div id="params">
+                <div id="param1">
+                    <p>X<span></span></p>
+                </div>
+                <div id="param2">
+                    <p>Y<span></span></p>
+                </div>
+                <div id="param3">
+                    <p>Size<span></span></p>
+                </div>
+            </div>
+            <div id="mask">
+                <div>成交量</div>
+                <div>运营平台数量</div>
+                <div>当月问题平台数量</div>
+                <div>累计问题平台数量</div>
+                <div>贷款余额</div>
+                <div>综合利率</div>
+                <div>平均借款期限</div>
+                <div>当月投资人数</div>
+                <div>当月借款人数</div>
+            </div>
+            <div id="plot92"></div>
+        </div>
+    </div>
+</div>
 <script src="{{url_for('static',filename='js/jquery.nstSlider.min.js')}}"></script>
 <script>
 $(document).ready(function() {
     $('#nav1').addClass('active');
+
+    $(window).scroll(function() {
+        if($(window).scrollTop() > 1115) {
+            $('#ranks').fadeOut('fast');
+        }
+        else {
+            $('#ranks').fadeIn('fast');
+        }
+    });
 
     var news_now = 0.85;
     var news_flow = [];
@@ -313,27 +660,28 @@ $(document).ready(function() {
     });
     $('.nstSlider').nstSlider('disable');
 
-    var flow_is_pause = 0;
-    var flow_interval = setInterval(function() {
-        if (!lock) {
-            var left = parseInt($('#flow .leftGrip').css('left'));
-            if (news_index.length == 0) {
-                flow_speed_up = flow_speed_up * 2;
-            } else {
-                flow_speed_up = 1;
-            }
-            news_now += flow_step * flow_speed_up;
-            left = news_now * 900;
-            if (left >= 900) {
-                left -= 900;
-                news_now -= 1;
-            }
-            $('#flow .leftGrip').animate({
-                left: left
-            }, 1200);
-            flow();
-        }
-    }, 1600);
+    var flow_is_pause = 1;
+    var flow_interval;
+    // var flow_interval = setInterval(function() {
+    //     if (!lock) {
+    //         var left = parseInt($('#flow .leftGrip').css('left'));
+    //         if (news_index.length == 0) {
+    //             flow_speed_up = flow_speed_up * 2;
+    //         } else {
+    //             flow_speed_up = 1;
+    //         }
+    //         news_now += flow_step * flow_speed_up;
+    //         left = news_now * 900;
+    //         if (left >= 900) {
+    //             left -= 900;
+    //             news_now -= 1;
+    //         }
+    //         $('#flow .leftGrip').animate({
+    //             left: left
+    //         }, 1200);
+    //         flow();
+    //     }
+    // }, 1600);
 
     $('#flow').on('click', '.fa-pause', function(event) {
         clearInterval(flow_interval);
@@ -461,7 +809,7 @@ $(document).ready(function() {
     var platforms = eval({{platforms|safe}});
     var platNamesJson = eval({{platNamesJson|safe}});
 
-    var plot1_margin = [70, 140, 30, 40];
+    var plot1_margin = [70, 80, 30, 40];
     var plot1_width = 1000 - plot1_margin[1] - plot1_margin[3];
     var plot1_height = 500 - plot1_margin[0] - plot1_margin[2];
 
@@ -477,9 +825,6 @@ $(document).ready(function() {
         },
         tooltip: {
             trigger: 'axis',
-            // formatter: function(params) {
-            //     return params[0].name + '<br/>' + params[0].seriesName + ' : ' + params[0].value + '<br/>' + params[1].seriesName + ' : ' + params[1].value;
-            // },
         },
         legend: {
             data: ['平台积极', '平台消极', '行业积极', '行业消极'],
@@ -556,9 +901,6 @@ $(document).ready(function() {
         },
         tooltip: {
             trigger: 'axis',
-            // formatter: function(params) {
-            //     return params[0].name + '<br/>' + params[0].seriesName + ' : ' + params[0].value + '<br/>' + params[1].seriesName + ' : ' + params[1].value;
-            // },
         },
         legend: {
             data: ['平台积极', '平台消极', '行业积极', '行业消极'],
@@ -849,8 +1191,8 @@ $(document).ready(function() {
                 })
                 .done(function(data) {
                     forces = eval(data['knowledge']);
-                    var colors = ['rgba(84, 148, 191, 0.9)', 'rgba(221, 107, 102, 0.9)', 'rgba(230, 157, 135, 0.9)', 'rgba(234, 126, 83, 0.9)', 'rgba(243, 230, 162, 0.9)', 'rgba(215, 135, 230, 0.9)'];
-                    var force = d3.layout.force().charge(-480).linkDistance(160).size([1000, 500]);
+                    var colors = ['rgba(84, 148, 191, 0.9)', 'rgba(221, 107, 102, 0.9)', 'rgba(230, 157, 135, 0.9)', 'rgba(234, 126, 83, 0.9)', 'rgba(243, 230, 162, 0.9)', 'rgba(215, 135, 230, 0.9)', 'rgba(117, 179, 117, 0.9)'];
+                    var force = d3.layout.force().charge(-320).linkDistance(150).size([1200, 500]);
 
                     force.nodes(forces.nodes).links(forces.links).start();
 
@@ -1001,7 +1343,14 @@ $(document).ready(function() {
         newskeyword.enter().append('text').text(function(d) {
             return d;
         }).attr({
-            fill: '#B85D59',
+            fill: function(d,i){
+                if (platforms[keyword].newskeywords[4][i] > 0.5) {
+                    return '#B85D59';
+                }
+                else {
+                    return '#4A7DA0';
+                }
+            },
             transform: function(d,i) {
                 return 'translate(' + parseInt(platforms[keyword].newskeywords[2][i] * plot1_width + plot1_margin[3]) + ',' + parseInt(platforms[keyword].newskeywords[3][i] * plot1_height + plot1_margin[0]) + ')';
             },
@@ -1185,13 +1534,20 @@ $(document).ready(function() {
 
     $('#knowledgegraph').on('click', 'rect', function(event) {
         var node_id = $(this).attr('name');
-        if (forces.nodes[node_id].group == 1 && $.inArray(forces.nodes[node_id].name, platNamesJson)) {
+        var flag = false;
+        for (var i = 0; i < platNamesJson.length; i++) {
+            if (platNamesJson[i] == forces.nodes[node_id].name) {
+                flag = true;
+                break;
+            }
+        }
+        if (forces.nodes[node_id].group == 1 && flag) {
             $('#ranks div').each(function(index, el) {
                 if ($(this).text() == forces.nodes[node_id].name) {
                     $('#ranks div').removeClass('active');
                     $(this).addClass('active');
                     var diff = $(this).offset().top - $('#ranks').offset().top;
-                    if (diff >= 101) {
+                    if (diff >= 101 || diff < 0) {
                         $('#ranks').animate({
                             scrollTop: $('#ranks').scrollTop() + diff - 34
                         }, 300);
@@ -1200,6 +1556,42 @@ $(document).ready(function() {
             });
             platName = forces.nodes[node_id].name;
             change_platName = true;
+        }
+        else {
+            change_platName = false;
+        }
+        if (forces.nodes[node_id].group == 1 || forces.nodes[node_id].group == 2) {
+            $('#info').hide();
+            draw(forces.nodes[node_id].name);
+        }
+    });
+    $('#knowledgegraph').on('click', 'text', function(event) {
+        var node_id = $(this).attr('name');
+        var flag = false;
+        for (var i = 0; i < platNamesJson.length; i++) {
+            if (platNamesJson[i] == forces.nodes[node_id].name) {
+                flag = true;
+                break;
+            }
+        }
+        if (forces.nodes[node_id].group == 1 && flag) {
+            $('#ranks div').each(function(index, el) {
+                if ($(this).text() == forces.nodes[node_id].name) {
+                    $('#ranks div').removeClass('active');
+                    $(this).addClass('active');
+                    var diff = $(this).offset().top - $('#ranks').offset().top;
+                    if (diff >= 101 || diff < 0) {
+                        $('#ranks').animate({
+                            scrollTop: $('#ranks').scrollTop() + diff - 34
+                        }, 300);
+                    }
+                }
+            });
+            platName = forces.nodes[node_id].name;
+            change_platName = true;
+        }
+        else {
+            change_platName = false;
         }
         if (forces.nodes[node_id].group == 1 || forces.nodes[node_id].group == 2) {
             $('#info').hide();
@@ -1207,28 +1599,1129 @@ $(document).ready(function() {
         }
     });
 
-    $('#knowledgegraph').on('click', 'text', function(event) {
-        var node_id = $(this).attr('name');
-        if (forces.nodes[node_id].group == 1 && $.inArray(forces.nodes[node_id].name, platNamesJson)) {
-            $('#ranks div').each(function(index, el) {
-                if ($(this).text() == forces.nodes[node_id].name) {
-                    $('#ranks div').removeClass('active');
-                    $(this).addClass('active');
-                    var diff = $(this).offset().top - $('#ranks').offset().top;
-                    if (diff >= 101) {
-                        $('#ranks').animate({
-                            scrollTop: $('#ranks').scrollTop() + diff - 34
-                        }, 300);
+    // data
+    var platCount = eval({{platCount|safe}});
+
+    var plot5 = echarts.init(document.getElementById('plot5'), 'dark');
+    option = {
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: ['成交指数', '人气指数', '利率指数'],
+            padding: [27, 10, 10, 10],
+            selected: {
+                '利率指数': false
+            },
+        },
+        calculable: true,
+        grid: {
+            x: 65,
+            x2: 50,
+            y: 60,
+            y2: 50,
+        },
+        xAxis: {
+            type: 'category',
+            data: platCount['index'][0],
+            axisTick: {
+                show: true
+            },
+            axisLine: {
+                show: true
+            },
+            axisLabel: {
+                margin: 12
+            }
+        },
+        yAxis: [{
+            type: 'value',
+            axisTick: {
+                show: true
+            },
+            axisLine: {
+                show: true
+            },
+            splitLine: {
+                show: false
+            }
+        }, {
+            type: 'value',
+            axisTick: {
+                show: true
+            },
+            axisLine: {
+                show: true
+            },
+            splitLine: {
+                show: false
+            }
+        }],
+        series: [{
+            name: '成交指数',
+            type: 'line',
+            symbol: 'none',
+            smooth: true,
+            data: platCount['index'][3]
+        }, {
+            name: '利率指数',
+            yAxisIndex: 1,
+            type: 'line',
+            symbol: 'none',
+            smooth: true,
+            data: platCount['index'][1]
+        }, {
+            name: '人气指数',
+            type: 'line',
+            symbol: 'none',
+            smooth: true,
+            data: platCount['index'][2]
+        }]
+    };
+    plot5.setOption(option);
+
+    var plot61 = echarts.init(document.getElementById('plot61'), 'dark');
+    setTimeout(function() {
+        $('#plot61').next('div').append('<p style="font-size:12px;margin-bottom:2px;">营业平台<span style="font-size:20px;margin-left:10px;color:rgba(84, 148, 191, 0.8);position:relative;top:2px;">' + platCount['map'][0].length + '</span></p>');
+        $('#plot61').next('div').append('<p style="font-size:12px;margin-bottom:2px;">停业平台<span style="font-size:20px;margin-left:10px;color:rgba(221, 107, 102, 0.8);position:relative;top:2px;">' + platCount['map'][1].length + '</span></p>');
+        $('#plot61').next('div').append('<p style="font-size:12px;margin-bottom:2px;">提现困难<span style="font-size:20px;margin-left:10px;color:rgba(230, 157, 135, 0.8);position:relative;top:2px;">' + platCount['map'][2].length + '</span></p>');
+        $('#plot61').next('div').append('<p style="font-size:12px;margin-bottom:2px;">跑路平台<span style="font-size:20px;margin-left:10px;color:rgba(234, 126, 83, 0.8);position:relative;top:2px;">' + platCount['map'][3].length + '</span></p>');
+        $('#plot61').next('div').append('<p style="font-size:12px;margin-bottom:2px;">经侦介入<span style="font-size:20px;margin-left:10px;color:rgba(243, 230, 162, 0.8);position:relative;top:2px;">' + platCount['map'][4].length + '</span></p>');
+        option = {
+            legend: {
+                left: 'left',
+                bottom: 'bottom',
+                padding: [20, 20, 20, 20],
+                data: ['营业', '停业', '提现困难', '跑路', '经侦介入'],
+            },
+            geo: {
+                type: 'scatter',
+                map: 'china',
+                label: {
+                    emphasis: {
+                        show: true,
+                        textStyle: {
+                            color: '#f2f2f2'
+                        }
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        areaColor: '#323c48',
+                        borderColor: 'rgba(20,20,20,0.2)'
+                    },
+                    emphasis: {
+                        areaColor: '#2a333d'
+                    }
+                }
+            },
+            series: [{
+                name: '营业',
+                type: 'scatter',
+                large: true,
+                coordinateSystem: 'geo',
+                symbolSize: 2,
+                legendHoverLink: false,
+                itemStyle: {
+                    normal: {
+                        shadowBlur: 2,
+                        shadowColor: 'rgba(84, 148, 191, 0.8)',
+                        color: 'rgba(84, 148, 191, 0.8)'
+                    }
+                },
+                data: platCount['map'][0]
+            }, {
+                name: '停业',
+                type: 'scatter',
+                large: true,
+                coordinateSystem: 'geo',
+                symbolSize: 2,
+                legendHoverLink: false,
+                itemStyle: {
+                    normal: {
+                        shadowBlur: 2,
+                        shadowColor: 'rgba(221, 107, 102, 0.8)',
+                        color: 'rgba(221, 107, 102, 0.8)'
+                    }
+                },
+                data: platCount['map'][1]
+            }, {
+                name: '提现困难',
+                type: 'scatter',
+                large: true,
+                coordinateSystem: 'geo',
+                symbolSize: 2,
+                legendHoverLink: false,
+                itemStyle: {
+                    normal: {
+                        shadowBlur: 2,
+                        shadowColor: 'rgba(230, 157, 135, 0.8)',
+                        color: 'rgba(230, 157, 135, 0.8)'
+                    }
+                },
+                data: platCount['map'][2]
+            }, {
+                name: '跑路',
+                type: 'scatter',
+                large: true,
+                coordinateSystem: 'geo',
+                symbolSize: 2,
+                legendHoverLink: false,
+                itemStyle: {
+                    normal: {
+                        shadowBlur: 2,
+                        shadowColor: 'rgba(234, 126, 83, 0.8)',
+                        color: 'rgba(234, 126, 83, 0.8)'
+                    }
+                },
+                data: platCount['map'][3]
+            }, {
+                name: '经侦介入',
+                type: 'scatter',
+                large: true,
+                coordinateSystem: 'geo',
+                symbolSize: 2,
+                legendHoverLink: false,
+                itemStyle: {
+                    normal: {
+                        shadowBlur: 2,
+                        shadowColor: 'rgba(243, 230, 162, 0.8)',
+                        color: 'rgba(243, 230, 162, 0.8)'
+                    }
+                },
+                data: platCount['map'][4]
+            }]
+        };
+        plot61.setOption(option);
+    }, 5000);
+    var plot62 = echarts.init(document.getElementById('plot62'), 'dark');
+    option = {
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        series: [{
+            name: '平台类型',
+            type: 'pie',
+            radius: '55%',
+            center: ['50%', '50%'],
+            data: [{
+                value: 32,
+                name: '停业'
+            }, {
+                value: 31,
+                name: '跑路'
+            }, {
+                value: 10,
+                name: '提现困难'
+            }, {
+                value: 1,
+                name: '经侦介入'
+            }],
+            itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }]
+    };
+    plot62.setOption(option);
+    var plot63 = echarts.init(document.getElementById('plot63'), 'dark');
+    option = {
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        series: [{
+            name: '平台地区',
+            type: 'pie',
+            radius: '55%',
+            center: ['50%', '50%'],
+            data: [{
+                value: 13,
+                name: '广东'
+            }, {
+                value: 9,
+                name: '北京'
+            }, {
+                value: 9,
+                name: '山东'
+            }, {
+                value: 9,
+                name: '其他'
+            }, {
+                value: 8,
+                name: '上海'
+            }, {
+                value: 7,
+                name: '安徽'
+            }, {
+                value: 6,
+                name: '浙江'
+            }, {
+                value: 5,
+                name: '江苏'
+            }, {
+                value: 5,
+                name: '湖北'
+            }, {
+                value: 3,
+                name: '河北'
+            }, {
+                value: 0,
+                name: '福建'
+            }],
+            itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }]
+    };
+    plot63.setOption(option);
+
+    var plot7_traits = ["rank", "score", "trade", "popularity", "weight", "distribution", "flooding", "opacity"];
+    var plot7_names = {
+        rank: '排名',
+        score: '发展指数',
+        trade: '成交',
+        popularity: '人气',
+        weight: '杠杆',
+        distribution: '分散度',
+        flooding: '流动性',
+        opacity: '透明度'
+    };
+    var margin = [60, 30, 30, 100];
+    var plot7_width = 1000 - margin[1] - margin[3];
+    var plot7_height = 500 - margin[0] - margin[2];
+    var plot7_x = d3.scale.ordinal().domain(plot7_traits).rangePoints([0, plot7_width]);
+    var plot7_y;
+    var plot7_y_reverse;
+    var plot7_line = d3.svg.line();
+    var plot7_axis = d3.svg.axis().orient("left").tickPadding([5]);
+    var plot7_foreground;
+    var plot7_num = 20;
+    var tmp = d3.interpolate(d3.rgb(192, 70, 77), d3.rgb(245, 236, 165));
+    var plot7_colors = [];
+    var plot7_data = [];
+    var platNames = [];
+    for (var i = 0; i < 20; i++) {
+        plot7_colors.push(tmp(i * 0.04));
+    }
+    d3.select('#plot7 svg g').attr("transform", "translate(" + margin[3] + "," + margin[0] + ")");
+    // add foreground
+    d3.select('#plot7 svg g').append("svg:g").attr("class", "foreground");
+    // add label
+    d3.select('#plot7 svg g').append('svg:g').attr('class', 'label');
+    // Add a group element for each trait.
+    d3.select('#plot7 svg g').selectAll(".trait").data(plot7_traits).enter().append("svg:g").attr("class", "trait").attr("transform", function(d) {
+        return "translate(" + plot7_x(d) + ")";
+    }).call(d3.behavior.drag()
+        .origin(function(d) {
+            return {
+                x: plot7_x(d)
+            };
+        })
+        .on("dragstart", plot7_dragstart)
+        .on("drag", plot7_drag)
+        .on("dragend", plot7_dragend));
+    // Add an axis and title.
+    d3.select('#plot7 svg').selectAll('.trait').append("svg:g")
+        .attr("class", "axis")
+        .append("svg:text")
+        .attr("text-anchor", "middle")
+        .attr("y", -20)
+        .attr("fill", '#f2f2f2')
+        .attr("font-size", "12px")
+        .text(function(d) {
+            return plot7_names[d]
+        });
+    // Add a brush for each axis.
+    $('#plot7 svg .trait .brush').remove();
+    d3.select('#plot7 svg').selectAll('.trait').append("svg:g")
+        .attr("class", "brush");
+
+    plotRank();
+
+    var rankInterval = setInterval(function() {
+        plotRank();
+    }, 3000);
+
+    function plotRank() {
+        $('#plot7 svg g.foreground path').attr('class', '');
+
+        plot7_data = platCount['rank'][plot7_num];
+        $('#plot7 p').text(plot7_data[0].replace('年', '-').replace('月', ''));
+        platNames = [];
+        for (var i = 0; i < plot7_data[1].length; i++) {
+            platNames.push(plot7_data[1][i]['platName']);
+        }
+        plot7_y = {};
+        plot7_y_reverse = {};
+
+        // add a scale and brush for each trait.
+        plot7_traits.forEach(function(d) {
+            plot7_y[d] = d3.scale.linear().domain(d3.extent(plot7_data[1], function(p) {
+                return p[d];
+            })).range([plot7_height, 0]);
+            plot7_y_reverse[d] = d3.scale.linear().domain(d3.extent(plot7_data[1], function(p) {
+                return p[d];
+            })).range([0, plot7_height]);
+
+            plot7_y[d].brush = d3.svg.brush().y(plot7_y[d]).on("brush", plot7_brush);
+        });
+        d3.select('#plot7 svg').selectAll('g.axis').each(function(d) {
+            if (d == 'rank') {
+                d3.select(this).call(plot7_axis.scale(plot7_y_reverse[d]));
+            } else {
+                d3.select(this).call(plot7_axis.scale(plot7_y[d]));
+            }
+        });
+
+        $('#plot7 svg g .label').next('.trait').children('.axis').children('.tick').children('text').hide();
+
+        // Add foreground lines.
+        plot7_foreground = d3.select('#plot7 svg g.foreground').selectAll("path").data(platNames, function(d) {
+            return d;
+        });
+
+        plot7_foreground.transition().duration(800).attr('d', plot7_path).attr("stroke", function(d, i) {
+            return plot7_colors[i];
+        });
+
+        plot7_foreground.enter().append("svg:path").attr("d", plot7_path).attr("stroke", function(d, i) {
+            return plot7_colors[i];
+        }).attr('opacity', 0).transition().duration(800).attr('opacity', 1);
+
+        plot7_foreground.exit().transition().duration(800).attr('opacity', 0).remove();
+
+        d3.select("#plot7 svg").selectAll('g.brush').each(function(d) {
+            d3.select(this).call(plot7_y[d].brush);
+        }).selectAll("rect").attr("x", -8).attr("width", 16);
+
+        // add label text
+        var label = d3.select('#plot7 svg g.label').selectAll('text').data(platNames, function(d) {
+            return d;
+        });
+        label.transition().duration(800).attr('transform', function(d, i) {
+            var tmp = d.match(/[a-z0-9]/g);
+            if (tmp == null) {
+                tmp = 0;
+            } else {
+                tmp = tmp.length;
+            }
+            var tmp1 = d.match(/[A-Z]/g);
+            if (tmp1 == null) {
+                tmp1 = 0;
+            } else {
+                tmp1 = tmp1.length;
+            }
+            return 'translate(' + (tmp * 5 + tmp1 * 3 - d.length * 12 - 18) + ',' + (i * 21 + 5) + ')';
+        }).attr('fill', function(d, i) {
+            return plot7_colors[i];
+        });
+        label.enter().append('svg:text').text(function(d) {
+            return d;
+        }).attr({
+            fill: function(d, i) {
+                return plot7_colors[i];
+            },
+            'fill-opacity': 0,
+            'font-size': '12px',
+            'font-weight': 'lighter',
+            transform: function(d, i) {
+                var tmp = d.match(/[a-z0-9]/g);
+                if (tmp == null) {
+                    tmp = 0;
+                } else {
+                    tmp = tmp.length;
+                }
+                var tmp1 = d.match(/[A-Z]/g);
+                if (tmp1 == null) {
+                    tmp1 = 0;
+                } else {
+                    tmp1 = tmp1.length;
+                }
+                return 'translate(' + (tmp * 5 + tmp1 * 3 - d.length * 12 - 18) + ',' + (i * 21 + 26) + ')';
+            }
+        }).transition().duration(800).attr('transform', function(d, i) {
+            var tmp = d.match(/[a-z0-9]/g);
+            if (tmp == null) {
+                tmp = 0;
+            } else {
+                tmp = tmp.length;
+            }
+            var tmp1 = d.match(/[A-Z]/g);
+            if (tmp1 == null) {
+                tmp1 = 0;
+            } else {
+                tmp1 = tmp1.length;
+            }
+            return 'translate(' + (tmp * 5 + tmp1 * 3 - d.length * 12 - 18) + ',' + (i * 21 + 5) + ')';
+        }).attr('fill-opacity', 0.8);
+        label.exit().transition().duration(800).attr({
+            'transform': function(d, i) {
+                var tmp = d.match(/[a-z0-9]/g);
+                if (tmp == null) {
+                    tmp = 0;
+                } else {
+                    tmp = tmp.length;
+                }
+                var tmp1 = d.match(/[A-Z]/g);
+                if (tmp1 == null) {
+                    tmp1 = 0;
+                } else {
+                    tmp1 = tmp1.length;
+                }
+                return 'translate(' + (tmp * 5 + tmp1 * 3 - d.length * 12 - 68) + ',' + (i * 21 + 5) + ')';
+            },
+            'fill-opacity': 0
+        }).remove();
+
+        plot7_num += 1;
+        if (plot7_num == 31) {
+            plot7_num = 0;
+        }
+    }
+
+    function plot7_dragstart(d) {
+        i = plot7_traits.indexOf(d);
+    }
+
+    function plot7_drag(d) {
+        // plot7_x.range()[i] = d3.event.x;
+        // plot7_traits.sort(function(a, b) {
+        //     return plot7_x(a) - plot7_x(b);
+        // });
+        // d3.select('#plot7 svg').selectAll(".trait").attr("transform", function(d) {
+        //     return "translate(" + plot7_x(d) + ")";
+        // });
+        // plot7_foreground.attr("d", plot7_path);
+    }
+
+    function plot7_dragend(d) {
+        // plot7_x.domain(plot7_traits).rangePoints([0, plot7_width]);
+        // var t = d3.transition().duration(500);
+        // t.selectAll(".trait").attr("transform", function(d) {
+        //     return "translate(" + plot7_x(d) + ")";
+        // });
+        // t.selectAll(".foreground path").attr("d", plot7_path);
+    }
+
+    function plot7_path(d, i) {
+        return plot7_line(plot7_traits.map(function(p) {
+            // return [plot7_x(p), plot7_y[p](d[p])];
+            return [plot7_x(p), plot7_y[p](plot7_data[1][i][p])];
+        }));
+    }
+
+    // Handles a brush event, toggling the display of foreground lines.
+    function plot7_brush() {
+        var actives = plot7_traits.filter(function(p) {
+            return !plot7_y[p].brush.empty();
+        });
+        var extents = actives.map(function(p) {
+            return plot7_y[p].brush.extent();
+        });
+        // plot7_foreground.classed("fade", function(d) {
+        //     return !actives.every(function(p, i) {
+        //         return extents[i][0] <= d[p] && d[p] <= e xtents[i][1];
+        //     });
+        // });
+        plot7_foreground.classed("fade", function(d, j) {
+            return !actives.every(function(p, i) {
+                return extents[i][0] <= plot7_data[1][j][p] && plot7_data[1][j][p] <= extents[i][1];
+            });
+        });
+    }
+
+    $('#plot7 span').click(function(event) {
+        if ($(this).hasClass('fa-play')) {
+            $(this).removeClass('fa-play').addClass('fa-pause');
+            clearInterval(rankInterval);
+        } else {
+            $(this).removeClass('fa-pause').addClass('fa-play');
+            plotRank();
+            rankInterval = setInterval(function() {
+                plotRank();
+            }, 3000);
+        }
+    });
+
+    var plot8_margin = [54, 100, 30, 30];
+    var plot8_index = 0;
+    var plot8_width = 1000 - plot8_margin[1] - plot8_margin[3];
+    var plot8_height = 500 - plot8_margin[0] - plot8_margin[2];
+    var tmp = d3.interpolate(d3.rgb(50, 73, 101), d3.rgb(178, 249, 239));
+    var plot8_colors = [];
+    for (var i = 0; i < 20; i++) {
+        plot8_colors.push(tmp(i * 0.04));
+    }
+    var plot8_platNames = ['陆金所', '人人贷', '宜人贷', '拍拍贷', '点融网', '微贷网', '积木盒子', '有利网', '投哪网', '开鑫贷', '易贷网', '翼龙贷', '京东金融', '爱钱进', '红岭创投', 'PPmoney万惠', '你我贷', '团贷网', '鑫合汇', '和信贷'];
+    var plot8_params = ['发展指数', '成交', '人气', '杠杆', '分散度', '流动性', '透明度'];
+
+    var curve = d3.svg.line().x(function(d) {
+        return plot8_width * d[0] + plot8_margin[3];
+    }).y(function(d) {
+        return plot8_height * d[1] + plot8_margin[0];
+        // }).interpolate('linear');
+    }).interpolate('monotone');
+
+    $('#plot8 .param').text(plot8_params[plot8_index]);
+
+    $('#plot8 .fa-chevron-left').click(function(event) {
+        plot8_index -= 1;
+        if (plot8_index < 0) {
+            plot8_index = 6; 
+        }
+        $('#plot8 .param').text(plot8_params[plot8_index]);
+        stream();
+    });
+
+    $('#plot8 .fa-chevron-right').click(function(event) {
+        plot8_index += 1;
+        if (plot8_index == 7) {
+            plot8_index = 0;
+        }
+        $('#plot8 .param').text(plot8_params[plot8_index]);
+        stream();
+    });
+
+    var plot8_paths = d3.select('#plot8 svg g').selectAll('path').data(plot8_platNames, function(d) {
+        return d;
+    });
+    plot8_paths.enter().append('path').attr('d', function(d, i) {
+        return curve(platCount['flow'][plot8_index]['content'][i][0]);
+    }).attr('name', function(d) {
+        return d;
+    }).attr('fill', function(d, i) {
+        return plot8_colors[platCount['flow'][plot8_index]['content'][i][1]];
+    }).attr('fill-opacity', 0).transition().duration(800).attr('fill-opacity', function(d, i) {
+        return 1 - 0.01 * platCount['flow'][plot8_index]['content'][i][1];
+    });
+
+    var plot8_text = d3.select('#plot8 svg g').selectAll('text.platName').data(plot8_platNames, function(d) {
+        return d;
+    });
+    plot8_text.enter().append('text').text(function(d) {
+        return d;
+    }).attr('transform', function(d, i) {
+        return 'translate(' + (plot8_width + plot8_margin[3] + 15) + ',' + (plot8_margin[0] + platCount['flow'][plot8_index]['content'][i][1] * 20 + 35) + ')';
+    }).attr({
+        'fill-opacity': '0',
+        'font-size': '12px',
+        'class': 'platName',
+        'fill': function(d, i) {
+            return plot8_colors[platCount['flow'][plot8_index]['content'][i][1]];
+        }
+    }).transition().duration(800).attr('transform', function(d, i) {
+        return 'translate(' + (plot8_width + plot8_margin[3] + 15) + ',' + (plot8_margin[0] + platCount['flow'][plot8_index]['content'][i][1] * 20 + 15) + ')';
+    }).attr('fill-opacity', 0.8);
+
+    function stream() {
+        plot8_paths.transition().duration(800).attr('d', function(d, i) {
+            return curve(platCount['flow'][plot8_index]['content'][i][0]);
+        }).attr('fill', function(d, i) {
+            return plot8_colors[platCount['flow'][plot8_index]['content'][i][1]];
+        }).attr('fill-opacity', function(d, i) {
+            return 1 - 0.01 * platCount['flow'][plot8_index]['content'][i][1];
+        });
+
+        plot8_text.transition().duration(800).attr('transform', function(d, i) {
+            return 'translate(' + (plot8_width + plot8_margin[3] + 15) + ',' + (plot8_margin[0] + platCount['flow'][plot8_index]['content'][i][1] * 20 + 15) + ')';
+        }).attr('fill', function(d,i){
+            return plot8_colors[platCount['flow'][plot8_index]['content'][i][1]];
+        });
+    }
+
+    var tmp = [];
+    for (var i = 0; i < 31; i++) {
+        tmp.push(i);
+    }
+    d3.select('#plot8 svg g').selectAll('line').data(tmp).enter().append('line').attr({
+        x1: function(d) {
+            return plot8_margin[3] + d * parseFloat(plot8_width) / (platCount['flow'][plot8_index]['content'][0][0].length / 2 - 1);
+        },
+        x2: function(d) {
+            return plot8_margin[3] + d * parseFloat(plot8_width) / (platCount['flow'][plot8_index]['content'][0][0].length / 2 - 1);
+        },
+        'y1': plot8_margin[0],
+        'y2': plot8_margin[0] + plot8_height,
+        'stroke': 'rgba(240, 240, 240, 0)',
+        'stroke-width': 1,
+        'shape-rendering': 'crispEdges',
+    }).transition().duration(800).attr('stroke', function(d,i){
+        if (i % 3 == 0) {
+            return 'rgba(240, 240, 240, 0.4)';
+        }
+        else {
+            return 'rgba(240, 240, 240, 0.1)';
+        }
+        
+    });
+
+    var tmp = ['2013-08', '2013-11', '2014-02', '2014-05', '2014-08', '2014-11', '2015-02', '2015-05', '2015-08', '2015-11', '2016-02'];
+    d3.select('#plot8 svg g').selectAll('text.month').data(tmp).enter().append('text').attr({
+        x: function(d, i) {
+            return plot8_margin[3] + 3 * i * parseFloat(plot8_width) / (platCount['flow'][plot8_index]['content'][0][0].length / 2 - 1) - 30;
+        },
+        y: 40,
+        'fill-opacity': 0,
+        'fill': '#fff',
+        'class': 'month',
+        'font-size': '12px'
+    }).text(function(d) {
+        return d;
+    }).transition().duration(800).attr('fill-opacity', '0.8');
+
+    $('#plot8 text.platName').hover(function() {
+        var tmp = $(this).text();
+        $('#plot8 text.platName').attr('class', 'platName inactive');
+        $(this).attr('class', 'platName active');
+        $('#plot8 path').attr('class', 'inactive');
+        $('#plot8 path[name="' + tmp + '"]').attr('class', 'active');
+        d3.selectAll('#plot8 path.inactive').transition().duration(600).attr('fill-opacity', 0.05);
+        d3.selectAll('#plot8 path.active').transition().duration(600).attr('fill-opacity', 1);
+        d3.selectAll('#plot8 text.inactive').transition().duration(600).attr('fill-opacity', 0.2);
+        d3.selectAll('#plot8 text.active').transition().duration(600).attr('fill-opacity', 1);
+    }, function() {
+        $('#plot8 path').attr('class', '');
+        $('#plot8 text.platName').attr('class', 'platName');
+        d3.select('#plot8 svg g').selectAll('path').transition().duration(600).attr('fill-opacity', function(d, i) {
+            return 1 - 0.01 * platCount['flow'][plot8_index]['content'][i][1];
+        });
+        d3.select('#plot8 svg g').selectAll('text.platName').transition().duration(600).attr('fill-opacity', 0.8);
+    });
+
+    var plot91 = echarts.init(document.getElementById('plot91'), 'dark');
+    option = {
+        baseOption: {
+            color: ['rgba(84, 148, 191, 1)', 'rgba(221, 107, 102, 0.8)', 'rgba(230, 157, 135, 0.8)', 'rgba(234, 126, 83, 0.8)', 'rgba(243, 230, 162, 0.8)'],
+            timeline: {
+                axisType: 'category',
+                orient: 'vertical',
+                autoPlay: true,
+                inverse: true,
+                playInterval: 3000,
+                left: null,
+                right: 20,
+                top: 40,
+                bottom: 25,
+                width: 70,
+                height: null,
+                label: {
+                    normal: {
+                        textStyle: {
+                            color: '#999'
+                        }
+                    },
+                    emphasis: {
+                        textStyle: {
+                            color: '#eee'
+                        }
+                    }
+                },
+                symbol: 'none',
+                lineStyle: {
+                    color: '#555',
+                    width: 1
+                },
+                checkpointStyle: {
+                    color: '#bbb',
+                    borderColor: '#777',
+                    borderWidth: 2
+                },
+                controlStyle: {
+                    showNextBtn: false,
+                    showPrevBtn: false,
+                    normal: {
+                        color: '#666',
+                        borderColor: '#666',
+                        borderWidth: 1
+                    },
+                    emphasis: {
+                        color: '#aaa',
+                        borderColor: '#aaa',
+                        borderWidth: 1
+                    }
+                },
+                data: []
+            },
+            title: {
+                'text': platCount.places.months[0],
+                textAlign: 'center',
+                left: 70,
+                bottom: 20,
+                textStyle: {
+                    fontSize: 30,
+                    color: 'rgba(255, 255, 255, 0.7)'
+                }
+            },
+            tooltip: {
+                padding: 5,
+                backgroundColor: '#222',
+                formatter: function(obj) {
+                    var value = obj.value;
+                    return value;
+                }
+            },
+            calculable: true,
+            tooltip: {},
+            legend: {
+                data: ['民营', '银行', '上市公司', '国资', '风投'],
+                top: 20,
+                left: 20,
+                width: 200
+            },
+        },
+        options: []
+    };
+    for (var n = 0; n < platCount.types.months.length; n++) {
+        option.baseOption.timeline.data.push(platCount.types.months[n]);
+        option.options.push({
+            title: {
+                'text': platCount.types.months[n]
+            },
+            radar: {
+                indicator: [{
+                    name: '成交',
+                    max: platCount.types.max[n][1]
+                }, {
+                    name: '运营平台',
+                    max: platCount.types.max[n][2]
+                }, {
+                    name: '当月问题平台',
+                    max: platCount.types.max[n][3]
+                }, {
+                    name: '累计问题平台',
+                    max: platCount.types.max[n][4]
+                }, {
+                    name: '贷款余额',
+                    max: platCount.types.max[n][5]
+                }, {
+                    name: '综合利率',
+                    max: platCount.types.max[n][6]
+                }, {
+                    name: '平均借款期限',
+                    max: platCount.types.max[n][7]
+                }, {
+                    name: '当月投资人数',
+                    max: platCount.types.max[n][8]
+                }, {
+                    name: '当月借款人数',
+                    max: platCount.types.max[n][9]
+                }],
+                center: ['39%', '50%'],
+                radius: '40%',
+                splitArea: {
+                    show: false
+                },
+                shape: 'circle',
+                startAngle: 180,
+                splitLine: {
+                    lineStyle: {
+                        color: ['rgba(200, 200, 200, 0.3)']
+                    }
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: 'rgba(200, 200, 200, 0.3)'
+                    }
+                }
+            },
+            series: [{
+                name: platCount.types.months[n],
+                type: 'radar',
+                data: platCount.types.series[n],
+                symbol: 'none',
+            }],
+        });
+    }
+    plot91.setOption(option);
+
+    var plot92 = echarts.init(document.getElementById('plot92'), 'dark');
+    var plot92_mapping = [1, 6, 2];
+    var plot92_schema = [{
+        name: 'province',
+        index: 0,
+        text: '区域',
+        unit: ''
+    }, {
+        name: 'amount',
+        index: 1,
+        text: '成交量',
+        unit: '亿元'
+    }, {
+        name: 'operatePlatNumber',
+        index: 2,
+        text: '运营平台数量',
+        unit: '家'
+    }, {
+        name: 'problemPlatNumber',
+        index: 3,
+        text: '当月问题平台数量',
+        unit: '家'
+    }, {
+        name: 'problemPlatNumberTotal',
+        index: 4,
+        text: '累计问题平台数量',
+        unit: '家'
+    }, {
+        name: 'balanceLoans',
+        index: 5,
+        text: '贷款余额',
+        unit: '亿元'
+    }, {
+        name: 'incomeRate',
+        index: 6,
+        text: '综合利率',
+        unit: '%'
+    }, {
+        name: 'loanPeriod',
+        index: 7,
+        text: '平均借款期限',
+        unit: '月'
+    }, {
+        name: 'bidderNum',
+        index: 8,
+        text: '当月投资人数',
+        unit: '万人'
+    }, {
+        name: 'borrowerNum',
+        index: 9,
+        text: '当月借款人数',
+        unit: '万人'
+    }];
+
+    setParams();
+
+    function setParams() {
+        $('#param1 span').text(plot92_schema[plot92_mapping[0]].text);
+        $('#param2 span').text(plot92_schema[plot92_mapping[1]].text);
+        $('#param3 span').text(plot92_schema[plot92_mapping[2]].text);
+
+        var plot92_data = [];
+        for (var i = 0; i < platCount.places.series.length; i++) {
+            var tmp = [];
+            var tmp_data = platCount.places.series[i];
+            for (var j = 0; j < tmp_data.length; j++) {
+                tmp.push([tmp_data[j][plot92_mapping[0]], tmp_data[j][plot92_mapping[1]], tmp_data[j][plot92_mapping[2]], tmp_data[j][0]]);
+            }
+            plot92_data.push(tmp);
+        }
+
+        option = {
+            baseOption: {
+                timeline: {
+                    axisType: 'category',
+                    orient: 'vertical',
+                    autoPlay: true,
+                    inverse: true,
+                    playInterval: 3000,
+                    left: null,
+                    right: 20,
+                    top: 40,
+                    bottom: 25,
+                    width: 70,
+                    height: null,
+                    label: {
+                        normal: {
+                            textStyle: {
+                                color: '#999'
+                            }
+                        },
+                        emphasis: {
+                            textStyle: {
+                                color: '#eee'
+                            }
+                        }
+                    },
+                    symbol: 'none',
+                    lineStyle: {
+                        color: '#555',
+                        width: 1
+                    },
+                    checkpointStyle: {
+                        color: '#bbb',
+                        borderColor: '#777',
+                        borderWidth: 2
+                    },
+                    controlStyle: {
+                        showNextBtn: false,
+                        showPrevBtn: false,
+                        normal: {
+                            color: '#666',
+                            borderColor: '#666',
+                            borderWidth: 1
+                        },
+                        emphasis: {
+                            color: '#aaa',
+                            borderColor: '#aaa',
+                            borderWidth: 1
+                        }
+                    },
+                    data: []
+                },
+                title: {
+                    'text': platCount.places.months[0],
+                    textAlign: 'center',
+                    right: 60,
+                    bottom: 75,
+                    textStyle: {
+                        fontSize: 30,
+                        color: 'rgba(255, 255, 255, 0.7)',
+                    }
+                },
+                tooltip: {
+                    padding: 5,
+                    backgroundColor: '#222',
+                    formatter: function(obj) {
+                        var value = obj.value;
+                        return plot92_schema[0].text + '：' + value[3] + '<br>' + plot92_schema[plot92_mapping[1]].text + '：' + value[1] + plot92_schema[plot92_mapping[1]].unit + '<br>' + plot92_schema[plot92_mapping[0]].text + '：' + value[0] + plot92_schema[plot92_mapping[0]].unit + '<br>' + plot92_schema[plot92_mapping[2]].text + '：' + value[2] + plot92_schema[plot92_mapping[2]].unit + '<br>';
+                    }
+                },
+                grid: {
+                    x: 70,
+                    x2: 120,
+                    y: 40,
+                    y2: 50
+                },
+                xAxis: {
+                    type: 'value',
+                    splitLine: {
+                        show: false
+                    },
+                    axisTick: {
+                        lineStyle: {
+                            color: '#ccc'
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#ccc'
+                        }
+                    },
+                    axisLabel: {
+                        formatter: '{value} ' + plot92_schema[plot92_mapping[0]].unit,
+                        textStyle: {
+                            color: '#ccc'
+                        },
+                        margin: 12
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLine: {
+                        lineStyle: {
+                            color: '#ccc'
+                        }
+                    },
+                    axisTick: {
+                        lineStyle: {
+                            color: '#ccc'
+                        }
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                    axisLabel: {
+                        formatter: '{value} ' + plot92_schema[plot92_mapping[1]].unit,
+                        textStyle: {
+                            color: '#ccc'
+                        },
+                        margin: 12
+                    }
+                },
+                visualMap: [{
+                    show: false,
+                    dimension: 3,
+                    categories: platCount.places.places,
+                    calculable: true,
+                    precision: 0.1,
+                    textGap: 30,
+                    textStyle: {
+                        color: '#ccc'
+                    },
+                    inRange: {
+                        color: ['#bcd3bb', '#e88f70', '#edc1a5', '#9dc5c8', '#e1e8c8', '#7b7c68', '#e5b5b5', '#f0b489', '#928ea8', '#bda29a']
+                    }
+                }],
+                series: [{
+                    type: 'scatter',
+                    itemStyle: {
+                        normal: {
+                            opacity: 0.8,
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 0,
+                            shadowColor: 'rgba(255, 255, 255, 0.5)'
+                        }
+                    },
+                    data: plot92_data[0],
+                    symbolSize: function(val) {
+                        return 90 * parseFloat(val[2]) / parseFloat(platCount.places.max[plot92_mapping[2]]) + 10;
+                    }
+                }],
+                animationDurationUpdate: 1000,
+                animationEasingUpdate: 'quinticInOut'
+            },
+            options: []
+        };
+
+        for (var n = 0; n < platCount.places.months.length; n++) {
+            option.baseOption.timeline.data.push(platCount.places.months[n]);
+            option.options.push({
+                title: {
+                    show: true,
+                    'text': platCount.places.months[n]
+                },
+                series: {
+                    name: platCount.places.months[n],
+                    type: 'scatter',
+                    itemStyle: {
+                        normal: {
+                            opacity: 0.8,
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    },
+                    data: plot92_data[n],
+                    symbolSize: function(val) {
+                        return 90 * parseFloat(val[2]) / parseFloat(platCount.places.max[plot92_mapping[2]]) + 10;
                     }
                 }
             });
-            platName = forces.nodes[node_id].name;
-            change_platName = true;
         }
-        if (forces.nodes[node_id].group == 1 || forces.nodes[node_id].group == 2) {
-            $('#info').hide();
-            draw(forces.nodes[node_id].name);
+        plot92.setOption(option);
+    }
+    var plot92_param = '';
+    $('#params>div').click(function(event) {
+        plot92_param = $(this).attr('id');
+        $('#mask').fadeIn('fast');
+    });
+    $('#mask div').click(function(event) {
+        var tmp = $(this).text();
+        for (var i = 0; i < plot92_schema.length; i++) {
+            if (plot92_schema[i].text == tmp) {
+                if (plot92_param == 'param1') {
+                    plot92_mapping[0] = i;
+                } else if (plot92_param == 'param2') {
+                    plot92_mapping[1] = i;
+                } else if (plot92_param == 'param3') {
+                    plot92_mapping[2] = i;
+                }
+                break;
+            }
         }
+        $('#mask').fadeOut('fast', function() {
+            setParams();
+        });
     });
 });
 </script>

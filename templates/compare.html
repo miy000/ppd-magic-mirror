@@ -1,11 +1,15 @@
 {% extends 'layout.html' %} {% block style %}
 <style>
+html { 
+    -webkit-text-size-adjust: none; 
+}
 #main {
     max-width: 1200px;
+    min-width: 1020px;
     margin: 0 auto;
 }
 
-#select {
+/*#select {
     background-color: #222 !important;
 }
 
@@ -30,41 +34,337 @@
     fill-opacity: 1;
     z-index: 999;
     font-size: 40px;
-}
+}*/
 
 #compare {
+    /*display: none;*/
+}
+
+/*#compare #rechoose {
+    position: absolute;
+    left: 30px;
+    top: 50px;
+    color: #f5f5f5;
+    font-size: 12px;
+    padding: 6px 12px;
+    border: 1px solid #f5f5f5;
+    border-radius: 3px;
+    transition: color .3s;
+    -o-transition: color .3s;
+    -ms-transition: color .3s;
+    -moz-transition: color .3s;
+    -webkit-transition: color .3s;
+}*/
+
+/*#compare #rechoose:hover {
+    cursor: pointer;
+    color: #333;
+    background-color: #f5f5f5;
+}*/
+
+#compare #choosePlat1 {
+    width: 90px;
+    text-align: center;
+    position: absolute;
+    left: 30px;
+    top: 50px;
+    color: #f5f5f5;
+    font-size: 12px;
+    padding: 6px 18px;
+    border: 1px solid #f5f5f5;
+    border-radius: 3px;
+    z-index: 10;
+    transition: color .3s;
+    -o-transition: color .3s;
+    -ms-transition: color .3s;
+    -moz-transition: color .3s;
+    -webkit-transition: color .3s;
+}
+#compare #choosePlat1:hover, #compare #choosePlat2:hover {
+    cursor: pointer;
+    color: #333;
+    background-color: #f5f5f5;
+}
+
+#compare #choosePlat2 {
+    width: 90px;
+    text-align: center;
+    position: absolute;
+    right: 30px;
+    top: 50px;
+    color: #f5f5f5;
+    font-size: 12px;
+    padding: 6px 18px;
+    border: 1px solid #f5f5f5;
+    border-radius: 3px;
+    z-index: 10;
+    transition: color .3s;
+    -o-transition: color .3s;
+    -ms-transition: color .3s;
+    -moz-transition: color .3s;
+    -webkit-transition: color .3s;
+}
+#compare #platList1, #compare #platList2 {
+    border: 1px solid #f5f5f5;
+    border-radius: 3px;
+    height: 145px;
+    overflow-y: scroll;
+    width: 90px;
+    text-align: center;
+    z-index: 99;
     display: none;
 }
+#compare #platList1 div, #compare #platList2 div {
+    padding: 6px;
+    color: #f5f5f5;
+    font-size: 12px;
+    width: 100%;
+    transition: color .3s;
+    -o-transition: color .3s;
+    -ms-transition: color .3s;
+    -moz-transition: color .3s;
+    -webkit-transition: color .3s;
+}
+#compare #platList1 div:hover, #compare #platList2 div:hover {
+    cursor: pointer;
+    color: #333;
+    background-color: #f5f5f5;
+}
+#compare #platList1 {
+    position: absolute;
+    left: 30px;
+    top: 50px;
+}
+#compare #platList2 {
+    position: absolute;
+    right: 30px;
+    top: 50px;
+}
+
 #compare #plot1 {
     width: 100%;
     height: 527px;
     background-color: #222;
     margin-bottom: 30px;
+    position: relative;
+}
+
+#compare #plot1 #img1 {
+    position: absolute;
+    top: 410px;
+    left: 50%;
+    margin-left: -120px;
+    opacity: 0;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.4);
+    border-radius: 3px;
+}
+
+#compare #plot1 #img2 {
+    position: absolute;
+    top: 410px;
+    left: 50%;
+    margin-left: 20px;
+    opacity: 0;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.4);
+    border-radius: 3px;
+}
+
+#compare #plot1 img {
+    height: 40px;
+    background-color: #f2f2f2;
+    transition: transform .3s;
+    -o-transition: -o-transform .3s;
+    -ms-transition: -ms-transform .3s;
+    -moz-transition: -moz-transform .3s;
+    -webkit-transition: -webkit-transform .3s;
+}
+
+#compare #plot1 img:hover {
+    transform: scale(1.1);
+    -o-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+    cursor: pointer;
 }
 
 #compare #plot21 {
     width: 100%;
     height: 300px;
     background-color: #222 !important;
+    margin-bottom: 30px;
 }
 
 #compare #plot22 {
     width: 100%;
     height: 300px;
     background-color: #222 !important;
+    margin-bottom: 30px;
 }
+
+#compare #plot31 {
+    width: 100%;
+    height: 275px;
+    background-color: #222 !important;
+    position: relative;
+    overflow: hidden;
+}
+
+#compare #plot32 {
+    width: 100%;
+    height: 275px;
+    background-color: #222 !important;
+    position: relative;
+    overflow: hidden;
+}
+
+#compare #plot34 {
+    width: 100%;
+    height: 275px;
+    background-color: #222 !important;
+}
+
+#compare .peoples .fa-chevron-right {
+    position: absolute;
+    right: 29px;
+    font-size: 40px;
+    color: rgba(120, 120, 120, 0.4);
+    bottom: 20px;
+    z-index: 999;
+    transition: color .3s;
+    -o-transition: color .3s;
+    -ms-transition: color .3s;
+    -moz-transition: color .3s;
+    -webkit-transition: color .3s;
+}
+
+#compare .peoples .fa-chevron-right:hover {
+    cursor: pointer;
+    color: rgba(160, 160, 160, 0.9);
+}
+
+#compare .peoples .portraits {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+}
+
+#compare .peoples .portraits img.thumb {
+    height: 35px;
+    width: 30px;
+    margin-right: 10px;
+    border-radius: 3px;
+}
+
+#compare .peoples .portraits .mask {
+    background-color: rgba(40, 40, 40, 0.7);
+    z-index: 999;
+    width: 30px;
+    height: 35px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#compare .peoples .people {
+    display: none;
+    position: relative;
+    text-align: left;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+}
+
+#compare .peoples img.portrait {
+    width: 80px;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.4);
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+#compare .peoples h5 {
+    display: inline-block;
+    font-size: 16px;
+    color: #f2f2f2;
+    margin-bottom: 15px;
+}
+
+#compare .peoples h5 span {
+    margin-left: 6px;
+    font-size: 14px;
+    color: rgba(84, 148, 191, 1);
+    position: relative;
+    top: 1px;
+}
+
+#compare .peoples p {
+    color: #999;
+    font-size: 12px;
+    line-height: 1.6;
+    margin-right: 96px;
+    max-height: 133px;
+    overflow-y: hidden;
+}
+
+/*#compare #plot33 {
+    width: 100%;
+    height: 600px;
+    background-color: #222 !important;
+    text-align: right;
+    position: relative;
+}
+
+#compare #plot33 #plot33_mode {
+    position: absolute;
+    top: 30px;
+    left: 25px;
+}
+#compare #plot33 #plot33_mode div {
+    display: inline-block;
+    font-size: 12px;
+    color: #f2f2f2;
+    padding: 4px 6px;
+    border: 1px solid #f2f2f2;
+    transition: color, background-color .3s;
+    -o-transition: color, background-color .3s;
+    -ms-transition: color, background-color .3s;
+    -moz-transition: color, background-color .3s;
+    -webkit-transition: color, background-color .3s;
+}
+#compare #plot33 #plot33_mode div:hover, #compare #plot33 #plot33_mode div.active {
+    background-color: #f2f2f2;
+    color: #333;
+    cursor: pointer;
+}
+
+#compare #plot4 {
+    width: 100%;
+    height: 327px;
+    background-color: #222 !important;
+    text-align: center;
+}*/
 </style>
 {% endblock %} {% block body %}
 <div style="text-align:center;">
-    <div id="select">
+    <!-- <div id="select">
         <div class="plot-title">选择对比平台</div>
         <svg width="1000px" height="600px" style="margin-top:30px;margin-bottom:30px;">
             <g></g>
         </svg>
-    </div>
+    </div> -->
     <div id="compare">
         <div id="plot1">
             <div class="plot-title">平台基本信息对比</div>
+            <!-- <div id="rechoose">
+                重新选择
+            </div> -->
+            <div id="choosePlat1">拍拍贷</div>
+            <div id="platList1"></div>
+            <div id="choosePlat2">宜人贷</div>
+            <div id="platList2"></div>
+            <a href="" target="_blank"><img src="" alt="" id="img1"></a>
+            <a href="" target="_blank"><img src="" alt="" id="img2"></a>
             <div>
                 <svg width="1000px" height="500px">
                     <g></g>
@@ -81,6 +381,47 @@
                 <div id="plot22"></div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="plot-title"> </div>
+                <div id="plot31" class="peoples">
+                    <div class="portraits"></div>
+                    <span id="next1" class="fa fa-fw fa-chevron-right"></span>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="plot-title">平台舆情对比</div>
+                <div id="plot34">
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="plot-title"> </div>
+                <div id="plot32" class="peoples">
+                    <div class="portraits"></div>
+                    <span id="next2" class="fa fa-fw fa-chevron-right"></span>
+                </div>
+            </div>
+            <!-- <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                <div style="margin-bottom:30px;">
+                    <div class="plot-title">平台舆情关联分析</div>
+                    <div id="plot33">
+                        <div id="plot33_mode">
+                            <div class="active" style="border-top-left-radius:3px;border-bottom-left-radius:3px;">权重</div>
+                            <div style="border-top-right-radius:3px;border-bottom-right-radius:3px;position:relative;left:-4px;">语义</div>
+                        </div>
+                        <svg width="700px" height="600px">
+                            <g></g>
+                        </svg>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+        <!-- <div id='plot4'>
+            <div class="plot-title">事件识别结果对比</div>
+            <svg width="1000px" height="300px">
+                <g></g>
+            </svg>
+        </div> -->
     </div>
 </div>
 <script>
@@ -88,8 +429,8 @@ $(document).ready(function() {
     $('#nav4').addClass('active');
 
     var selectCount = 0;
-    var platform1 = '';
-    var platform2 = '';
+    var platform1 = '拍拍贷';
+    var platform2 = '宜人贷';
 
     var platforms = eval({{platforms|safe}});
     var platNames = [];
@@ -99,81 +440,161 @@ $(document).ready(function() {
         positions.push([platforms[i].x, platforms[i].y]);
     }
 
-    d3.select('#select svg g').selectAll('text').data(platNames).enter().append('text').text(function(d) {
-        return d;
-    }).attr('transform', function(d) {
-        var tmp = Math.random();
-        if (tmp > 0.75) {
-            return 'translate(0, 0)';
-        } else if (tmp > 0.5) {
-            return 'translate(0, 500)';
-        } else if (tmp > 0.25) {
-            return 'translate(1000, 0)';
-        } else {
-            return 'translate(1000, 500)';
-        }
+    for (var i = 0; i < platNames.length; i++) {
+        $('#compare #platList1').append('<div>' + platNames[i] + '</div>');
+        $('#compare #platList2').append('<div>' + platNames[i] + '</div>');
+    }
 
-    }).attr('fill', '#f2f2f2').attr({
-        'fill-opacity': 0
-    }).attr('id', function(d) {
-        return d;
-    }).attr('class', 'inactive').transition().duration(800).attr({
-        'font-size': function(d, i) {
-            return 20 * parseFloat(platforms[i].nscore) + 10;
-        },
-        'fill-opacity': function(d, i) {
+    $('#compare #choosePlat1').click(function(event) {
+        $(this).hide();
+        $('#compare #platList1').show();
+    });
+
+    $('#compare #choosePlat2').click(function(event) {
+        $(this).hide();
+        $('#compare #platList2').show();
+    });
+
+    $('#compare #platList1 div').click(function(event) {
+        var tmp = $(this).text();
+        platform1 = tmp;
+        $(this).parent().hide();
+        $('#compare #choosePlat1').text(tmp).show();
+        compare();
+    });
+
+    $('#compare #platList2 div').click(function(event) {
+        var tmp = $(this).text();
+        platform2 = tmp;
+        $(this).parent().hide();
+        $('#compare #choosePlat2').text(tmp).show();
+        compare();
+    });
+
+    // d3.select('#select svg g').selectAll('text').data(platNames).enter().append('text').text(function(d) {
+    //     return d;
+    // }).attr('transform', function(d) {
+    //     var tmp = Math.random();
+    //     if (tmp > 0.75) {
+    //         return 'translate(0, 0)';
+    //     } else if (tmp > 0.5) {
+    //         return 'translate(0, 500)';
+    //     } else if (tmp > 0.25) {
+    //         return 'translate(1000, 0)';
+    //     } else {
+    //         return 'translate(1000, 500)';
+    //     }
+
+    // }).attr('fill', '#f2f2f2').attr({
+    //     'fill-opacity': 0
+    // }).attr('id', function(d) {
+    //     return d;
+    // }).attr('class', 'inactive').transition().duration(800).attr({
+    //     'font-size': function(d, i) {
+    //         return 20 * parseFloat(platforms[i].nscore) + 10;
+    //     },
+    //     'fill-opacity': function(d, i) {
+    //         return parseFloat(platforms[i].nscore);
+    //     }
+    // }).attr('transform', function(d, i) {
+    //     return 'translate(' + (positions[i][0] + Math.random() * 80 - 40) + ',' + (positions[i][1] + Math.random() * 40 - 20) + ')';
+    // });
+
+    // $('#select text').click(function(event) {
+    //     if ($(this).attr('class') != 'inactive') {} else if (selectCount == 0) {
+    //         d3.select('#select text#' + $(this).attr('id')).attr('class', 'active').transition().duration(600).attr('transform', 'translate(250, 230)');
+    //         selectCount += 1;
+    //         platform1 = $(this).text();
+    //     } else if (selectCount == 1) {
+    //         d3.select('#select text#' + $(this).attr('id')).attr('class', 'active').transition().duration(600).attr('transform', 'translate(650, 230)');
+    //         selectCount += 1;
+    //         platform2 = $(this).text();
+    //         setTimeout(function() {
+    //             d3.selectAll('#select text.inactive').transition().duration(600).attr({
+    //                 'fill-opacity': 0,
+    //                 'class': '',
+    //                 'transform': function() {
+    //                     var tmp = Math.random();
+    //                     if (tmp > 0.75) {
+    //                         return 'translate(0, 0)';
+    //                     } else if (tmp > 0.5) {
+    //                         return 'translate(0, 500)';
+    //                     } else if (tmp > 0.25) {
+    //                         return 'translate(1000, 0)';
+    //                     } else {
+    //                         return 'translate(1000, 500)';
+    //                     }
+    //                 }
+    //             });
+    //         }, 300);
+    //         setTimeout(function() {
+    //             d3.selectAll('#select text.active').attr({
+    //                 'fill': 'rgba(221, 107, 102, 1)',
+    //                 'fill-opacity': 1,
+    //                 'font-size': 40,
+    //                 'class': '',
+    //             }).transition().duration(600).attr({
+    //                 'transform': 'translate(430, 230)',
+    //                 'fill-opacity': 0
+    //             });
+    //         }, 600);
+
+    //         setTimeout(function() {
+    //             compare();
+    //         }, 1200);
+    //     }
+    // });
+
+    compare();
+
+    // $('#compare #rechoose').click(function(event) {
+    //     selectCount = 0;
+    //     platform1 = ''
+    //     platform2 = '';
+    //     distribute();
+    // });
+
+    function distribute() {
+        $('#compare').hide();
+        $('#select').show();
+        var tmp = d3.select('#select svg g').selectAll('text').data(platNames, function(d) {
+            return d;
+        });
+        tmp.attr({
+            'class': 'inactive',
+            'fill': '#f2f2f2',
+            'font-size': function(d, i) {
+                return 20 * parseFloat(platforms[i].nscore) + 10;
+            },
+        }).transition().duration(800).attr('transform', function(d, i) {
+            return 'translate(' + (positions[i][0] + Math.random() * 80 - 40) + ',' + (positions[i][1] + Math.random() * 40 - 20) + ')';
+        }).attr('fill-opacity', function(d, i) {
             return parseFloat(platforms[i].nscore);
-        }
-    }).attr('transform', function(d, i) {
-        return 'translate(' + (positions[i][0] + Math.random() * 80 - 40) + ',' + (positions[i][1] + Math.random() * 40 - 20) + ')';
-    });
+        });
 
-    $('#select text').click(function(event) {
-        if (selectCount == 0) {
-            d3.select('#select text#' + $(this).attr('id')).attr('class', 'active').transition().duration(600).attr('transform', 'translate(250, 230)');
-            selectCount += 1;
-            platform1 = $(this).text();
-        } else if (selectCount == 1) {
-            d3.select('#select text#' + $(this).attr('id')).attr('class', 'active').transition().duration(600).attr('transform', 'translate(650, 230)');
-            selectCount += 1;
-            platform2 = $(this).text();
-            setTimeout(function() {
-                d3.selectAll('#select text.inactive').transition().duration(600).attr({
-                    'fill-opacity': 0,
-                    'class': '',
-                    'transform': function() {
-                        var tmp = Math.random();
-                        if (tmp > 0.75) {
-                            return 'translate(0, 0)';
-                        } else if (tmp > 0.5) {
-                            return 'translate(0, 500)';
-                        } else if (tmp > 0.25) {
-                            return 'translate(1000, 0)';
-                        } else {
-                            return 'translate(1000, 500)';
-                        }
-                    }
-                });
-            }, 300);
-            setTimeout(function() {
-                d3.selectAll('#select text.active').attr({
-                    'fill': 'rgba(221, 107, 102, 1)',
-                    'fill-opacity': 1,
-                    'font-size': 40,
-                    'class': '',
-                }).transition().duration(600).attr({
-                    'transform': 'translate(430, 230)',
-                    'fill-opacity': 0
-                });
-            }, 600);
+        $('#compare #plot1 #img1').attr('src', '').css('opacity', 0);
+        $('#compare #plot1 #img2').attr('src', '').css('opacity', 0);
+        $('#compare #plot1 svg g').empty();
+        $('#compare .people').remove();
+        $('#compare .portraits').empty();
 
-            setTimeout(function() {
-                compare();
-            }, 1200);
-        }
-    });
+        $('#compare #plot4 svg g').empty();
+    }
+
+    var people_num1 = 1;
+    var people_total1 = 0;
+    var people_num2 = 1;
+    var people_total2 = 0;
 
     function compare() {
+        $('#compare #plot1 #img1').attr('src', '').css('opacity', 0);
+        $('#compare #plot1 #img2').attr('src', '').css('opacity', 0);
+        $('#compare #plot1 svg g').empty();
+        $('#compare .people').remove();
+        $('#compare .portraits').empty();
+        $('#compare #plot4 svg g').empty();
+
+        // plot1
         var tmp1 = '';
         var tmp2 = '';
         for (var i = 0; i < platforms.length; i++) {
@@ -189,40 +610,15 @@ $(document).ready(function() {
             }
         }
         var content = [tmp1.platName, tmp2.platName];
-        $('#select').hide();
+        // $('#select').hide();
         $('#compare').show();
 
-        console.log(tmp1);
-        console.log(tmp2);
-
-        // $('#compare #platName #plat1').attr('href', "{{url_for('platform', platName='')}}" + content[0]);
-        // $('#compare #platName #plat1 h5 span').text(content[0]).animate({
-        //     opacity: 1
-        // }, 400);
-        // $('#compare #platName #plat1 h5 img').attr('src', tmp1['logo']).animate({
-        //     opacity: 1
-        // }, 400);
-        // for (var i = 0; i < tmp1['tags'].length; i++) {
-        //     $('#compare #tags #tag1').append('<div class="tag">' + tmp1['tags'][i] + '</div>');
-        // }
-
-        // $('#compare #platName #plat2').attr('href', "{{url_for('platform', platName='')}}" + content[1]);
-        // $('#compare #platName #plat2 h5 span').text(content[1]).animate({
-        //     opacity: 1
-        // }, 400);
-        // $('#compare #platName #plat2 h5 img').attr('src', tmp2['logo']).animate({
-        //     opacity: 1
-        // }, 400);
-        // for (var i = 0; i < tmp2['tags'].length; i++) {
-        //     $('#compare #tags #tag2').append('<div class="tag">' + tmp2['tags'][i] + '</div>');
-        // }
-
-        var plot1_margin = [30,30,30,30];
+        var plot1_margin = [30, 30, 30, 30];
         var plot1_width = 1000 - plot1_margin[3] - plot1_margin[1];
         var plot1_height = 500 - plot1_margin[0] - plot1_margin[2];
         var plot1_data = [];
-        var plot1_x = [0.2,0.12,0.06,0.025,0,0.025,0.06,0.12,0.2];
-        var plot1_y = [0.06,0.17,0.28,0.39,0.5,0.61,0.72,0.83,0.94];
+        var plot1_x = [0.2, 0.12, 0.06, 0.025, 0, 0.025, 0.06, 0.12, 0.2];
+        var plot1_y = [0.06, 0.17, 0.28, 0.39, 0.5, 0.61, 0.72, 0.83, 0.94];
         var tmp_names = ['上线时间', '地理位置', '公司类型', '自动投标', '债权转让', '资金托管', '投标保障', '保障模式', '担保机构'];
         var tmp_params = ['lauchTime', 'location', 'category', 'autobid', 'stockTransfer', 'fundsToken', 'bidGuarantee', 'guaranteeMode', 'guaranteeOrg'];
         var tmp = d3.interpolate(d3.rgb(192, 70, 77), d3.rgb(245, 236, 165));
@@ -233,17 +629,17 @@ $(document).ready(function() {
 
         plot1_data.push({
             name: tmp1['platName'],
-            x: 0.25,
-            y: 0.4,
-            size: 24,
+            x: 0.26,
+            y: 0.3,
+            size: 20,
             group: 0,
             orient: 1
         });
         plot1_data.push({
             name: tmp2['platName'],
-            x: 0.75,
-            y: 0.4,
-            size: 24,
+            x: 0.74,
+            y: 0.3,
+            size: 20,
             group: 9,
             orient: 0
         });
@@ -267,35 +663,34 @@ $(document).ready(function() {
             });
         }
 
-        d3.select('#plot1 svg g').selectAll('text.field').data(plot1_data).enter().append('text').text(function(d){
+        d3.select('#plot1 svg g').selectAll('text.field').data(plot1_data).enter().append('text').text(function(d) {
             return d.name;
         }).attr({
             x: 500,
-            'text-anchor': function(d){
+            'text-anchor': function(d) {
                 if (d.orient == 0) {
                     return 'start';
-                }
-                else {
+                } else {
                     return 'end';
                 }
             },
             y: 250,
             'dominant-baseline': 'middle',
-            'fill': function(d){
+            'fill': function(d) {
                 return plot1_colors[d.group];
             },
             'fill-opacity': 0,
-            'font-size': function(d){
+            'font-size': function(d) {
                 return d.size;
             },
             'class': 'field'
-        }).transition().delay(function(d,i){
+        }).transition().delay(function(d, i) {
             return i * 20;
         }).duration(600).attr({
-            x: function(d){
+            x: function(d) {
                 return plot1_margin[3] + d.x * plot1_width;
             },
-            y: function(d){
+            y: function(d) {
                 return plot1_margin[0] + d.y * plot1_height;
             },
             'fill-opacity': 1
@@ -308,8 +703,8 @@ $(document).ready(function() {
         }).interpolate('linear');
 
         var bar_data = [];
-        var bar_names = ['发展指数','平均利润/%','注册资金/万元','成交量/万元','历史待还/万元','资金净流入/万元','投资人数/人','借款人数/人','待收投资人数/人','待还借款人数/人','借款标数/个','人均投资金额/元','人均借款金额/万元','平均借款期限/月'];
-        var tmp_list = ['score','averageProfit','registMoney'];
+        var bar_names = ['发展指数', '平均利润/%', '注册资金/万元', '成交量/万元', '历史待还/万元', '资金净流入/万元', '投资人数/人', '借款人数/人', '待收投资人数/人', '待还借款人数/人', '借款标数/个', '人均投资金额/元', '人均借款金额/万元', '平均借款期限/月'];
+        var tmp_list = ['score', 'averageProfit', 'registMoney'];
         for (var i = 0; i < tmp_list.length; i++) {
             var length1 = tmp1[tmp_list[i]] / (tmp1[tmp_list[i]] + tmp2[tmp_list[i]]);
             var length2 = tmp2[tmp_list[i]] / (tmp1[tmp_list[i]] + tmp2[tmp_list[i]]);
@@ -323,12 +718,12 @@ $(document).ready(function() {
                 length1 = 0.5;
                 length2 = 0.5;
             }
-            bar_data.push([length1,length2,tmp1[tmp_list[i]],tmp2[tmp_list[i]]])
+            bar_data.push([length1, length2, tmp1[tmp_list[i]], tmp2[tmp_list[i]]])
         }
-        tmp_list = [0,2,3,4,5,10,11,8,6,7,9];
+        tmp_list = [0, 2, 3, 4, 5, 10, 11, 8, 6, 7, 9];
         for (var i = 0; i < tmp_list.length; i++) {
-            var length1 = tmp1['basicdata']['data']['y1'][tmp_list[i]] / (tmp1['basicdata']['data']['y1'][tmp_list[i]] + tmp2['basicdata']['data']['y1'][tmp_list[i]]);
-            var length2 = tmp2['basicdata']['data']['y1'][tmp_list[i]] / (tmp1['basicdata']['data']['y1'][tmp_list[i]] + tmp2['basicdata']['data']['y1'][tmp_list[i]]);
+            var length1 = Math.abs(tmp1['basicdata']['data']['y1'][tmp_list[i]]) / (Math.abs(tmp1['basicdata']['data']['y1'][tmp_list[i]]) + Math.abs(tmp2['basicdata']['data']['y1'][tmp_list[i]]));
+            var length2 = Math.abs(tmp2['basicdata']['data']['y1'][tmp_list[i]]) / (Math.abs(tmp1['basicdata']['data']['y1'][tmp_list[i]]) + Math.abs(tmp2['basicdata']['data']['y1'][tmp_list[i]]));
             if (length1 < 0.01) {
                 length1 = 0.01;
             }
@@ -339,27 +734,27 @@ $(document).ready(function() {
                 length1 = 0.5;
                 length2 = 0.5;
             }
-            bar_data.push([length1,length2,tmp1['basicdata']['data']['y1'][tmp_list[i]],tmp1['basicdata']['data']['y1'][tmp_list[i]]]);
+            bar_data.push([length1, length2, tmp1['basicdata']['data']['y1'][tmp_list[i]], tmp2['basicdata']['data']['y1'][tmp_list[i]]]);
         }
         var curve_data = [];
         for (var i = 0; i < bar_data.length; i++) {
             var d = [];
-            d.push([0.27, 0.40]);
-            d.push([0.32, 0.10 + 0.7 * parseFloat(i) / bar_data.length]);
-            d.push([0.32 + 0.36 * bar_data[i][0], 0.10 + 0.7 * parseFloat(i) / bar_data.length]);
-            d.push([0.32 + 0.36 * bar_data[i][0], 0.10 + 0.7 * parseFloat(i) / bar_data.length + 0.04]);
-            d.push([0.32, 0.10 + 0.7 * parseFloat(i) / bar_data.length + 0.04]);
-            d.push([0.27, 0.40]);
-            curve_data.push([d,0]);
+            d.push([0.27, 0.30]);
+            d.push([0.32, 0.05 + 0.7 * parseFloat(i) / bar_data.length]);
+            d.push([0.32 + 0.36 * bar_data[i][0], 0.05 + 0.7 * parseFloat(i) / bar_data.length]);
+            d.push([0.32 + 0.36 * bar_data[i][0], 0.05 + 0.7 * parseFloat(i) / bar_data.length + 0.04]);
+            d.push([0.32, 0.05 + 0.7 * parseFloat(i) / bar_data.length + 0.04]);
+            d.push([0.27, 0.30]);
+            curve_data.push([d, 0]);
 
             var d = [];
-            d.push([0.73, 0.40]);
-            d.push([0.68, 0.10 + 0.7 * parseFloat(i) / bar_data.length]);
-            d.push([0.68 - 0.36 * bar_data[i][1], 0.10 + 0.7 * parseFloat(i) / bar_data.length]);
-            d.push([0.68 - 0.36 * bar_data[i][1], 0.10 + 0.7 * parseFloat(i) / bar_data.length + 0.04]);
-            d.push([0.68, 0.10 + 0.7 * parseFloat(i) / bar_data.length + 0.04]);
-            d.push([0.73, 0.40]);
-            curve_data.push([d,1]);
+            d.push([0.73, 0.30]);
+            d.push([0.68, 0.05 + 0.7 * parseFloat(i) / bar_data.length]);
+            d.push([0.68 - 0.36 * bar_data[i][1], 0.05 + 0.7 * parseFloat(i) / bar_data.length]);
+            d.push([0.68 - 0.36 * bar_data[i][1], 0.05 + 0.7 * parseFloat(i) / bar_data.length + 0.04]);
+            d.push([0.68, 0.05 + 0.7 * parseFloat(i) / bar_data.length + 0.04]);
+            d.push([0.73, 0.30]);
+            curve_data.push([d, 1]);
         }
 
         var plot1_colors1 = [];
@@ -370,67 +765,75 @@ $(document).ready(function() {
             plot1_colors1.push(tmpc1(parseFloat(i) / bar_data.length));
             plot1_colors2.push(tmpc2(parseFloat(i) / bar_data.length));
         }
-        
-        d3.select('#plot1 svg g').selectAll('path').data(curve_data).enter().append('path').attr('fill', function(d,i){
+
+        d3.select('#plot1 svg g').selectAll('path').data(curve_data).enter().append('path').attr('fill', function(d, i) {
             if (!d[1]) {
-                console.log(i/2);
                 return plot1_colors1[Math.floor(i / 2)];
-            }
-            else {
-                console.log(i/2);
+            } else {
                 return plot1_colors2[Math.floor(i / 2)];
             }
-        }).attr('fill-opacity', 0).attr('d', function(d){
+        }).attr('fill-opacity', 0).attr('d', function(d) {
             if (!d[1]) {
-                return curve([[0.25,0.4],[0.25,0.4],[0.25,0.4],[0.25,0.4],[0.25,0.4],[0.25,0.4]]);
+                return curve([
+                    [0.25, 0.4],
+                    [0.25, 0.4],
+                    [0.25, 0.4],
+                    [0.25, 0.4],
+                    [0.25, 0.4],
+                    [0.25, 0.4]
+                ]);
+            } else {
+                return curve([
+                    [0.75, 0.4],
+                    [0.75, 0.4],
+                    [0.75, 0.4],
+                    [0.75, 0.4],
+                    [0.75, 0.4],
+                    [0.75, 0.4]
+                ]);
             }
-            else {
-                return curve([[0.75,0.4],[0.75,0.4],[0.75,0.4],[0.75,0.4],[0.75,0.4],[0.75,0.4]]);
-            }
-        }).transition().delay(function(d,i){
+        }).transition().delay(function(d, i) {
             return i * 20;
-        }).duration(600).attr('d', function(d,i){
+        }).duration(600).attr('d', function(d, i) {
             return curve(d[0]);
         }).attr('fill-opacity', 0.9);
 
         d3.select('#plot1 svg g').selectAll('text.param').data(bar_names).enter().append('text').attr({
             x: 500,
-            y: function(d,i){
-                return plot1_height * (0.10 + 0.7 * parseFloat(i) / bar_data.length) + plot1_margin[0] + 13;
+            y: function(d, i) {
+                return plot1_height * (0.05 + 0.7 * parseFloat(i) / bar_data.length) + plot1_margin[0] + 13;
             },
             'text-anchor': 'middle',
             'fill': '#222',
             'font-size': '12px',
             'fill-opacity': 0,
             'class': 'param'
-        }).text(function(d){
+        }).text(function(d) {
             return d;
-        }).transition().delay(function(d,i){
+        }).transition().delay(function(d, i) {
             return 400 + i * 40;
         }).duration(800).attr('fill-opacity', 1);
 
         var curve_value = [];
         for (var i = 0; i < bar_data.length; i++) {
-            curve_value.push([bar_data[i][2],i,0]);
-            curve_value.push([bar_data[i][3],i,1]);
+            curve_value.push([bar_data[i][2], i, 0]);
+            curve_value.push([bar_data[i][3], i, 1]);
         }
         d3.select('#plot1 svg g').selectAll('text.value').data(curve_value).enter().append('text').attr({
-            x: function(d){
+            x: function(d) {
                 if (!d[2]) {
                     return plot1_width * 0.32 + plot1_margin[3] + 20;
-                }
-                else {
+                } else {
                     return plot1_width * 0.68 + plot1_margin[3] - 20;
                 }
             },
-            y: function(d,i){
-                return plot1_height * (0.10 + 0.7 * parseFloat(d[1]) / bar_data.length) + plot1_margin[0] + 13;
+            y: function(d, i) {
+                return plot1_height * (0.05 + 0.7 * parseFloat(d[1]) / bar_data.length) + plot1_margin[0] + 13;
             },
-            'text-anchor': function(d){
+            'text-anchor': function(d) {
                 if (!d[2]) {
                     return 'start';
-                }
-                else {
+                } else {
                     return 'end';
                 }
             },
@@ -438,191 +841,746 @@ $(document).ready(function() {
             'font-size': '12px',
             'fill-opacity': 0,
             'class': 'value'
-        }).text(function(d){
+        }).text(function(d) {
             return d[0];
-        }).transition().delay(function(d,i){
+        }).transition().delay(function(d, i) {
             return 200 + i * 20;
-        }).duration(800).attr('fill-opacity', 1).attr('x', function(d){
+        }).duration(800).attr('fill-opacity', 1).attr('x', function(d) {
             if (!d[2]) {
                 return plot1_width * 0.32 + plot1_margin[3] + 5;
-            }
-            else {
+            } else {
                 return plot1_width * 0.68 + plot1_margin[3] - 5;
             }
         });
-    
-        // var plot11 = echarts.init(document.getElementById('plot11'), 'dark');
-        // var option = {
-        //     tooltip: {
-        //         trigger: 'axis',
-        //         axisPointer: { // 坐标轴指示器，坐标轴触发有效
-        //             type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-        //         }
-        //     },
-        //     legend: {
-        //         data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎', '百度', '谷歌', '必应', '其他']
-        //     },
-        //     grid: {
-        //         left: '3%',
-        //         right: '4%',
-        //         bottom: '3%',
-        //         containLabel: true
-        //     },
-        //     xAxis: [{
-        //         type: 'category',
-        //         data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-        //     }],
-        //     yAxis: [{
-        //         type: 'value'
-        //     }],
-        //     series: [{
-        //         name: '直接访问',
-        //         type: 'bar',
-        //         data: [320, 332, 301, 334, 390, 330, 320]
-        //     }, {
-        //         name: '邮件营销',
-        //         type: 'bar',
-        //         stack: '广告',
-        //         data: [120, 132, 101, 134, 90, 230, 210]
-        //     }, {
-        //         name: '联盟广告',
-        //         type: 'bar',
-        //         stack: '广告',
-        //         data: [220, 182, 191, 234, 290, 330, 310]
-        //     }, {
-        //         name: '视频广告',
-        //         type: 'bar',
-        //         stack: '广告',
-        //         data: [150, 232, 201, 154, 190, 330, 410]
-        //     }, {
-        //         name: '搜索引擎',
-        //         type: 'bar',
-        //         data: [862, 1018, 964, 1026, 1679, 1600, 1570],
-        //         markLine: {
-        //             lineStyle: {
-        //                 normal: {
-        //                     type: 'dashed'
-        //                 }
-        //             },
-        //             data: [
-        //                 [{
-        //                     type: 'min'
-        //                 }, {
-        //                     type: 'max'
-        //                 }]
-        //             ]
-        //         }
-        //     }, {
-        //         name: '百度',
-        //         type: 'bar',
-        //         barWidth: 5,
-        //         stack: '搜索引擎',
-        //         data: [620, 732, 701, 734, 1090, 1130, 1120]
-        //     }, {
-        //         name: '谷歌',
-        //         type: 'bar',
-        //         stack: '搜索引擎',
-        //         data: [120, 132, 101, 134, 290, 230, 220]
-        //     }, {
-        //         name: '必应',
-        //         type: 'bar',
-        //         stack: '搜索引擎',
-        //         data: [60, 72, 71, 74, 190, 130, 110]
-        //     }, {
-        //         name: '其他',
-        //         type: 'bar',
-        //         stack: '搜索引擎',
-        //         data: [62, 82, 91, 84, 109, 110, 120]
-        //     }]
-        // };
-        // plot11.setOption(option);
+        var plot1_tags = [];
+        for (var i = 0; i < tmp1['tags'].length; i++) {
+            plot1_tags.push([tmp1['tags'][i], 0]);
+        }
+        for (var i = 0; i < tmp2['tags'].length; i++) {
+            plot1_tags.push([tmp2['tags'][i], 1]);
+        }
 
-        // var plot12 = echarts.init(document.getElementById('plot12'), 'dark');
-        // option = {
-        //     tooltip: {
-        //         trigger: 'axis',
-        //         axisPointer: { // 坐标轴指示器，坐标轴触发有效
-        //             type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+        var tmp = [0, 0];
+        d3.select('#plot1 svg g').selectAll('text.tag').data(plot1_tags).enter().append('text').attr({
+            x: function(d) {
+                if (!d[1]) {
+                    return plot1_width * 0.25 + plot1_margin[3] - 5;
+                } else {
+                    return plot1_width * 0.75 + plot1_margin[3] + 5;
+                }
+            },
+            y: function(d, i) {
+                tmp[d[1]] += 1;
+                return plot1_height * 0.3 + plot1_margin[0] + tmp[d[1]] * 21 + 15;
+            },
+            'text-anchor': function(d) {
+                if (!d[1]) {
+                    return 'end';
+                } else {
+                    return 'start';
+                }
+            },
+            'fill': 'rgba(240, 240, 240, 0.9)',
+            'font-size': '12px',
+            'fill-opacity': 0,
+            'class': 'tag'
+        }).text(function(d) {
+            return d[0];
+        }).transition().delay(function(d, i) {
+            return 600 + i * 20;
+        }).duration(800).attr('fill-opacity', 1);
+
+        $('#plot1 #img1').attr('src', tmp1['logo']);
+        $('#plot1 #img2').attr('src', tmp2['logo']);
+        var offset1, offset2, total_width;
+        var cal_interval = setInterval(function() {
+            offset1 = $('#plot1 #img1').width(), offset2 = $('#plot1 #img2').width();
+            total_width = offset1 + offset2 + 30;
+            if (offset1 * offset2 != 0) {
+                $('#plot1 #img1').css('margin-left', -total_width / 2);
+                $('#plot1 #img2').css('margin-left', total_width / 2 - offset2);
+                clearInterval(cal_interval);
+            }
+        }, 500);
+        $('#plot1 #img1').parent('a').attr('href', "{{url_for('platform', platName='')}}" + tmp1['platName']);
+        $('#plot1 #img2').parent('a').attr('href', "{{url_for('platform', platName='')}}" + tmp2['platName']);
+        setTimeout(function() {
+            $('#plot1 #img1').animate({
+                opacity: 1
+            }, 600);
+            $('#plot1 #img2').animate({
+                opacity: 1
+            }, 600);
+        }, 1200);
+
+        var x = [];
+        var y1 = [];
+        var y2 = [];
+        for (var i = 0; i < tmp1['bidDistribution']['deadline'].length; i++) {
+            x.push(tmp1['bidDistribution']['deadline'][i]['name']);
+        }
+        for (var i = 0; i < tmp2['bidDistribution']['deadline'].length; i++) {
+            if (x.indexOf(tmp2['bidDistribution']['deadline'][i]['name']) == -1) {
+                x.push(tmp2['bidDistribution']['deadline'][i]['name']);
+            }
+        }
+        x.sort();
+        for (var i = 0; i < x.length; i++) {
+            var tmp = -1;
+            for (var j = 0; j < tmp1['bidDistribution']['deadline'].length; j++) {
+                if (tmp1['bidDistribution']['deadline'][j]['name'] == x[i]) {
+                    tmp = j;
+                    break;
+                }
+            }
+            if (tmp == -1) {
+                y1.push(0);
+            } else {
+                y1.push(tmp1['bidDistribution']['deadline'][tmp]['y']);
+            }
+
+            tmp = -1;
+            for (var j = 0; j < tmp2['bidDistribution']['deadline'].length; j++) {
+                if (tmp2['bidDistribution']['deadline'][j]['name'] == x[i]) {
+                    tmp = j;
+                    break;
+                }
+            }
+            if (tmp == -1) {
+                y2.push(0);
+            } else {
+                y2.push(tmp2['bidDistribution']['deadline'][tmp]['y']);
+            }
+        }
+
+        // plot21
+        var plot21 = echarts.init(document.getElementById('plot21'), 'dark');
+        var option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {
+                data: [tmp1['platName'], tmp2['platName']],
+                padding: [27, 10, 10, 10],
+            },
+            grid: {
+                x: 65,
+                x2: 50,
+                y: 60,
+                y2: 50,
+            },
+            xAxis: [{
+                type: 'category',
+                data: x,
+                axisTick: {
+                    show: true
+                },
+                axisLine: {
+                    show: true
+                },
+                axisLabel: {
+                    margin: 12
+                }
+            }],
+            yAxis: [{
+                type: 'value',
+                axisTick: {
+                    show: true
+                },
+                axisLine: {
+                    show: true
+                },
+                splitLine: {
+                    show: false
+                }
+            }],
+            series: [{
+                name: tmp1['platName'],
+                type: 'bar',
+                data: y1
+            }, {
+                name: tmp2['platName'],
+                type: 'bar',
+                data: y2
+            }]
+        };
+        plot21.setOption(option);
+
+        var x = [];
+        var y1 = [];
+        var y2 = [];
+        for (var i = 0; i < tmp1['bidDistribution']['platamount'].length; i++) {
+            x.push(tmp1['bidDistribution']['platamount'][i]['name']);
+        }
+        for (var i = 0; i < tmp2['bidDistribution']['platamount'].length; i++) {
+            if (x.indexOf(tmp2['bidDistribution']['platamount'][i]['name']) == -1) {
+                x.push(tmp2['bidDistribution']['platamount'][i]['name']);
+            }
+        }
+        x.sort();
+        for (var i = 0; i < x.length; i++) {
+            var tmp = -1;
+            for (var j = 0; j < tmp1['bidDistribution']['platamount'].length; j++) {
+                if (tmp1['bidDistribution']['platamount'][j]['name'] == x[i]) {
+                    tmp = j;
+                    break;
+                }
+            }
+            if (tmp == -1) {
+                y1.push(0);
+            } else {
+                y1.push(tmp1['bidDistribution']['platamount'][tmp]['y']);
+            }
+
+            tmp = -1;
+            for (var j = 0; j < tmp2['bidDistribution']['platamount'].length; j++) {
+                if (tmp2['bidDistribution']['platamount'][j]['name'] == x[i]) {
+                    tmp = j;
+                    break;
+                }
+            }
+            if (tmp == -1) {
+                y2.push(0);
+            } else {
+                y2.push(tmp2['bidDistribution']['platamount'][tmp]['y']);
+            }
+        }
+
+        // plot22
+        var plot22 = echarts.init(document.getElementById('plot22'), 'dark');
+        option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {
+                data: [tmp1['platName'], tmp2['platName']],
+                padding: [27, 10, 10, 10],
+            },
+            grid: {
+                x: 75,
+                x2: 50,
+                y: 60,
+                y2: 50,
+            },
+            xAxis: [{
+                type: 'category',
+                data: x,
+                axisTick: {
+                    show: true
+                },
+                axisLine: {
+                    show: true
+                },
+                axisLabel: {
+                    margin: 12
+                }
+            }],
+            yAxis: [{
+                type: 'value',
+                axisTick: {
+                    show: true
+                },
+                axisLine: {
+                    show: true
+                },
+                splitLine: {
+                    show: false
+                }
+            }],
+            series: [{
+                name: tmp1['platName'],
+                type: 'bar',
+                data: y1
+            }, {
+                name: tmp2['platName'],
+                type: 'bar',
+                data: y2
+            }]
+        };
+        plot22.setOption(option);
+
+        // plot31 and plot32
+        people_num1 = 1;
+        people_total1 = 0;
+        people_num2 = 1;
+        people_total2 = 0;
+        $('#plot31').siblings('.plot-title').text(tmp1['platName'] + '人员信息')
+        $.ajax({
+                url: '{{url_for("people")}}',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    platPin: tmp1['platPin']
+                },
+            })
+            .done(function(data) {
+                people_total1 = data['people'].length;
+                for (var i = 0; i < data['people'].length; i++) {
+                    var $p = "<div class='people' name='1" + data['people'][i]['number'] + "'><img class='portrait' src='" + data['people'][i]['portrait'] + "'><h5>" + data['people'][i]['name'] + "<span>" + data['people'][i]['position'] + "</span></h5><p>" + data['people'][i]['description'] + "</p></div>";
+                    $('#plot31').append($p);
+
+                    var $i = "<div style='display:inline-block;position:relative;'><img class='thumb' src='" + data['people'][i]['portrait'] + "' name='1" + data['people'][i]['number'] + "'><div class='mask' name='1" + data['people'][i]['number'] + "'></div></div>";
+                    $('#plot31 .portraits').append($i);
+                }
+                $('#plot31 .people[name="1' + people_num1 + '"]').show();
+                $('#plot31 .portraits .mask[name="1' + people_num1 + '"]').css('opacity', 0);
+            })
+            .fail(function() {})
+            .always(function() {});
+
+        $('#plot32').siblings('.plot-title').text(tmp2['platName'] + '人员信息')
+        $.ajax({
+                url: '{{url_for("people")}}',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    platPin: tmp2['platPin']
+                },
+            })
+            .done(function(data) {
+                people_total2 = data['people'].length;
+                for (var i = 0; i < data['people'].length; i++) {
+                    var $p = "<div class='people' name='2" + data['people'][i]['number'] + "'><img class='portrait' src='" + data['people'][i]['portrait'] + "'><h5>" + data['people'][i]['name'] + "<span>" + data['people'][i]['position'] + "</span></h5><p>" + data['people'][i]['description'] + "</p></div>";
+                    $('#plot32').append($p);
+
+                    var $i = "<div style='display:inline-block;position:relative;'><img class='thumb' src='" + data['people'][i]['portrait'] + "' name='2" + data['people'][i]['number'] + "'><div class='mask' name='2" + data['people'][i]['number'] + "'></div></div>";
+                    $('#plot32 .portraits').append($i);
+                }
+                $('#plot32 .people[name="2' + people_num2 + '"]').show();
+                $('#plot32 .portraits .mask[name="2' + people_num2 + '"]').css('opacity', 0);
+            })
+            .fail(function() {})
+            .always(function() {});
+
+        // plot34
+        var plot34 = echarts.init(document.getElementById('plot34'), 'dark');
+        option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {
+                data: [tmp1['platName'], tmp2['platName']],
+                padding: [27, 10, 10, 10],
+            },
+            grid: {
+                x: 85,
+                x2: 40,
+                y: 60,
+                y2: 50,
+            },
+            yAxis: [{
+                type: 'category',
+                data: ['消极评论','积极评论','消极新闻','积极新闻'],
+                axisTick: {
+                    show: true
+                },
+                axisLine: {
+                    show: true
+                },
+                axisLabel: {
+                    margin: 12
+                }
+            }],
+            xAxis: [{
+                type: 'value',
+                axisTick: {
+                    show: true
+                },
+                axisLine: {
+                    show: true
+                },
+                splitLine: {
+                    show: false
+                }
+            }],
+            series: [{
+                name: tmp1['platName'],
+                type: 'bar',
+                data: [tmp1.commentnegative,tmp1.commentpositive,tmp1.newsnegative,tmp1.newspositive]
+            }, {
+                name: tmp2['platName'],
+                type: 'bar',
+                data: [tmp2.commentnegative,tmp2.commentpositive,tmp2.newsnegative,tmp2.newspositive]
+            }]
+        };
+        plot34.setOption(option);
+
+        // plot4
+        // var begintime, endtime;
+        // var plot4_margins = [10, 50, 50, 70];
+        // var plot4_width = 1000 - plot4_margins[1] - plot4_margins[3];
+        // var plot4_height = 300 - plot4_margins[0] - plot4_margins[2];
+        // $.ajax({
+        //         url: '{{url_for("compare_trade")}}',
+        //         type: 'POST',
+        //         dataType: 'json',
+        //         data: {
+        //             platId1: tmp1.platId,
+        //             platId2: tmp2.platId
+        //         },
+        //     })
+        //     .done(function(data) {
+        //         var curve1 = d3.svg.line().x(function(d) {
+        //             return plot4_width * d[0] + plot4_margins[3];
+        //         }).y(function(d) {
+        //             return plot4_height * (0.3 - 0.1 * d[1]) + plot4_margins[0] - 4;
+        //         }).interpolate('linear');
+        //         var curve2 = d3.svg.line().x(function(d) {
+        //             return plot4_width * d[0] + plot4_margins[3];
+        //         }).y(function(d) {
+        //             return plot4_height * (0.75 - 0.1 * d[1]) + plot4_margins[0] - 4;
+        //         }).interpolate('linear');
+
+        //         if (data['data1'][0] < data['data2'][0]) {
+        //             begintime = data['data1'][0];
+        //         } else {
+        //             begintime = data['data2'][0];
         //         }
-        //     },
-        //     legend: {
-        //         data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎', '百度', '谷歌', '必应', '其他']
-        //     },
-        //     grid: {
-        //         left: '3%',
-        //         right: '4%',
-        //         bottom: '3%',
-        //         containLabel: true
-        //     },
-        //     xAxis: [{
-        //         type: 'category',
-        //         data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-        //     }],
-        //     yAxis: [{
-        //         type: 'value'
-        //     }],
-        //     series: [{
-        //         name: '直接访问',
-        //         type: 'bar',
-        //         data: [320, 332, 301, 334, 390, 330, 320]
-        //     }, {
-        //         name: '邮件营销',
-        //         type: 'bar',
-        //         stack: '广告',
-        //         data: [120, 132, 101, 134, 90, 230, 210]
-        //     }, {
-        //         name: '联盟广告',
-        //         type: 'bar',
-        //         stack: '广告',
-        //         data: [220, 182, 191, 234, 290, 330, 310]
-        //     }, {
-        //         name: '视频广告',
-        //         type: 'bar',
-        //         stack: '广告',
-        //         data: [150, 232, 201, 154, 190, 330, 410]
-        //     }, {
-        //         name: '搜索引擎',
-        //         type: 'bar',
-        //         data: [862, 1018, 964, 1026, 1679, 1600, 1570],
-        //         markLine: {
-        //             lineStyle: {
-        //                 normal: {
-        //                     type: 'dashed'
+        //         if (data['data1'][1] < data['data2'][1]) {
+        //             endtime = data['data2'][1];
+        //         } else {
+        //             endtime = data['data1'][1];
+        //         }
+
+        //         var curves = [];
+        //         var tmp = [];
+        //         for (var i = 0; i < data['data1'][3].length; i++) {
+        //             tmp.push([parseFloat(data['data1'][0] + i * data['data1'][2] - begintime) / parseFloat(endtime - begintime), parseFloat(data['data1'][3][i]) / parseFloat(data['data1'][4])]);
+        //         }
+        //         curves.push([tmp, 1]);
+        //         var tmp = [];
+        //         for (var i = 0; i < data['data2'][3].length; i++) {
+        //             tmp.push([parseFloat(data['data2'][0] + i * data['data2'][2] - begintime) / parseFloat(endtime - begintime), parseFloat(data['data2'][3][i]) / parseFloat(data['data2'][4])]);
+        //         }
+        //         curves.push([tmp, 2]);
+
+        //         d3.select("#plot4 svg g").selectAll('path').data(curves).enter().append('path').attr({
+        //             fill: 'none',
+        //             stroke: 'rgba(240,240,240,0.4)',
+        //             'stroke-width': 1,
+        //             d: function(d) {
+        //                 if (d[1] == 1) {
+        //                     return curve1(d[0]);
+        //                 } else if (d[1] == 2) {
+        //                     return curve2(d[0]);
         //                 }
-        //             },
-        //             data: [
-        //                 [{
-        //                     type: 'min'
-        //                 }, {
-        //                     type: 'max'
-        //                 }]
-        //             ]
+        //             }
+        //         });
+
+        //         var tmp = [];
+        //         for (var i = 0; i <= 10; i++) {
+        //             tmp.push(new Date(parseInt(begintime + i * (endtime - begintime) / 10 + 3600 * 8) * 1000).toJSON().substr(0, 10));
         //         }
-        //     }, {
-        //         name: '百度',
-        //         type: 'bar',
-        //         barWidth: 5,
-        //         stack: '搜索引擎',
-        //         data: [620, 732, 701, 734, 1090, 1130, 1120]
-        //     }, {
-        //         name: '谷歌',
-        //         type: 'bar',
-        //         stack: '搜索引擎',
-        //         data: [120, 132, 101, 134, 290, 230, 220]
-        //     }, {
-        //         name: '必应',
-        //         type: 'bar',
-        //         stack: '搜索引擎',
-        //         data: [60, 72, 71, 74, 190, 130, 110]
-        //     }, {
-        //         name: '其他',
-        //         type: 'bar',
-        //         stack: '搜索引擎',
-        //         data: [62, 82, 91, 84, 109, 110, 120]
-        //     }]
-        // };
-        // plot12.setOption(option);
+        //         d3.select("#plot4 svg g").selectAll("text.x").data(tmp).enter().append('text').attr({
+        //             'class': 'x',
+        //             'font-size': '12px',
+        //             'fill': 'rgba(250,250,250,0.8)',
+        //             'text-anchor': 'middle',
+        //             'transform': function(d, i) {
+        //                 return 'translate(' + (plot4_margins[3] + i * plot4_width / 10) + ',' + (plot4_margins[0] + plot4_height + 10) + ')';
+        //             }
+        //         }).text(function(d) {
+        //             return d;
+        //         });
+
+        //         tmp = [];
+        //         for (var i = 0; i < tmp1.positive_date.length; i++) {
+        //             tmp.push([tmp1.positive_date[i], 0.15, 'rgba(221, 107, 102, 0.8)']);
+        //         }
+        //         for (var i = 0; i < tmp1.negative_date.length; i++) {
+        //             tmp.push([tmp1.negative_date[i], 0.35, 'rgba(84, 148, 191, 0.8)']);
+        //         }
+        //         for (var i = 0; i < tmp2.positive_date.length; i++) {
+        //             tmp.push([tmp2.positive_date[i], 0.6, 'rgba(221, 107, 102, 0.8)']);
+        //         }
+        //         for (var i = 0; i < tmp2.negative_date.length; i++) {
+        //             tmp.push([tmp2.negative_date[i], 0.8, 'rgba(84, 148, 191, 0.8)']);
+        //         }
+        //         d3.select("#plot4 svg g").selectAll('circle').data(tmp).enter().append('circle').attr({
+        //             'cx': function(d) {
+        //                 return plot4_margins[3] + plot4_width * parseFloat(d[0] - begintime) / parseFloat(endtime - begintime) - 3;
+        //             },
+        //             'cy': function(d) {
+        //                 return plot4_margins[0] + plot4_height * d[1] - 5;
+        //             },
+        //             'r': 3,
+        //             'fill': function(d) {
+        //                 return d[2];
+        //             },
+        //         });
+        //     })
+        //     .fail(function() {})
+        //     .always(function() {});
+
+        // var plot4_axis = [];
+        // plot4_axis.push({
+        //     x1: plot4_margins[3],
+        //     x2: plot4_margins[3] + plot4_width,
+        //     y1: plot4_margins[0] + plot4_height - 10,
+        //     y2: plot4_margins[0] + plot4_height - 10,
+        // });
+        // for (var i = 0; i <= 10; i++) {
+        //     plot4_axis.push({
+        //         x1: plot4_margins[3] + plot4_width * 0.1 * i,
+        //         x2: plot4_margins[3] + plot4_width * 0.1 * i,
+        //         y1: plot4_margins[0] + plot4_height - 18,
+        //         y2: plot4_margins[0] + plot4_height - 10,
+        //     });
+        // }
+
+        // d3.select('#plot4 svg g').selectAll('line').data(plot4_axis).enter().append('line').attr({
+        //     x1: function(d) {
+        //         return d.x1
+        //     },
+        //     x2: function(d) {
+        //         return d.x2
+        //     },
+        //     y1: function(d) {
+        //         return d.y1
+        //     },
+        //     y2: function(d) {
+        //         return d.y2
+        //     }
+        // }).attr({
+        //     'shape-rendering': 'crispEdges',
+        //     'stroke': 'rgba(250,250,250,0.5)',
+        //     'stroke-width': '1px'
+        // });
+
+        // tmp = [];
+        // tmp.push(['积极', 0.15, 'rgba(221, 107, 102, 0.9)']);
+        // tmp.push([tmp1.platName, 0.25, 'rgba(250, 250, 250, 0.9)']);
+        // tmp.push(['消极', 0.35, 'rgba(84, 148, 191, 0.9)']);
+
+        // tmp.push(['积极', 0.6, 'rgba(221, 107, 102, 0.9)']);
+        // tmp.push([tmp2.platName, 0.7, 'rgba(250, 250, 250, 0.9)']);
+        // tmp.push(['消极', 0.8, 'rgba(84, 148, 191, 0.9)']);;
+        // d3.select("#plot4 svg g").selectAll("text.y").data(tmp).enter().append('text').attr({
+        //     'class': 'y',
+        //     'font-size': '12px',
+        //     'fill': function(d) {
+        //         return d[2];
+        //     },
+        //     'text-anchor': 'middle',
+        //     'transform': function(d, i) {
+        //         return 'translate(' + (plot4_margins[3] - 40) + ',' + (plot4_margins[0] + plot4_height * d[1]) + ')';
+        //     }
+        // }).text(function(d) {
+        //     return d[0];
+        // });
+
+        // plot33
+        // $.ajax({
+        //     url: '{{url_for("matrix")}}',
+        //     type: 'POST',
+        //     dataType: '',
+        //     data: {
+        //         // platName1: tmp1.platName,
+        //         // platName2: tmp2.platName
+        //         platName1: '拍拍贷',
+        //         platName2: '拍拍贷'
+        //     },
+        // })
+        // .done(function(data) {
+        //     var matrix = eval("(" + data + ")");
+        //     matrix = matrix['data'];
+        //     var keywords1 = matrix.keywords1;
+        //     var keywords2 = matrix.keywords2;
+        //     matrix = matrix.matrix;
+
+        //     var text1 = d3.select('#plot33 svg g').selectAll('text.platform1').data(keywords1[0], function(d){
+        //         return d;
+        //     });
+        //     text1.enter().append('text').text(function(d){
+        //         return d;
+        //     }).attr({
+        //         'fill': '#ddd',
+        //         'class': 'platform1',
+        //         'text-anchor': 'end',
+        //         'font-size': 12,
+        //         'fill-opacity': 0,
+        //         'transform': function(d,i){
+        //             if (plot33_mode == 0) {
+        //                 return 'translate(' + [plot33_margin[3] + 50, plot33_margin[0] + 50 + 12 * keywords1[1][i]] + ')';
+        //             }
+        //             else if (plot33_mode == 1) {
+        //                 return 'translate(' + [plot33_margin[3] + 50, plot33_margin[0] + 50 + 12 * keywords1[2][i]] + ')';
+        //             }
+        //         },
+        //     }).transition().duration(600).attr({
+        //         'fill-opacity': 1,
+        //         'transform': function(d,i){
+        //             if (plot33_mode == 0) {
+        //                 return 'translate(' + [plot33_margin[3] + 50, plot33_margin[0] + 40 + 12 * keywords1[1][i]] + ')';
+        //             }
+        //             else if (plot33_mode == 1) {
+        //                 return 'translate(' + [plot33_margin[3] + 50, plot33_margin[0] + 40 + 12 * keywords1[2][i]] + ')';
+        //             }
+        //         },
+        //     });
+
+        //     var text2 = d3.select('#plot33 svg g').selectAll('text.platform2').data(keywords2[0], function(d){
+        //         return d;
+        //     });
+        //     text2.enter().append('text').text(function(d){
+        //         return d;
+        //     }).attr({
+        //         'fill': '#ddd',
+        //         'class': 'platform2',
+        //         'text-anchor': 'start',
+        //         'font-size': 12,
+        //         'fill-opacity': 0,
+        //         'transform': function(d,i){
+        //             if (plot33_mode == 0) {
+        //                 return 'translate(' + [plot33_margin[3] + 90 + 12 * keywords2[1][i], plot33_margin[0] + 10] + ')rotate(270)';
+        //             }
+        //             else if (plot33_mode == 1) {
+        //                 return 'translate(' + [plot33_margin[3] + 90 + 12 * keywords2[2][i], plot33_margin[0] + 10] + ')rotate(270)';
+        //             }
+        //         },
+        //     }).transition().duration(600).attr({
+        //         'fill-opacity': 1,
+        //         'transform': function(d,i){
+        //             if (plot33_mode == 0) {
+        //                 return 'translate(' + [plot33_margin[3] + 80 + 12 * keywords2[1][i], plot33_margin[0] + 10] + ')rotate(270)';
+        //             }
+        //             else if (plot33_mode == 1) {
+        //                 return 'translate(' + [plot33_margin[3] + 80 + 12 * keywords2[2][i], plot33_margin[0] + 10] + ')rotate(270)';
+        //             }
+        //         },
+        //     });
+
+        //     var colors = d3.interpolate(d3.rgb(192, 70, 77), d3.rgb(245, 236, 165));
+        //     // var colors = d3.scale.category20();
+        //     var rect = d3.select('#plot33 svg g').selectAll('rect').data(matrix[0]);
+        //     rect.enter().append('rect').attr({
+        //         'fill': function(d){
+        //             return colors(Math.sqrt(d));
+        //         },
+        //         'x': function(d,i){
+        //             if (plot33_mode == 0) {
+        //                 return plot33_margin[3] + 70 + 12 * matrix[2][i];
+        //             }
+        //             else if (plot33_mode == 1) {
+        //                 return plot33_margin[3] + 70 + 12 * matrix[4][i];
+        //             }
+        //         },
+        //         'y': function(d,i){
+        //             if (plot33_mode == 0) {
+        //                 return plot33_margin[0] + 30 + 12 * matrix[1][i];
+        //             }
+        //             else if (plot33_mode == 1) {
+        //                 return plot33_margin[0] + 30 + 12 * matrix[3][i];
+        //             }
+        //         },
+        //         'width': 12,
+        //         'height': 12
+        //     }).transition().duration(600).attr('fill-opacity', function(d){
+        //         return 1;
+        //     });
+
+        // })
+        // .fail(function() {
+        // })
+        // .always(function() {
+        // });
     }
+
+    $('#plot31 .fa-chevron-right').click(function(event) {
+        $('#plot31 .people[name="1' + people_num1 + '"]').removeClass('spaceInRight').addClass('magictime spaceOutLeft');
+        setTimeout(function() {
+            $('#plot31 .people[name="1' + people_num1 + '"]').hide().removeClass('spaceOutLeft');
+            people_num1 += 1;
+            if (people_num1 > people_total1) {
+                people_num1 = 1;
+            }
+            $('#plot31 .portraits .mask').css('opacity', 1);
+            $('#plot31 .portraits .mask[name="1' + people_num1 + '"]').css('opacity', 0);
+            $('#plot31 .people[name="1' + people_num1 + '"]').show().addClass('magictime spaceInRight');
+        }, 200);
+    });
+    $('#plot31 .portraits').on('mouseover', 'div', function(event) {
+        event.preventDefault();
+        $(this).css('cursor', 'pointer');
+        $(this).children('.mask').css('opacity', 0);
+    });
+    $('#plot31 .portraits').on('mouseout', 'div', function(event) {
+        event.preventDefault();
+        $('#plot31 .portraits .mask[name="1' + people_num1 + '"]').css('opacity', 0);
+        var $c = $(this).children('.mask');
+        if ($c.attr('name') != ('1' + people_num1)) {
+            $c.css('opacity', 1);
+        }
+    });
+    $('#plot31 .portraits').on('click', 'div', function(event) {
+        event.stopPropagation();
+        var $i = $(this).siblings('img');
+        var id = parseInt($(this).attr('name')[1]);
+        $('#plot31 .portraits .mask').css('opacity', 1);
+        $('#plot31 .portraits .mask[name="1' + id + '"]').css('opacity', 0);
+
+        $('#plot31 .people[name="1' + people_num1 + '"]').removeClass('spaceInRight').addClass('magictime spaceOutLeft');
+        setTimeout(function() {
+            $('#plot31 .people[name="1' + people_num1 + '"]').hide().removeClass('spaceOutLeft');
+            people_num1 = id;
+            $('#plot31 .people[name="1' + people_num1 + '"]').show().addClass('magictime spaceInRight');
+        }, 200);
+    });
+
+    $('#plot32 .fa-chevron-right').click(function(event) {
+        $('#plot32 .people[name="2' + people_num2 + '"]').removeClass('spaceInRight').addClass('magictime spaceOutLeft');
+        setTimeout(function() {
+            $('#plot32 .people[name="2' + people_num2 + '"]').hide().removeClass('spaceOutLeft');
+            people_num2 += 1;
+            if (people_num2 > people_total2) {
+                people_num2 = 1;
+            }
+            $('#plot32 .portraits .mask').css('opacity', 1);
+            $('#plot32 .portraits .mask[name="2' + people_num2 + '"]').css('opacity', 0);
+            $('#plot32 .people[name="2' + people_num2 + '"]').show().addClass('magictime spaceInRight');
+        }, 200);
+    });
+    $('#plot32 .portraits').on('mouseover', 'div', function(event) {
+        event.preventDefault();
+        $(this).css('cursor', 'pointer');
+        $(this).children('.mask').css('opacity', 0);
+    });
+    $('#plot32 .portraits').on('mouseout', 'div', function(event) {
+        event.preventDefault();
+        $('#plot32 .portraits .mask[name="2' + people_num2 + '"]').css('opacity', 0);
+        var $c = $(this).children('.mask');
+        if ($c.attr('name') != ('2' + people_num2)) {
+            $c.css('opacity', 1);
+        }
+    });
+    $('#plot32 .portraits').on('click', 'div', function(event) {
+        event.stopPropagation();
+        var $i = $(this).siblings('img');
+        var id = parseInt($(this).attr('name')[1]);
+        $('#plot32 .portraits .mask').css('opacity', 1);
+        $('#plot32 .portraits .mask[name="2' + id + '"]').css('opacity', 0);
+
+        $('#plot32 .people[name="2' + people_num2 + '"]').removeClass('spaceInRight').addClass('magictime spaceOutLeft');
+        setTimeout(function() {
+            $('#plot32 .people[name="2' + people_num2 + '"]').hide().removeClass('spaceOutLeft');
+            people_num2 = id;
+            $('#plot32 .people[name="2' + people_num2 + '"]').show().addClass('magictime spaceInRight');
+        }, 200);
+    });
+
+    // var plot33_margin = [60,30,30,60];
+    // var plot33_width = 700 - plot33_margin[1] - plot33_margin[3];
+    // var plot33_height = 600 - plot33_margin[0] - plot33_margin[2];
+    // var plot33_mode = 0;
 });
 </script>
 {% endblock %}

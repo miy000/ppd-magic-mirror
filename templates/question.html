@@ -1,7 +1,1243 @@
 {% extends 'layout.html' %} {% block style %}
+<script src="{{url_for('static',filename='js/countUp.js')}}"></script>
+<link href="{{url_for('static',filename='css/component.css')}}" rel="stylesheet">
+<script src="{{url_for('static',filename='js/d3.layout.cloud.js')}}"></script>
+<script src="{{url_for('static',filename='js/typed.js')}}"></script>
 <style>
-	
+#main {
+    max-width: 1200px;
+    min-width: 1020px;
+    margin: 0 auto;
+}
+
+#plot1 {
+    width: 100%;
+    height: 400px;
+    background-color: #222 !important;
+    margin-bottom: 30px;
+}
+
+#plot1 #indicator text:hover {
+    cursor: pointer;
+}
+
+#plot1 #questions {
+    text-align: center;
+}
+
+#plot1 .question {
+    padding: 60px 30px;
+    height: 400px;
+    color: #666;
+    display: none;
+}
+
+#plot1 .question h2 {
+    color: #f2f2f2;
+    margin-bottom: 20px;
+}
+
+#plot1 .question h4 {
+    font-size: 16px;
+    margin-bottom: 90px;
+}
+
+#plot1 .question span {
+    font-size: 20px;
+    padding: 8px 16px;
+    border-radius: 5px;
+    margin: 10px;
+    transition: color, background-color .3s;
+    -o-transition: color, background-color .3s;
+    -ms-transition: color, background-color .3s;
+    -moz-transition: color, background-color .3s;
+    -webkit-transition: color, background-color .3s;
+}
+
+#plot1 .question span:hover {
+    cursor: pointer;
+}
+
+#plot1 .question span:first-child {
+    color: rgba(84, 148, 191, 0.8);
+    border: 1px solid rgba(84, 148, 191, 0.8);
+}
+
+#plot1 .question span:first-child:hover {
+    color: #fff;
+    background-color: rgba(84, 148, 191, 0.8);
+}
+
+#plot1 .question span:last-child {
+    color: rgba(221, 107, 102, 0.8);
+    border: 1px solid rgba(221, 107, 102, 0.8);
+}
+
+#plot1 .question span:last-child:hover {
+    color: #fff;
+    background-color: rgba(221, 107, 102, 0.8);
+}
+
+#plot1 #result {
+    padding-top: 100px;
+    padding-bottom: 140px;
+    text-align: center;
+}
+
+#plot1 #result h2 {
+    color: rgba(230, 157, 135, 0.8);
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+#plot1 #result p {
+    color: #666;
+    font-size: 12px;
+}
+
+#plot1 #platNames {
+    padding: 10px;
+    font-size: 16px;
+    height: 154px;
+    overflow-y: scroll;
+    border-radius: 10px;
+    background-color: #202020;
+}
+
+#plot1 #platNames .platName {
+    display: inline-block;
+    margin: 6px 12px;
+}
+
+#plot1 #platNames a,
+#plot1 #platNames a:hover {
+    text-decoration: none;
+}
+
+#plot1 #platNames .platName.plattype1 a,
+#plot1 #platNames .platName.plattype1 a:hover {
+    color: rgba(84, 148, 191, 0.8);
+}
+
+#plot1 #platNames .platName.plattype2 a,
+#plot1 #platNames .platName.plattype2 a:hover {
+    color: rgba(243, 230, 162, 0.8);
+}
+
+#plot1 #platNames .platName.plattype3 a,
+#plot1 #platNames .platName.plattype3 a:hover {
+    color: rgba(230, 157, 135, 0.8);
+}
+
+#plot1 #platNames .platName.plattype4 a,
+#plot1 #platNames .platName.plattype4 a:hover {
+    color: rgba(221, 107, 102, 0.8);
+}
+
+#plot2 {
+    width: 100%;
+    height: 400px;
+    background-color: #222 !important;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+#plot2 svg g text {
+    transition: opacity .3s;
+    -o-transition: opacity .3s;
+    -ms-transition: opacity .3s;
+    -moz-transition: opacity .3s;
+    -webkit-transition: opacity .3s;
+}
+
+#plot2 svg g text:hover {
+    cursor: pointer;
+}
+
+#plot2 svg g text[name="disabled"] {
+    opacity: 0.1;
+}
+
+#plot2 svg g text[name="disabled"]:hover {
+    cursor: default;
+}
+
+#plot2 .fa {
+    color: #ddd;
+    font-size: 30px;
+    position: absolute;
+    bottom: 30px;
+    left: 40px;
+    display: none;
+}
+
+#plot2 .fa:hover {
+    cursor: pointer;
+}
+
+#plot2 #onemore {
+    color: #f5f5f5;
+    font-size: 12px;
+    padding: 6px 12px;
+    border: 1px solid #f5f5f5;
+    border-radius: 3px;
+    transition: color .3s;
+    -o-transition: color .3s;
+    -ms-transition: color .3s;
+    -moz-transition: color .3s;
+    -webkit-transition: color .3s;
+    position: absolute;
+    top: 30px;
+    left: 40px;
+    display: none;
+}
+
+#plot2 #onemore:hover {
+    cursor: pointer;
+    color: #333;
+    background-color: #f5f5f5;
+}
+
+#plot2 #answer {
+    width: 600px;
+    height: 400px;
+    margin: 0 auto;
+    padding: 80px 40px;
+    text-align: left;
+    display: none;
+}
+
+#plot2 .query {
+    display: inline-block;
+    font-size: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#plot2 #part2 {
+    margin-top: 30px;
+}
+
+#plot2 .answer {
+    font-size: 13px;
+    display: inline-block;
+    color: #ddd;
+    margin: 6px 10px;
+}
+
+#plot3 {
+    width: 100%;
+    height: 500px;
+    background-color: #222 !important;
+}
+
+#plot3 label {
+    font-size: 12px;
+    font-weight: lighter;
+}
+
+#plot3 #cb1:checked + label {
+    color: rgba(84, 148, 191, 0.8);
+}
+
+#plot3 #cb2:checked + label {
+    color: rgba(230, 157, 135, 0.8);
+}
+
+#plot3 #cb3:checked + label {
+    color: rgba(243, 230, 162, 0.8);
+}
+
+#plot3 #cb4:checked + label {
+    color: rgba(221, 107, 102, 0.8);
+}
+
+#plot3 #cb5:checked + label {
+    color: rgba(234, 126, 83, 0.8);
+}
+
+#plot3 #platInput {
+    display: inline-block;
+    margin-left: 15px;
+    width: 120px;
+    padding: 5px 10px;
+    color: #f2f2f2;
+    background-color: #555;
+    border-color: #333;
+    box-shadow: none;
+}
+
+#plot3 #relation .link {
+    stroke: #999;
+    stroke-opacity: .5;
+}
+
+#plot3 #relation rect.active {
+    stroke: rgba(240, 240, 240, 0.7);
+    stroke-width: 1.5;
+}
+
+#plot3 #relation rect:hover {
+    cursor: pointer;
+}
+
+#plot3 #relation text:hover {
+    cursor: pointer;
+}
+
+#plot3 #platCount {
+    font-size: 13px;
+    color: #999;
+    text-align: center;
+}
+
+#plot3 #platCount span {
+    margin-left: 10px;
+    margin-right: 10px;
+    font-size: 35px;
+    color: rgba(221, 107, 102, 0.8);
+}
+
+#info {
+    display: none;
+    border: 1px solid #eee;
+    background-color: rgba(20, 20, 20, 0.8);
+    padding: 15px;
+    max-width: 400px;
+    position: absolute;
+    color: #ddd;
+    font-size: 12px;
+    text-align: left;
+}
+
+#info #portrait {
+    border-radius: 3px;
+    background-color: #fff;
+}
+
+#info h4,
+#info h5 {
+    color: #eee;
+    font-size: 14px;
+    display: inline-block;
+    margin-left: 15px;
+    margin-top: 0;
+}
+
+#info h4 span {
+    margin-left: 12px;
+    color: rgba(84, 148, 191, 1);
+    font-size: 30px;
+    position: relative;
+    top: 3px;
+}
+
+#info p {
+    margin-bottom: 5px;
+}
+
+#info p span {
+    color: #999;
+    margin-left: 12px;
+}
 </style>
 {% endblock %} {% block body %}
-question
+<div>
+    <div class="plot-title">基于选择的平台推荐</div>
+    <div id="plot1">
+        <div class="row">
+            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                <div style="text-align:center" id="indicator">
+                    <svg width="220px" height="400px">
+                        <g></g>
+                    </svg>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <div id="questions">
+                    <div class="question" id="question1">
+                        <h2>1 老平台 or 新平台</h2>
+                        <h4>老平台指上线时间两年以上的平台</h4>
+                        <div style="margin-top:30px;">
+                            <span>老平台</span>
+                            <span>新平台</span>
+                        </div>
+                    </div>
+                    <div class="question" id="question2">
+                        <h2>2 北上广 or 其他城市</h2>
+                        <h4>平台位于北上广还是其他城市</h4>
+                        <div style="margin-top:30px;">
+                            <span>北上广</span>
+                            <span>其他城市</span>
+                        </div>
+                    </div>
+                    <div class="question" id="question3">
+                        <h2>3 长期投资 or 快速收益</h2>
+                        <h4>长期投资指6个月以上的标</h4>
+                        <div style="margin-top:30px;">
+                            <span>长期投资</span>
+                            <span>快速收益</span>
+                        </div>
+                    </div>
+                    <div class="question" id="question4">
+                        <h2>4 一掷千金 or 小投怡情</h2>
+                        <h4>一掷千金指人均投资一万以上</h4>
+                        <div style="margin-top:30px;">
+                            <span>一掷千金</span>
+                            <span>小投怡情</span>
+                        </div>
+                    </div>
+                    <div class="question" id="question5">
+                        <h2>5 追求利率 or 稳中求胜</h2>
+                        <h4>追求利率指平均利率高于12%的平台</h4>
+                        <div style="margin-top:30px;">
+                            <span>追求利率</span>
+                            <span>稳中求胜</span>
+                        </div>
+                    </div>
+                    <div class="question" id="question6">
+                        <h2>6 土豪出身 or 钱非一切</h2>
+                        <h4>土豪出身指注册资金5000万以上的平台</h4>
+                        <div style="margin-top:30px;">
+                            <span>土豪出身</span>
+                            <span>钱非一切</span>
+                        </div>
+                    </div>
+                    <div class="question" id="question7">
+                        <h2 style="margin-top:0px;">大功告成</h2>
+                        <div style="text-align:center;margin-bottom:10px;">
+                            <div style="margin:10px;color:rgba(84, 148, 191, 0.8);display:inline-block;font-size:12px;border-bottom:1px solid rgba(84, 148, 191, 0.8);padding-bottom:3px;">国资</div>
+                            <div style="margin:10px;color:rgba(243, 230, 162, 0.8);display:inline-block;font-size:12px;border-bottom:1px solid rgba(243, 230, 162, 0.8);padding-bottom:3px;">上市公司</div>
+                            <div style="margin:10px;color:rgba(230, 157, 135, 0.8);display:inline-block;font-size:12px;border-bottom:1px solid rgba(230, 157, 135, 0.8);padding-bottom:3px;">银行</div>
+                            <div style="margin:10px;color:rgba(221, 107, 102, 0.8);display:inline-block;font-size:12px;border-bottom:1px solid rgba(221, 107, 102, 0.8);padding-bottom:3px;">民营</div>
+                        </div>
+                        <h4 style="margin-bottom:20px;font-size:12px;">为您推荐以下平台</h4>
+                        <div id="platNames"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                <div id="result">
+                    <h2 id="platCount">3050</h2>
+                    <p>家平台符合要求</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <div class="plot-title">基于标签的平台匹配</div>
+    <div id="plot2">
+        <svg width="1000px" height="400px">
+            <g></g>
+        </svg>
+        <span class="fa fa-fw fa-search"></span>
+        <div id="onemore">继续提问</div>
+        <div id="answer">
+            <div id="part1"></div>
+            <div id="part2"></div>
+        </div>
+    </div>
+</div>
+<div>
+    <div class="plot-title">基于图谱的关系发现</div>
+    <div id="plot3">
+        <div class="row">
+            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                <div class="ac-custom ac-checkbox ac-checkmark" autocomplete="off" style="height:350px;padding:50px;padding-left:40px;padding-right:0;">
+                    <div style="color:#bbb;margin-bottom:20px;position:relative;left:10px;">
+                        <span>和</span>
+                        <input type="text" class="form-control" placeholder="平台名称" id="platInput" value="拍拍贷">
+                    </div>
+                    <ul style="position:relative;">
+                        <li>
+                            <input id="cb1" type="checkbox">
+                            <label>位于同一城市</label>
+                        </li>
+                        <li>
+                            <input id="cb2" type="checkbox">
+                            <label>公司类型相同</label>
+                        </li>
+                        <li>
+                            <input id="cb3" type="checkbox">
+                            <label>于同一年上线</label>
+                        </li>
+                        <li>
+                            <input id="cb4" type="checkbox">
+                            <label>具备公共标签</label>
+                        </li>
+                        <li>
+                            <input id="cb5" type="checkbox">
+                            <label>综合排名相近</label>
+                        </li>
+                        <ul>
+                </div>
+                <h4 style="display:none;" id="platCount" class="magictime">发现平台<span></span>家</h4>
+            </div>
+            <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
+                <div id="relation" style="text-align:center;">
+                    <svg width="750px" height="500px">
+                        <g></g>
+                    </svg>
+                    <div id="info">
+                        <div style="margin-bottom:15px;">
+                            <img id="portrait" src="" alt="">
+                            <h4>发展指数<span></span></h4>
+                            <h5></h5>
+                        </div>
+                        <div style="border-bottom:1px solid rgba(240,240,240,0.4);margin-bottom:10px;padding-bottom:5px;" id="info1">
+                            <p id="averageProfit">平均收益<span></span></p>
+                            <p id="lauchTime">上线时间<span></span></p>
+                            <p id="registMoney">注册资金<span></span></p>
+                            <p id="homepage">平台官网<a href=""><span></span></a></p>
+                            <p id="address">联系地址<span></span></p>
+                        </div>
+                        <div id="info2">
+                            <p id="autobid">自动投标<span></span></p>
+                            <p id="stockTransfer">债券转让<span></span></p>
+                            <p id="fundsToken">资金托管<span></span></p>
+                            <p id="bidGuarantee">投标保障<span></span></p>
+                            <p id="guaranteeMode">保障模式<span></span></p>
+                            <p id="guaranteeOrg" style="margin-bottom:0;">担保机构<span></span></p>
+                        </div>
+                        <p id="description" style="margin-bottom:0;"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{url_for('static',filename='js/svgcheckbx.js')}}"></script>
+<script>
+$(document).ready(function() {
+    $('#nav5').addClass('active');
+
+    var question_index = 1;
+    var question_answers = [];
+    var question_finish = false;
+    var question_platforms = [];
+
+    $('#plot1 #question' + question_index).show();
+
+    $('#plot1 .question span').click(function() {
+        if (question_finish) {
+            question_answers[parseInt($(this).parent().parent().attr('id')[8]) - 1] = [$(this).text(), $(this).css('border-color')];
+        } else {
+            question_answers.push([$(this).text(), $(this).css('border-color')]);
+        }
+
+        drawIndicatior();
+
+        if (question_finish) {
+            $('#plot1 #question' + question_index).addClass('magictime vanishOut');
+            setTimeout(function() {
+                $('#plot1 #question' + question_index).hide().removeClass('magictime vanishOut');
+                question_index = 7;
+                $('#plot1 #question' + question_index).show().addClass('magictime vanishIn');
+            }, 300);
+        } else {
+            question_index += 1;
+            if (question_index == 7) {
+                question_finish = true;
+            }
+            $('#plot1 #question' + (question_index - 1)).addClass('magictime vanishOut');
+            setTimeout(function() {
+                $('#plot1 #question' + (question_index - 1)).hide().removeClass('magictime vanishOut');
+                $('#plot1 #question' + question_index).show().addClass('magictime vanishIn');
+            }, 300);
+        }
+
+        var query = {};
+        if (question_answers.length > 0) {
+            if (question_answers[0][0] == '老平台') {
+                query['year'] = 0;
+            } else if (question_answers[0][0] == '新平台') {
+                query['year'] = 1;
+            }
+        }
+        if (question_answers.length > 1) {
+            if (question_answers[1][0] == '北上广') {
+                query['location'] = 0;
+            } else if (question_answers[1][0] == '其他城市') {
+                query['location'] = 1;
+            }
+        }
+        if (question_answers.length > 2) {
+            if (question_answers[2][0] == '长期投资') {
+                query['month'] = 0;
+            } else if (question_answers[2][0] == '快速收益') {
+                query['month'] = 1;
+            }
+        }
+        if (question_answers.length > 3) {
+            if (question_answers[3][0] == '一掷千金') {
+                query['amount'] = 0;
+            } else if (question_answers[3][0] == '小投怡情') {
+                query['amount'] = 1;
+            }
+        }
+        if (question_answers.length > 4) {
+            if (question_answers[4][0] == '追求利率') {
+                query['rate'] = 0;
+            } else if (question_answers[4][0] == '稳中求胜') {
+                query['rate'] = 1;
+            }
+        }
+        if (question_answers.length > 5) {
+            if (question_answers[5][0] == '土豪出身') {
+                query['regist'] = 0;
+            } else if (question_answers[5][0] == '钱非一切') {
+                query['regist'] = 1;
+            }
+        }
+        $.ajax({
+                url: '{{url_for("question1")}}',
+                type: 'POST',
+                dataType: 'json',
+                data: query,
+            })
+            .done(function(data) {
+                question_platforms = data.platforms;
+                var count = new CountUp("platCount", parseInt($('#platCount').text()), data.platforms.length, 0, 1);
+                count.start();
+                if (question_finish) {
+                    $('#plot1 #platNames').empty();
+                    for (var i = 0; i < data.platforms.length; i++) {
+                        if (data.platforms[i]['question_type'] == '国资系') {
+                            $('#plot1 #platNames').append("<div class='platName plattype1'><a target='_blank' href='" + "{{url_for('platform', platName='')}}" + data.platforms[i].platName + "'>" + data.platforms[i].platName + "</a></div>");
+                        } else if (data.platforms[i]['question_type'] == '上市公司系') {
+                            $('#plot1 #platNames').append("<div class='platName plattype2'><a target='_blank' href='" + "{{url_for('platform', platName='')}}" + data.platforms[i].platName + "'>" + data.platforms[i].platName + "</a></div>");
+                        } else if (data.platforms[i]['question_type'] == '银行系') {
+                            $('#plot1 #platNames').append("<div class='platName plattype3'><a target='_blank' href='" + "{{url_for('platform', platName='')}}" + data.platforms[i].platName + "'>" + data.platforms[i].platName + "</a></div>");
+                        } else if (data.platforms[i]['question_type'] == '民营系') {
+                            $('#plot1 #platNames').append("<div class='platName plattype4'><a target='_blank' href='" + "{{url_for('platform', platName='')}}" + data.platforms[i].platName + "'>" + data.platforms[i].platName + "</a></div>");
+                        }
+                    }
+                }
+            })
+            .fail(function() {})
+            .always(function() {});
+    });
+
+    $('#plot1 #indicator').on('click', 'text', function(event) {
+        var id = $(this).attr('name');
+        $('#plot1 #question' + question_index).addClass('magictime vanishOut');
+        setTimeout(function() {
+            $('#plot1 #question' + question_index).hide().removeClass('magictime vanishOut');
+            question_index = id;
+            $('#plot1 #question' + question_index).show().addClass('magictime vanishIn');
+        }, 300);
+    });
+
+    function drawIndicatior() {
+        var text = d3.select('#indicator svg g').selectAll('text').data(question_answers, function(d) {
+            return d;
+        });
+
+        text.enter().append('text').text(function(d) {
+            return d[0];
+        }).attr({
+            'fill': function(d) {
+                return d[1];
+            },
+            'transform': function(d, i) {
+                return 'translate(' + 80 + ',' + (80 + i * 45) + ')';
+            },
+            'font-size': '13px',
+            'fill-opacity': 0,
+            'name': function(d, i) {
+                return i + 1;
+            }
+        }).transition().duration(400).attr({
+            'fill-opacity': 1,
+            'transform': function(d, i) {
+                return 'translate(' + 60 + ',' + (80 + i * 45) + ')';
+            }
+        });
+
+        text.transition().duration(400).attr({
+            'fill-opacity': 1,
+            'transform': function(d, i) {
+                return 'translate(' + 60 + ',' + (80 + i * 45) + ')';
+            }
+        });
+
+        text.exit().remove();
+
+        var circle = d3.select('#indicator svg g').selectAll('circle').data(question_answers, function(d) {
+            return d;
+        });
+
+        circle.enter().append('circle').attr({
+            'fill': function(d) {
+                return d[1];
+            },
+            'r': 0,
+            'cx': 40,
+            'cy': function(d, i) {
+                return 75 + i * 45;
+            }
+        }).transition().duration(400).attr({
+            'r': 6
+        });
+
+        circle.transition().duration(400).attr({
+            'r': 6,
+            'cy': function(d, i) {
+                return 75 + i * 45;
+            }
+        });
+
+        circle.exit().remove();
+
+        var line = d3.select('#indicator svg g').selectAll('line').data(question_answers, function(d) {
+            return d;
+        });
+
+        line.enter().append('line').attr({
+            'stroke': 'rgba(200,200,200,0.4)',
+            'stroke-width': 1,
+            'shape-rendering': 'crispEdges',
+            'x1': 40,
+            'x2': 40,
+            'y1': function(d, i) {
+                if (i == 0) {
+                    return 75;
+                } else {
+                    return 75 + (i - 1) * 45 + 6;
+                }
+            },
+            'y2': function(d, i) {
+                if (i == 0) {
+                    return 75;
+                } else {
+                    return 75 + (i - 1) * 45 + 6;
+                }
+            }
+        }).transition().duration(400).attr({
+            'y2': function(d, i) {
+                if (i == 0) {
+                    return 75;
+                } else {
+                    return 75 + i * 45 - 6;
+                }
+            }
+        });
+
+        line.transition().duration(400).attr({
+            'y1': function(d, i) {
+                if (i == 0) {
+                    return 75;
+                } else {
+                    return 75 + (i - 1) * 45 + 6;
+                }
+            },
+            'y2': function(d, i) {
+                if (i == 0) {
+                    return 75;
+                } else {
+                    return 75 + i * 45 - 6;
+                }
+            }
+        });
+
+        line.exit().remove();
+    }
+
+    var wordcloud = eval({{data|safe}});
+    var wordclouddict = eval({{datadict|safe}});
+    var words_used = [];
+    var plot2_margins = [0, 0, 0, 0];
+    var plot2_width = 1000 - plot2_margins[1] - plot2_margins[3];
+    var plot2_height = 400 - plot2_margins[0] - plot2_margins[2];
+    var search_status = false;
+    $('#plot2 svg g').attr('transform', function() {
+        return 'translate(' + (plot2_margins[3] + plot2_width / 2) + ',' + (plot2_margins[0] + plot2_height / 2) + ')';
+    });
+    drawWordCloud();
+
+    $('#plot2 svg g').on('click', 'text.unused[name="enabled"]', function(event) {
+        $(this).attr('class', 'used');
+        var index = parseInt($(this).attr('id'));
+        var text = $(this).text();
+        if (wordclouddict[text].hasOwnProperty('group')) {
+            var group = wordclouddict[text].group;
+            for (var i = 0; i < wordcloud.length; i++) {
+                var tmp = wordclouddict[wordcloud[i].name];
+                if (tmp.id != index && tmp.hasOwnProperty('group') && tmp['group'] == group) {
+                    $('#plot2 svg g text#' + tmp.id).attr('name', 'disabled');
+                }
+            }
+        }
+
+        var step2 = false;
+        var step3 = false;
+        $('#plot2 svg g text.used').each(function(index, el) {
+            if (wordclouddict[$(this).text()].order == 2) {
+                step2 = true;
+            }
+            if (wordclouddict[$(this).text()].order == 3) {
+                step3 = true;
+            }
+        });
+        if (step2 && step3) {
+            if (!search_status) {
+                $('#plot2 .fa').fadeIn('slow');
+                search_status = true;
+            }
+        } else {
+            $('#plot2 .fa').fadeOut('slow');
+            search_status = false;
+        }
+
+        drawWordCloud();
+    });
+    $('#plot2 svg g').on('click', 'text.used[name="enabled"]', function(event) {
+        $(this).attr('class', 'unused');
+        var index = parseInt($(this).attr('id'));
+        var text = $(this).text();
+        if (wordclouddict[text].hasOwnProperty('group')) {
+            var group = wordclouddict[text].group;
+            for (var i = 0; i < wordcloud.length; i++) {
+                var tmp = wordclouddict[wordcloud[i].name];
+                if (tmp.id != index && tmp.hasOwnProperty('group') && tmp['group'] == group) {
+                    $('#plot2 svg g text#' + tmp.id).attr('name', 'enabled');
+                }
+            }
+        }
+
+        var step2 = false;
+        var step3 = false;
+        $('#plot2 svg g text.used').each(function(index, el) {
+            if (wordclouddict[$(this).text()].order == 2) {
+                step2 = true;
+            }
+            if (wordclouddict[$(this).text()].order == 3) {
+                step3 = true;
+            }
+        });
+        if (step2 && step3) {
+            if (!search_status) {
+                $('#plot2 .fa').fadeIn('slow');
+                search_status = true;
+            }
+        } else {
+            $('#plot2 .fa').fadeOut('slow');
+            search_status = false;
+        }
+
+        drawWordCloud();
+    });
+
+    $('#plot2 .fa').click(function(event) {
+        $('#plot2 svg').hide();
+        $('#plot2 .fa').hide();
+        $('#plot2 #answer').show();
+        $('#plot2 #onemore').fadeIn();
+        var query = {};
+        $('#plot2 svg g text.used').each(function(index, el) {
+            query['param' + index] = $(this).text();
+        });
+        console.log(query);
+        $.ajax({
+                url: "{{url_for('question2')}}",
+                type: 'POST',
+                dataType: 'json',
+                data: query
+            })
+            .done(function(data) {
+                $('#plot2 #answer #part1').empty();
+                $('#plot2 #answer #part2').empty();
+                for (var i = 0; i < data['query'].length; i++) {
+                    $('#plot2 #answer #part1').append("<div class='query' style='color:" + wordclouddict[data['query'][i]].color + "'>" + data['query'][i] + "</div>");
+                }
+                for (var i = 0; i < data['answer'].length; i++) {
+                    $('#plot2 #answer #part2').append("<div class='answer'>" + data['answer'][i] + "</div>");
+                }
+                $('#answer').typewriter();
+            })
+            .fail(function() {})
+            .always(function() {});
+    });
+
+    $('#plot2 #onemore').click(function(event) {
+        $('#plot2 svg g text').attr('name', 'enabled').attr('class', 'unused');
+        $('#plot2 svg').show();
+        $('#plot2 .fa').hide();
+        $('#plot2 #answer').hide();
+        $('#plot2 #onemore').hide();
+
+        drawWordCloud();
+    });
+
+    function findInArray(value, array) {
+        var flag = false;
+        for (var i = 0; i < array.length; i++) {
+            if (value == array[i]) {
+                flag = true;
+                break;
+            }
+        }
+        return flag;
+    }(function(a) {
+        a.fn.typewriter = function() {
+            this.each(function() {
+                var d = a(this),
+                    c = d.html(),
+                    b = 0;
+                d.html("");
+                var e = setInterval(function() {
+                    var f = c.substr(b, 1);
+                    if (f == "<") {
+                        b = c.indexOf(">", b) + 1
+                    } else {
+                        b++
+                    }
+                    d.html(c.substring(0, b) + (b & 1 ? "_" : ""));
+                    if (b >= c.length) {
+                        clearInterval(e)
+                    }
+                }, 60)
+            });
+            return this
+        }
+    })(jQuery);
+
+    function drawWordCloud() {
+        d3.layout.cloud().size([plot2_width, plot2_height])
+            .words(wordcloud.map(function(d) {
+                return {
+                    text: d.name,
+                    size: d.size,
+                };
+            }))
+            .rotate(function() {
+                return (~~(Math.random() * 6) - 3) * 10;
+            })
+            .font("Microsoft Yahei")
+            .fontSize(function(d) {
+                return d.size;
+            })
+            .on("end", draw)
+            .start();
+
+        function draw(words) {
+            words_used = [];
+            for (var i = 0; i < wordcloud.length; i++) {
+                if ($('#plot2 svg g text#' + wordclouddict[wordcloud[i].name].id).attr('class') == 'used') {
+                    words_used.push(wordcloud[i].name);
+                }
+            }
+            var text = d3.select("#plot2 svg g").selectAll("text").data(words);
+            text.enter().append("text").style("font-size", function(d) {
+                return d.size + "px";
+            }).style("fill", function(d) {
+                return wordclouddict[d.text].color;
+            }).attr("text-anchor", "middle").text(function(d) {
+                return d.text;
+            }).attr('id', function(d) {
+                return wordclouddict[d.text].id;
+            }).attr('name', 'enabled').attr('class', 'unused').attr("fill-opacity", 0).attr("transform", function(d, i) {
+                return "translate(" + [d.x + 60, d.y] + ")rotate(" + d.rotate + ")";
+            }).transition().duration(800).attr('fill-opacity', 1);
+
+            text.transition().duration(800).attr({
+                'transform': function(d, i) {
+                    if ($(this).attr('class') == 'unused') {
+                        return "translate(" + [d.x + 60, d.y] + ")rotate(" + d.rotate + ")";
+                    } else {
+                        var i;
+                        for (i = 0; i < words_used.length; i++) {
+                            if (words_used[i] == d.text) {
+                                break;
+                            }
+                        }
+                        return "translate(" + (plot2_margins[3] + 60 - plot2_width / 2) + "," + (plot2_margins[0] + i * 25 + 40 - plot2_height / 2) + ")";
+                    }
+                },
+                'fill-opacity': 1,
+            }).style("font-size", function(d, i) {
+                if ($(this).attr('class') == 'unused') {
+                    return d.size + "px";
+                } else {
+                    return 12;
+                }
+            });
+        }
+    }
+
+    function drawRelation() {
+        if (!is_animate) {
+            is_animate = true;
+            var platName = $('#plot3 #platInput').val();
+            var status1 = $("#plot3 #cb1").is(':checked');
+            var status2 = $("#plot3 #cb2").is(':checked');
+            var status3 = $("#plot3 #cb3").is(':checked');
+            var status4 = $("#plot3 #cb4").is(':checked');
+            var status5 = $("#plot3 #cb5").is(':checked');
+            if (!(status1 == false && status2 == false && status3 == false && status4 == false && status5 == false) && platName != '') {
+                $.ajax({
+                        url: '{{url_for("question3")}}',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            name: platName,
+                            location: status1,
+                            category: status2,
+                            year: status3,
+                            tag: status4,
+                            similar: status5
+                        },
+                    })
+                    .done(function(data) {
+                        $('#plot3 #relation svg g').empty();
+                        if (data['platCount'] > 0) {
+                            $('#plot3 #platCount span').text(data['platCount']);
+                            $('#plot3 #platCount').removeClass('puffOut').show().addClass('puffIn');
+                        } else {
+                            $('#plot3 #platCount').removeClass('puffIn').addClass('puffOut');
+                        }
+
+                        forces = eval(data['knowledge']);
+                        var colors = ['rgba(84, 148, 191, 0.9)', 'rgba(221, 107, 102, 0.9)', 'rgba(230, 157, 135, 0.9)', 'rgba(234, 126, 83, 0.9)', 'rgba(243, 230, 162, 0.9)', 'rgba(215, 135, 230, 0.9)'];
+                        var force = d3.layout.force().charge(-320).linkDistance(150).size([750, 500]);
+
+                        force.nodes(forces.nodes).links(forces.links).start();
+
+                        var link = d3.select("#relation svg g").selectAll(".link").data(forces.links);
+                        link.enter().append("line").attr("class", "link").style("stroke-width", function(d) {
+                            return Math.sqrt(d.value);
+                        });
+
+                        var node = d3.select("#relation svg g").selectAll(".node").data(forces.nodes);
+                        node.enter().append("rect").attr('class', 'node').attr("type", function(d) {
+                            if (d.group == 1) {
+                                return 'platform';
+                            } else if (d.group == 2) {
+                                return 'person';
+                            } else {
+                                return '';
+                            }
+                        }).attr('name', function(d, i) {
+                            return i;
+                        }).attr("width", function(d) {
+                            var tmp = d.name;
+                            var n1 = tmp.match(/[a-z0-9]/g);
+                            if (n1 == null) {
+                                n1 = 0;
+                            } else {
+                                n1 = n1.length;
+                            }
+                            var n2 = tmp.match(/[A-Z]/g);
+                            if (n2 == null) {
+                                n2 = 0;
+                            } else {
+                                n2 = n2.length;
+                            }
+                            var n3 = tmp.match(/[\0]/g);
+                            if (n3 == null) {
+                                n3 = 0;
+                            } else {
+                                n3 = n3.length;
+                            }
+                            return tmp.length * 12 - n1 * 6 - n2 * 4 - n3 * 4 + 30;
+
+                        }).attr('height', 30).style("fill", function(d) {
+                            return colors[d.group - 1];
+                        }).call(force.drag);
+
+                        var text = d3.select("#relation svg g").selectAll(".text").data(forces.nodes);
+                        text.enter().append("text").attr('class', 'text').attr("type", function(d) {
+                            if (d.group == 1) {
+                                return 'platform';
+                            } else if (d.group == 2) {
+                                return 'person';
+                            } else {
+                                return '';
+                            }
+                        }).attr('name', function(d, i) {
+                            return i;
+                        }).text(function(d) {
+                            return d.name;
+                        }).style("fill", "#fff").style("font-size", "12px").call(force.drag);
+
+                        force.on("tick", function() {
+                            link.attr("x1", function(d) {
+                                return d.source.x;
+                            }).attr("y1", function(d) {
+                                return d.source.y;
+                            }).attr("x2", function(d) {
+                                return d.target.x;
+                            }).attr("y2", function(d) {
+                                return d.target.y;
+                            });
+
+                            node.attr("x", function(d) {
+                                var tmp = d.name;
+                                var n1 = tmp.match(/[a-z0-9]/g);
+                                if (n1 == null) {
+                                    n1 = 0;
+                                } else {
+                                    n1 = n1.length;
+                                }
+                                var n2 = tmp.match(/[A-Z]/g);
+                                if (n2 == null) {
+                                    n2 = 0;
+                                } else {
+                                    n2 = n2.length;
+                                }
+                                var n3 = tmp.match(/[\0]/g);
+                                if (n3 == null) {
+                                    n3 = 0;
+                                } else {
+                                    n3 = n3.length;
+                                }
+                                return d.x - 0.5 * (tmp.length * 12 - n1 * 6 - n2 * 4 - n3 * 4 + 30);
+                            }).attr("y", function(d) {
+                                return d.y - 13;
+                            });
+
+                            text.attr("x", function(d) {
+                                var tmp = d.name;
+                                var n1 = tmp.match(/[a-z0-9]/g);
+                                if (n1 == null) {
+                                    n1 = 0;
+                                } else {
+                                    n1 = n1.length;
+                                }
+                                var n2 = tmp.match(/[A-Z]/g);
+                                if (n2 == null) {
+                                    n2 = 0;
+                                } else {
+                                    n2 = n2.length;
+                                }
+                                var n3 = tmp.match(/[\0]/g);
+                                if (n3 == null) {
+                                    n3 = 0;
+                                } else {
+                                    n3 = n3.length;
+                                }
+                                return d.x - 0.5 * (tmp.length * 12 - n1 * 6 - n2 * 4 - n3 * 4);
+                            }).attr("y", function(d) {
+                                return d.y + 6;
+                            }).style('background-color', '#f5f5f5');
+                        });
+
+                        is_animate = false;
+                    })
+                    .fail(function() {})
+                    .always(function() {});
+            }
+        }
+    }
+
+    var is_animate = false;
+    var forces;
+    $("#plot3 input[type='checkbox']").click(function() {
+        drawRelation();
+    });
+
+    $('#plot3 #relation').on('mouseover', 'rect', function(event) {
+        var node_id = $(this).attr('name');
+        var $obj = $(this);
+        var x = parseInt($obj.attr('x'));
+        var y = parseInt($obj.attr('y'));
+        if (forces.nodes[node_id].group == 1 || forces.nodes[node_id].group == 2) {
+            $('#info #info1').show();
+            $('#info #info2').show();
+            $('#info h4').show();
+            $('#info h5').hide();
+            $('#info #description').hide();
+
+            $('#info #portrait').css('width', '100px').attr('src', forces.nodes[node_id].logo);
+            $('#info h4 span').text(forces.nodes[node_id].score);
+            $('#info #averageProfit span').text(forces.nodes[node_id].averageProfit);
+            $('#info #lauchTime span').text(forces.nodes[node_id].lauchTime);
+            $('#info #registMoney span').text(forces.nodes[node_id].registMoney);
+            $('#info #homepage span').text(forces.nodes[node_id].homepage);
+            $('#info #address span').text(forces.nodes[node_id].address);
+            $('#info #autobid span').text(forces.nodes[node_id].autobid);
+            $('#info #stockTransfer span').text(forces.nodes[node_id].stockTransfer);
+            $('#info #fundsToken span').text(forces.nodes[node_id].fundsToken);
+            $('#info #bidGuarantee span').text(forces.nodes[node_id].bidGuarantee);
+            $('#info #guaranteeMode span').text(forces.nodes[node_id].guaranteeMode);
+            $('#info #guaranteeOrg span').text(forces.nodes[node_id].guaranteeOrg);
+
+            $('#info').css({
+                left: x + parseInt($obj.attr('width')) + 120,
+                top: y + 27 - 150
+            }).show();
+        }
+    })
+
+    $('#plot3 #relation').on('mouseout', 'rect', function(event) {
+        $('#info').hide();
+    });
+
+    $('#plot3 #relation').on('mouseover', 'text', function(event) {
+        var node_id = $(this).attr('name');
+        var $obj = $('#knowledgegraph rect[name="' + node_id + '"]');
+        var x = parseInt($obj.attr('x'));
+        var y = parseInt($obj.attr('y'));
+        if (forces.nodes[node_id].group == 1 || forces.nodes[node_id].group == 2) {
+            $('#info #info1').show();
+            $('#info #info2').show();
+            $('#info h4').show();
+            $('#info h5').hide();
+            $('#info #description').hide();
+
+            $('#info #portrait').css('width', '100px').attr('src', forces.nodes[node_id].logo);
+            $('#info h4 span').text(forces.nodes[node_id].score);
+            $('#info #averageProfit span').text(forces.nodes[node_id].averageProfit);
+            $('#info #lauchTime span').text(forces.nodes[node_id].lauchTime);
+            $('#info #registMoney span').text(forces.nodes[node_id].registMoney);
+            $('#info #homepage span').text(forces.nodes[node_id].homepage);
+            $('#info #address span').text(forces.nodes[node_id].address);
+            $('#info #autobid span').text(forces.nodes[node_id].autobid);
+            $('#info #stockTransfer span').text(forces.nodes[node_id].stockTransfer);
+            $('#info #fundsToken span').text(forces.nodes[node_id].fundsToken);
+            $('#info #bidGuarantee span').text(forces.nodes[node_id].bidGuarantee);
+            $('#info #guaranteeMode span').text(forces.nodes[node_id].guaranteeMode);
+            $('#info #guaranteeOrg span').text(forces.nodes[node_id].guaranteeOrg);
+
+            $('#info').css({
+                left: x + parseInt($obj.attr('width')) + 120,
+                top: y + 27 - 150
+            }).show();
+        }
+    })
+
+    $('#plot3 #relation').on('mouseout', 'text', function(event) {
+        $('#info').hide();
+    });
+
+    $('#plot3 #relation').on('mouseover', 'rect', function(event) {
+        $(this).attr('class', 'node active');
+    });
+
+    $('#plot3 #relation').on('mouseout', 'rect', function(event) {
+        $(this).attr('class', 'node');
+    });
+
+    $('#plot3 #relation').on('mouseover', 'text', function(event) {
+        $('#plot3 #relation rect[name="' + $(this).attr('name') + '"]').attr('class', 'node active');
+    });
+
+    $('#plot3 #relation').on('mouseout', 'text', function(event) {
+        $('#plot3 #relation rect[name="' + $(this).attr('name') + '"]').attr('class', 'node');
+    });
+
+    $('#plot3 #relation').on('dblclick', 'text', function(event) {
+        $('#info').hide();
+        $('#platInput').val($(this).text());
+        drawRelation();
+    });
+
+    $('#plot3 #relation').on('dblclick', 'rect', function(event) {
+        $('#info').hide();
+        $('#platInput').val($('#plot3 #relation text[name="' + $(this).attr('name') + '"]').text());
+        drawRelation();
+    });
+});
+</script>
 {% endblock %}
