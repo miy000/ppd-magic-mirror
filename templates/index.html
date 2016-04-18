@@ -1947,9 +1947,10 @@ $(document).ready(function() {
 
     plotRank();
 
-    var rankInterval = setInterval(function() {
-        plotRank();
-    }, 3000);
+    var rankInterval;
+    // var rankInterval = setInterval(function() {
+    //     plotRank();
+    // }, 3000);
 
     function plotRank() {
         $('#plot7 svg g.foreground path').attr('class', '');
@@ -2084,7 +2085,7 @@ $(document).ready(function() {
 
         plot7_num += 1;
         if (plot7_num == 31) {
-            plot7_num = 0;
+            plot7_num = 10;
         }
     }
 
@@ -2140,11 +2141,11 @@ $(document).ready(function() {
     }
 
     $('#plot7 span').click(function(event) {
-        if ($(this).hasClass('fa-play')) {
-            $(this).removeClass('fa-play').addClass('fa-pause');
+        if ($(this).hasClass('fa-pause')) {
+            $(this).removeClass('fa-pause').addClass('fa-play');
             clearInterval(rankInterval);
         } else {
-            $(this).removeClass('fa-pause').addClass('fa-play');
+            $(this).removeClass('fa-play').addClass('fa-pause');
             plotRank();
             rankInterval = setInterval(function() {
                 plotRank();
