@@ -479,6 +479,9 @@ def platform(platName):
 
 	cursor.execute('select * from platform where platName=%s',[platName])
 	platform = cursor.fetchone()
+	if platform == None:
+		cursor.execute('select * from platform where platName=%s',['拍拍贷'])
+		platform = cursor.fetchone()
 
 	cursor.execute('select * from people where platPin=%s', [platform['platPin']])
 	people = cursor.fetchall()

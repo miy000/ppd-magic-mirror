@@ -2,7 +2,6 @@
 <script src="{{url_for('static',filename='js/countUp.js')}}"></script>
 <link href="{{url_for('static',filename='css/component.css')}}" rel="stylesheet">
 <script src="{{url_for('static',filename='js/d3.layout.cloud.js')}}"></script>
-<script src="{{url_for('static',filename='js/typed.js')}}"></script>
 <style>
 #main {
     max-width: 1200px;
@@ -343,7 +342,7 @@
 </style>
 {% endblock %} {% block body %}
 <div>
-    <div class="plot-title">基于选择的平台推荐</div>
+    <div class="plot-title">平台推荐</div>
     <div id="plot1">
         <div class="row">
             <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
@@ -426,13 +425,13 @@
     </div>
 </div>
 <div>
-    <div class="plot-title">基于标签的平台匹配</div>
+    <div class="plot-title">标签匹配</div>
     <div id="plot2">
         <svg width="1000px" height="400px">
             <g></g>
         </svg>
         <span class="fa fa-fw fa-search"></span>
-        <div id="onemore">继续提问</div>
+        <div id="onemore">重新匹配</div>
         <div id="answer">
             <div id="part1"></div>
             <div id="part2"></div>
@@ -440,7 +439,7 @@
     </div>
 </div>
 <div>
-    <div class="plot-title">基于图谱的关系发现</div>
+    <div class="plot-title">图谱探索</div>
     <div id="plot3">
         <div class="row">
             <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">

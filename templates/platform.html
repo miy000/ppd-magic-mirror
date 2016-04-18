@@ -384,9 +384,46 @@
     font-size: 12px;
     color: #eee;
 }
+#search1, #search2 {
+    position: fixed;
+    top: 100px;
+    left: 0;
+    padding: 10px;
+    z-index: 999;
+    color: #f2f2f2;
+    background-color: rgba(120,120,120,0.7);
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+#search2 {
+    left: -263px;
+}
+#search2 .input-group {
+    width: 200px;
+}
+#search2 input {
+    display: inline-block;
+    padding: 5px 10px;
+    width: 200px;
+    color: #333;
+    background-color: rgba(200,200,200,0.7);
+    border: none;
+    box-shadow: none;
+}
+#search2 .input-group-addon:hover {
+    cursor: pointer;
+}
 </style>
 {% endblock %} {% block body %}
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=gW3cQ4s09L4KYCnxh7VKf26P"></script>
+<div  id="search1">
+    <div>其他平台</div>
+</div>
+<div id="search2">
+    <div class="input-group">
+        <input type="text" class="form-control"><span class="input-group-addon" style="border:none;"><span class="fa fa-fw fa-search"></span></span>
+    </div>
+</div>
 <div class="row" style="margin-bottom:30px;">
     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
         <div class="plot-title">基本信息</div>
@@ -516,6 +553,33 @@
 <script>
 $(document).ready(function() {
     $('#nav3').addClass('active');
+
+    $('#search1').mouseenter(function(event) {
+        $(this).animate({
+            left: -76,
+        },
+            120, function() {
+                $('#search2').animate({
+                    left: 0
+                }, 120);
+        });
+    });
+    $('#search2').mouseleave(function(event) {
+        $(this).animate({
+            left: -263,
+        },
+            120, function() {
+                $('#search1').animate({
+                    left: 0
+                }, 120);
+        });
+    });
+    $('#search2 .input-group-addon').click(function(event) {
+        var tmp = $(this).siblings('input').val();
+        if (tmp != '') {
+            window.location.href = "{{url_for('platform', platName='')}}" + tmp;
+        }
+    });
 
     var platformJson = eval({{platformJson|safe}});
 
