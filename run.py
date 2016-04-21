@@ -15,6 +15,7 @@ from py2neo import *
 from config import *
 import pprint
 import random
+import urllib2
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -34,10 +35,51 @@ def closedb(db,cursor):
 	db.close()
 	cursor.close()
 
+# ip 逆解析
+def ipgeo(ip):
+	headers = {}
+	headers["User-Agent"] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36"
+	url = 'http://202.112.26.122/ipgeo/?ip=' + ip
+	request = urllib2.Request(url=url, headers=headers)
+	try:
+		response = urllib2.urlopen(request, timeout=20)
+	except Exception, e:
+		result = ['','','','']
+	else:
+		result = json.loads(response.read())
+		result = result[ip]
+		if result['17mon'] in ['', None, 'null']:
+			d1 = ''
+		else:
+			d1 = result['17mon']
+		if result['cz88'] in ['', None, 'null']:
+			d2 = ''
+		else:
+			d2 = result['cz88']
+		if result['latitude'] in ['', None, 'null']:
+			d3 = ''
+		else:
+			d3 = result['latitude']
+		if result['longitude'] in ['', None, 'null']:
+			d4 = ''
+		else:
+			d4 = result['longitude']
+		result = [d1,d2,d3,d4]
+	finally:
+		pass
+	return result
+
 # 首页
 @app.route('/')
 def index():
 	(db, cursor) = connectdb()
+
+	ip = request.remote_addr
+	geo = ipgeo(ip)
+	accesstime = int(time.time())
+	cursor.execute('insert into visit_stat(ip,accesstime,part) values(%s,%s,%s)',[ip,accesstime,'index'])
+	cursor.execute('insert into visit_geo(ip,accesstime,geo,cz88,latitude,longitude) values(%s,%s,%s,%s,%s,%s)',[ip,accesstime,geo[0],geo[1],geo[2],geo[3]])
+
 	# 舆情
 	cursor.execute("select * from platform where major=1")
 	platforms = cursor.fetchall()
@@ -477,6 +519,12 @@ def people():
 def platform(platName):
 	(db, cursor) = connectdb()
 
+	ip = request.remote_addr
+	geo = ipgeo(ip)
+	accesstime = int(time.time())
+	cursor.execute('insert into visit_stat(ip,accesstime,part) values(%s,%s,%s)',[ip,accesstime,'platform'])
+	cursor.execute('insert into visit_geo(ip,accesstime,geo,cz88,latitude,longitude) values(%s,%s,%s,%s,%s,%s)',[ip,accesstime,geo[0],geo[1],geo[2],geo[3]])
+
 	cursor.execute('select * from platform where platName=%s',[platName])
 	platform = cursor.fetchone()
 	if platform == None:
@@ -636,6 +684,13 @@ def platform(platName):
 @app.route('/compare')
 def compare():
 	(db, cursor) = connectdb()
+
+	ip = request.remote_addr
+	geo = ipgeo(ip)
+	accesstime = int(time.time())
+	cursor.execute('insert into visit_stat(ip,accesstime,part) values(%s,%s,%s)',[ip,accesstime,'compare'])
+	cursor.execute('insert into visit_geo(ip,accesstime,geo,cz88,latitude,longitude) values(%s,%s,%s,%s,%s,%s)',[ip,accesstime,geo[0],geo[1],geo[2],geo[3]])
+
 	cursor.execute("select * from platform where score != '' and tSNEx != '' and tSNEy != '' order by score desc")
 	platforms = list(cursor.fetchall())
 
@@ -787,6 +842,14 @@ def compare_trade():
 
 @app.route('/question')
 def question():
+	(db, cursor) = connectdb()
+	ip = request.remote_addr
+	geo = ipgeo(ip)
+	accesstime = int(time.time())
+	cursor.execute('insert into visit_stat(ip,accesstime,part) values(%s,%s,%s)',[ip,accesstime,'question'])
+	cursor.execute('insert into visit_geo(ip,accesstime,geo,cz88,latitude,longitude) values(%s,%s,%s,%s,%s,%s)',[ip,accesstime,geo[0],geo[1],geo[2],geo[3]])
+	closedb(db, cursor)
+
 	colors = ['rgba(84, 148, 191, 0.8)','rgba(221, 107, 102, 0.8)','rgba(230, 157, 135, 0.8)','rgba(234, 126, 83, 0.8)','rgba(243, 230, 162, 0.8)', 'rgba(117, 179, 117, 0.8)']
 
 	data = []
@@ -914,7 +977,7 @@ def question():
 	data.append({'id':idx, 'name':'外商投资', 'group':5, 'order':1, 'size':14})
 	idx += 1
 
-	data.append({'id':idx, 'name':'发展指数', 'group':1, 'order':2, 'size':20})
+	data.append({'id':idx, 'name':'OMNIRANK', 'group':1, 'order':2, 'size':20})
 	idx += 1
 	data.append({'id':idx, 'name':'平均利率', 'group':1, 'order':2, 'size':20})
 	idx += 1
@@ -1069,8 +1132,8 @@ def question2():
 				query += 'where category="' + item + '" '
 			else:
 				query += 'and category="' + item + '" '
-		if item in ['发展指数','平均利率','注册资金','平均投资期限','人均投资金额','人均借款金额','成交量','历史待还','资金净流入','投资人数','借款人数','借款标数','待收投资人数','待还借款人数']:
-			if item == '发展指数':
+		if item in ['OMNIRANK','平均利率','注册资金','平均投资期限','人均投资金额','人均借款金额','成交量','历史待还','资金净流入','投资人数','借款人数','借款标数','待收投资人数','待还借款人数']:
+			if item == 'OMNIRANK':
 				torder = 'order by score '
 				select += 'score'
 				param = 'score'
@@ -1267,6 +1330,23 @@ def question3():
 			break
 
 	return json.dumps({"ok": True, "knowledge": forces, "platCount": platCount})
+
+@app.route('/stat')
+def stat():
+	(db, cursor) = connectdb()
+	
+	ip = request.remote_addr
+	geo = ipgeo(ip)
+	accesstime = int(time.time())
+	cursor.execute('insert into visit_stat(ip,accesstime,part) values(%s,%s,%s)',[ip,accesstime,'stat'])
+	cursor.execute('insert into visit_geo(ip,accesstime,geo,cz88,latitude,longitude) values(%s,%s,%s,%s,%s,%s)',[ip,accesstime,geo[0],geo[1],geo[2],geo[3]])
+
+	
+
+	closedb(db, cursor)
+
+	return render_template('stat.html')
+
 
 if __name__ == '__main__':
 	app.run(debug=True)
