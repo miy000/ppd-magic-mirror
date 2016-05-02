@@ -77,8 +77,9 @@ def index():
 	ip = request.remote_addr
 	geo = ipgeo(ip)
 	accesstime = int(time.time())
-	cursor.execute('insert into visit_stat(ip,accesstime,part) values(%s,%s,%s)',[ip,accesstime,'index'])
-	cursor.execute('insert into visit_geo(ip,accesstime,geo,cz88,latitude,longitude) values(%s,%s,%s,%s,%s,%s)',[ip,accesstime,geo[0],geo[1],geo[2],geo[3]])
+	if not ip == '127.0.0.1':
+		cursor.execute('insert into visit_stat(ip,accesstime,part) values(%s,%s,%s)',[ip,accesstime,'index'])
+		cursor.execute('insert into visit_geo(ip,accesstime,geo,cz88,latitude,longitude) values(%s,%s,%s,%s,%s,%s)',[ip,accesstime,geo[0],geo[1],geo[2],geo[3]])
 
 	# 舆情
 	cursor.execute("select * from platform where major=1")
@@ -522,8 +523,9 @@ def platform(platName):
 	ip = request.remote_addr
 	geo = ipgeo(ip)
 	accesstime = int(time.time())
-	cursor.execute('insert into visit_stat(ip,accesstime,part) values(%s,%s,%s)',[ip,accesstime,'platform'])
-	cursor.execute('insert into visit_geo(ip,accesstime,geo,cz88,latitude,longitude) values(%s,%s,%s,%s,%s,%s)',[ip,accesstime,geo[0],geo[1],geo[2],geo[3]])
+	if not ip == '127.0.0.1':
+		cursor.execute('insert into visit_stat(ip,accesstime,part) values(%s,%s,%s)',[ip,accesstime,'platform'])
+		cursor.execute('insert into visit_geo(ip,accesstime,geo,cz88,latitude,longitude) values(%s,%s,%s,%s,%s,%s)',[ip,accesstime,geo[0],geo[1],geo[2],geo[3]])
 
 	cursor.execute('select * from platform where platName=%s',[platName])
 	platform = cursor.fetchone()
@@ -688,8 +690,9 @@ def compare():
 	ip = request.remote_addr
 	geo = ipgeo(ip)
 	accesstime = int(time.time())
-	cursor.execute('insert into visit_stat(ip,accesstime,part) values(%s,%s,%s)',[ip,accesstime,'compare'])
-	cursor.execute('insert into visit_geo(ip,accesstime,geo,cz88,latitude,longitude) values(%s,%s,%s,%s,%s,%s)',[ip,accesstime,geo[0],geo[1],geo[2],geo[3]])
+	if not ip == '127.0.0.1':
+		cursor.execute('insert into visit_stat(ip,accesstime,part) values(%s,%s,%s)',[ip,accesstime,'compare'])
+		cursor.execute('insert into visit_geo(ip,accesstime,geo,cz88,latitude,longitude) values(%s,%s,%s,%s,%s,%s)',[ip,accesstime,geo[0],geo[1],geo[2],geo[3]])
 
 	cursor.execute("select * from platform where score != '' and tSNEx != '' and tSNEy != '' order by score desc")
 	platforms = list(cursor.fetchall())
@@ -846,8 +849,9 @@ def question():
 	ip = request.remote_addr
 	geo = ipgeo(ip)
 	accesstime = int(time.time())
-	cursor.execute('insert into visit_stat(ip,accesstime,part) values(%s,%s,%s)',[ip,accesstime,'question'])
-	cursor.execute('insert into visit_geo(ip,accesstime,geo,cz88,latitude,longitude) values(%s,%s,%s,%s,%s,%s)',[ip,accesstime,geo[0],geo[1],geo[2],geo[3]])
+	if not ip == '127.0.0.1':
+		cursor.execute('insert into visit_stat(ip,accesstime,part) values(%s,%s,%s)',[ip,accesstime,'question'])
+		cursor.execute('insert into visit_geo(ip,accesstime,geo,cz88,latitude,longitude) values(%s,%s,%s,%s,%s,%s)',[ip,accesstime,geo[0],geo[1],geo[2],geo[3]])
 	closedb(db, cursor)
 
 	colors = ['rgba(84, 148, 191, 0.8)','rgba(221, 107, 102, 0.8)','rgba(230, 157, 135, 0.8)','rgba(234, 126, 83, 0.8)','rgba(243, 230, 162, 0.8)', 'rgba(117, 179, 117, 0.8)']
@@ -1338,15 +1342,55 @@ def stat():
 	ip = request.remote_addr
 	geo = ipgeo(ip)
 	accesstime = int(time.time())
-	cursor.execute('insert into visit_stat(ip,accesstime,part) values(%s,%s,%s)',[ip,accesstime,'stat'])
-	cursor.execute('insert into visit_geo(ip,accesstime,geo,cz88,latitude,longitude) values(%s,%s,%s,%s,%s,%s)',[ip,accesstime,geo[0],geo[1],geo[2],geo[3]])
+	if not ip == '127.0.0.1':
+		cursor.execute('insert into visit_stat(ip,accesstime,part) values(%s,%s,%s)',[ip,accesstime,'stat'])
+		cursor.execute('insert into visit_geo(ip,accesstime,geo,cz88,latitude,longitude) values(%s,%s,%s,%s,%s,%s)',[ip,accesstime,geo[0],geo[1],geo[2],geo[3]])
 
-	
+	stat = {}
+	cursor.execute("select * from visit_geo")
+	visit_geo = list(cursor.fetchall())
+	visit_geo.sort(lambda x,y:cmp(int(x['accesstime']),int(y['accesstime'])))
+	begintime = np.min([int(x['accesstime']) for x in visit_geo])
+	endtime = np.max([int(x['accesstime']) for x in visit_geo])
+
+	cursor.execute("select * from visit_stat")
+	visit_stat = list(cursor.fetchall())
+	visit_stat.sort(lambda x,y:cmp(int(x['accesstime']),int(y['accesstime'])))	
+
+	tmp = {}
+	dist = {}
+	for x in xrange(0, len(visit_geo)):
+		visit_geo[x]['geo'] = visit_geo[x]['geo'].split(' ')[1]
+		if not tmp.has_key(visit_geo[x]['geo']):
+			tmp[visit_geo[x]['geo']] = 0
+		tmp[visit_geo[x]['geo']] += 1
+		visit_geo[x]['accesstime'] = float(visit_geo[x]['accesstime'])
+		visit_geo[x]['latitude'] = float(visit_geo[x]['latitude'])
+		visit_geo[x]['longitude'] = float(visit_geo[x]['longitude'])
+		for y in xrange(0, len(visit_stat)):
+			if visit_stat[y]['ip'] == visit_geo[x]['ip'] and float(visit_stat[y]['accesstime']) == visit_geo[x]['accesstime']:
+				visit_geo[x]['part'] = visit_stat[y]['part']
+				break
+	maxcount = 0
+	for k, v in tmp.items():
+		if v > maxcount:
+			maxcount = v
+
+	stat['geo'] = visit_geo
+	stat['begintime'] = float(begintime)
+	stat['endtime'] = float(endtime)
+	stat['maxcount'] = maxcount
+	stat['dist'] = tmp
+
+	tmp = []
+	for x in xrange(0, 6):
+		t = begintime + x * (endtime - begintime) / 5
+		tmp.append([t, time.strftime('%Y-%m-%d', time.localtime(float(t)))[2:]])
+	stat['axis'] = tmp
 
 	closedb(db, cursor)
 
-	return render_template('stat.html')
-
+	return render_template('stat.html', stat=json.dumps(stat))
 
 if __name__ == '__main__':
 	app.run(debug=True)
