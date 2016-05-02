@@ -1385,7 +1385,7 @@ def stat():
 	tmp = []
 	for x in xrange(0, 6):
 		t = begintime + x * (endtime - begintime) / 5
-		tmp.append([t, time.strftime('%Y-%m-%d', time.localtime(float(t)))[2:]])
+		tmp.append([t, time.strftime('%m-%d %H:%M', time.localtime(float(t)))])
 	stat['axis'] = tmp
 
 	closedb(db, cursor)
