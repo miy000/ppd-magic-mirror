@@ -542,6 +542,7 @@
         </div>
         <div id="cell">
             <h5> </h5>
+            <h6 style="color:#888;"> </h6>
             <p> </p>
         </div>
         <svg width="1000px" height="400px">
@@ -1337,6 +1338,7 @@ $(document).ready(function() {
             color_tmp = 3;
         }
         $('#plot5 #cell h5').css('color', plot5_colors[color_tmp]).text(platformJson['timeline'][tmp]['title']);
+        $('#plot5 #cell h6').text(platformJson['timeline'][tmp]['timestamp']);
         $('#plot5 #cell p').text(platformJson['timeline'][tmp]['content']);
     }, function() {
         // $('#plot5 #cell h5').text('');
