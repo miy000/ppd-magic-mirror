@@ -1385,7 +1385,7 @@ def stat():
 	dist = {}
 	visit_geo_tmp = []
 	for x in xrange(0, len(visit_geo)):
-		if len(visit_geo[x]['geo'].split(' ')) == 1 or visit_geo[x]['geo'].split(' ')[0] == '美国':
+		if len(visit_geo[x]['geo'].split(' ')) == 1 or (not visit_geo[x]['geo'].split(' ')[0] == '中国'):
 			continue
 		visit_geo[x]['geo'] = visit_geo[x]['geo'].split(' ')[1]
 		if not tmp.has_key(visit_geo[x]['geo']):
