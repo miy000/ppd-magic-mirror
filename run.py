@@ -1385,8 +1385,9 @@ def stat():
 	dist = {}
 	visit_geo_tmp = []
 	for x in xrange(0, len(visit_geo)):
-		if visit_geo[x]['geo'].find('美国') >= 0:
+		if visit_geo[x]['geo'].find(u'美国') >= 0:
 			continue
+		print visit_geo[x]['geo']
 		visit_geo[x]['geo'] = visit_geo[x]['geo'].split(' ')[1]
 		if not tmp.has_key(visit_geo[x]['geo']):
 			tmp[visit_geo[x]['geo']] = 0
