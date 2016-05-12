@@ -995,7 +995,7 @@ def question():
 	data.append({'id':idx, 'name':'外商投资', 'group':5, 'order':1, 'size':14})
 	idx += 1
 
-	data.append({'id':idx, 'name':'OMNIRANK', 'group':1, 'order':2, 'size':20})
+	data.append({'id':idx, 'name':'发展指数', 'group':1, 'order':2, 'size':20})
 	idx += 1
 	data.append({'id':idx, 'name':'平均利率', 'group':1, 'order':2, 'size':20})
 	idx += 1
@@ -1150,8 +1150,8 @@ def question2():
 				query += 'where category="' + item + '" '
 			else:
 				query += 'and category="' + item + '" '
-		if item in ['OMNIRANK','平均利率','注册资金','平均投资期限','人均投资金额','人均借款金额','成交量','历史待还','资金净流入','投资人数','借款人数','借款标数','待收投资人数','待还借款人数']:
-			if item == 'OMNIRANK':
+		if item in ['发展指数','平均利率','注册资金','平均投资期限','人均投资金额','人均借款金额','成交量','历史待还','资金净流入','投资人数','借款人数','借款标数','待收投资人数','待还借款人数']:
+			if item == '发展指数':
 				torder = 'order by score '
 				select += 'score'
 				param = 'score'
