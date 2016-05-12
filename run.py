@@ -1383,6 +1383,7 @@ def stat():
 
 	tmp = {}
 	dist = {}
+	visit_geo_tmp = []
 	for x in xrange(0, len(visit_geo)):
 		if len(visit_geo[x]['geo'].split(' ')) == 1:
 			continue
@@ -1397,12 +1398,13 @@ def stat():
 			if visit_stat[y]['ip'] == visit_geo[x]['ip'] and float(visit_stat[y]['accesstime']) == visit_geo[x]['accesstime']:
 				visit_geo[x]['part'] = visit_stat[y]['part']
 				break
+		visit_geo_tmp.append(visit_geo[x])
 	maxcount = 0
 	for k, v in tmp.items():
 		if v > maxcount:
 			maxcount = v
 
-	stat['geo'] = visit_geo
+	stat['geo'] = visit_geo_tmp
 	stat['begintime'] = float(begintime)
 	stat['endtime'] = float(endtime)
 	stat['maxcount'] = maxcount
