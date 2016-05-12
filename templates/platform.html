@@ -430,7 +430,7 @@
         <div id="plot11">
             <div>
                 <img src="{{platform['logo']}}" alt="">
-                <h4>OMNIRANK<span>{{platform['score']}}</span></h4>
+                <h4>OMNIRANK<span>{{platform['omnirank']}}</span></h4>
             </div>
             <div style="margin-top:15px;margin-bottom:20px;">
                 {% for t in platform['tags'].split(',') %}
@@ -553,7 +553,7 @@
 {% endif %}
 <script>
 $(document).ready(function() {
-    $('#nav3').addClass('active');
+    $('#nav2').addClass('active');
 
     $('#search1').mouseenter(function(event) {
         $(this).animate({

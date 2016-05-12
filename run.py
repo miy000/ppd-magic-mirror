@@ -333,6 +333,15 @@ def index():
 
 @app.route('/knowledge', methods=['POST'])
 def knowledge():
+	(db, cursor) = connectdb()
+	cursor.execute("select platId, omnirank from platform")
+	platforms = cursor.fetchall()
+	closedb(db, cursor)
+	tmp = {}
+	for item in platforms:
+		tmp[str(item['platId'])] = item['omnirank'][:5]
+	platforms = tmp
+
 	data = request.form
 	name = data['name']
 	records = graph.cypher.execute("match (p),(p)-[]-(n) where p.name={name} return p, n", name=name)
@@ -370,6 +379,7 @@ def knowledge():
 				tmp['logo'] = item[0].properties['logo']
 				tmp['stockTransfer'] = item[0].properties['stockTransfer']
 				tmp['homepage'] = item[0].properties['homepage']
+				tmp['omnirank'] = platforms[str(item[0].properties['platId'])]
 			elif label == 'Person':
 				tmp['group'] = 2
 				tmp['description'] = item[0].properties['description']
@@ -412,6 +422,7 @@ def knowledge():
 				tmp['logo'] = item[1].properties['logo']
 				tmp['stockTransfer'] = item[1].properties['stockTransfer']
 				tmp['homepage'] = item[1].properties['homepage']
+				tmp['omnirank'] = platforms[str(item[1].properties['platId'])]
 			elif label == 'Person':
 				tmp['group'] = 2
 				tmp['description'] = item[1].properties['description']
@@ -535,6 +546,8 @@ def platform(platName):
 
 	cursor.execute('select * from people where platPin=%s', [platform['platPin']])
 	people = cursor.fetchall()
+
+	platform['omnirank'] = platform['omnirank'][:5]
 
 	for x in xrange(0, len(people)):
 		people[x]['number'] = x + 1
@@ -709,6 +722,7 @@ def compare():
 		platforms[x]['averageProfit'] = float(platforms[x]['averageProfit'][:-1])
 		platforms[x]['registMoney'] = float(platforms[x]['registMoney'][:platforms[x]['registMoney'].find('万元')])
 		platforms[x]['location'] = platforms[x]['location'].replace('|', ' ')
+		platforms[x]['omnirank'] = platforms[x]['omnirank'][:5]
 		
 		if platforms[x]['location'] == '':
 			platforms[x]['location'] = '-'
@@ -1231,6 +1245,15 @@ def question2():
 
 @app.route('/question3', methods=['POST'])
 def question3():
+	(db, cursor) = connectdb()
+	cursor.execute("select platId, omnirank from platform")
+	mapping = cursor.fetchall()
+	closedb(db, cursor)
+	tmp = {}
+	for item in mapping:
+		tmp[str(item['platId'])] = item['omnirank'][:5]
+	mapping = tmp
+
 	data = request.form
 
 	location = data['location']
@@ -1304,6 +1327,7 @@ def question3():
 					tmp['logo'] = it.properties['logo']
 					tmp['stockTransfer'] = it.properties['stockTransfer']
 					tmp['homepage'] = it.properties['homepage']
+					tmp['omnirank'] = mapping[str(it.properties['platId'])]
 				elif label == 'Person':
 					tmp['group'] = 2
 					tmp['description'] = it.properties['description']

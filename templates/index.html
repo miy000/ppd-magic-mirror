@@ -1447,7 +1447,7 @@ $(document).ready(function() {
             $('#info #description').hide();
 
             $('#info #portrait').css('width', '100px').attr('src', forces.nodes[node_id].logo);
-            $('#info h4 span').text(forces.nodes[node_id].score);
+            $('#info h4 span').text(forces.nodes[node_id].omnirank);
             $('#info #averageProfit span').text(forces.nodes[node_id].averageProfit);
             $('#info #lauchTime span').text(forces.nodes[node_id].lauchTime);
             $('#info #registMoney span').text(forces.nodes[node_id].registMoney);
@@ -1496,7 +1496,7 @@ $(document).ready(function() {
             $('#info #description').hide();
 
             $('#info #portrait').css('width', '100px').attr('src', forces.nodes[node_id].logo);
-            $('#info h4 span').text(forces.nodes[node_id].score);
+            $('#info h4 span').text(forces.nodes[node_id].omnirank);
             $('#info #averageProfit span').text(forces.nodes[node_id].averageProfit);
             $('#info #lauchTime span').text(forces.nodes[node_id].lauchTime);
             $('#info #registMoney span').text(forces.nodes[node_id].registMoney);
@@ -1904,7 +1904,7 @@ $(document).ready(function() {
     var plot7_line = d3.svg.line();
     var plot7_axis = d3.svg.axis().orient("left").tickPadding([5]);
     var plot7_foreground;
-    var plot7_num = 20;
+    var plot7_num = 25;
     var tmp = d3.interpolate(d3.rgb(192, 70, 77), d3.rgb(245, 236, 165));
     var plot7_colors = [];
     var plot7_data = [];
@@ -2084,7 +2084,7 @@ $(document).ready(function() {
         }).remove();
 
         plot7_num += 1;
-        if (plot7_num == 31) {
+        if (plot7_num == 33) {
             plot7_num = 10;
         }
     }
@@ -2240,7 +2240,7 @@ $(document).ready(function() {
     }
 
     var tmp = [];
-    for (var i = 0; i < 31; i++) {
+    for (var i = 0; i < 33; i++) {
         tmp.push(i);
     }
     d3.select('#plot8 svg g').selectAll('line').data(tmp).enter().append('line').attr({
@@ -2256,7 +2256,7 @@ $(document).ready(function() {
         'stroke-width': 1,
         'shape-rendering': 'crispEdges',
     }).transition().duration(800).attr('stroke', function(d,i){
-        if (i % 3 == 0) {
+        if (i % 4 == 0) {
             return 'rgba(240, 240, 240, 0.4)';
         }
         else {
@@ -2264,11 +2264,11 @@ $(document).ready(function() {
         }
         
     });
-
-    var tmp = ['2013-08', '2013-11', '2014-02', '2014-05', '2014-08', '2014-11', '2015-02', '2015-05', '2015-08', '2015-11', '2016-02'];
+    console.log(platCount['flow']);
+    var tmp = ['2013-08', '2013-12', '2014-04', '2014-08', '2014-12', '2015-04', '2015-08', '2015-12', '2016-04'];
     d3.select('#plot8 svg g').selectAll('text.month').data(tmp).enter().append('text').attr({
         x: function(d, i) {
-            return plot8_margin[3] + 3 * i * parseFloat(plot8_width) / (platCount['flow'][plot8_index]['content'][0][0].length / 2 - 1) - 30;
+            return plot8_margin[3] + 4 * i * parseFloat(plot8_width) / (platCount['flow'][plot8_index]['content'][0][0].length / 2 - 1) - 30;
         },
         y: 40,
         'fill-opacity': 0,

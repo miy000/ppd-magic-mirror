@@ -427,7 +427,7 @@
 </div>
 <script>
 $(document).ready(function() {
-    $('#nav4').addClass('active');
+    $('#nav3').addClass('active');
 
     var selectCount = 0;
     var platform1 = '拍拍贷';
@@ -705,7 +705,7 @@ $(document).ready(function() {
 
         var bar_data = [];
         var bar_names = ['OMNIRANK', '平均利润/%', '注册资金/万元', '成交量/万元', '历史待还/万元', '资金净流入/万元', '投资人数/人', '借款人数/人', '待收投资人数/人', '待还借款人数/人', '借款标数/个', '人均投资金额/元', '人均借款金额/万元', '平均借款期限/月'];
-        var tmp_list = ['score', 'averageProfit', 'registMoney'];
+        var tmp_list = ['omnirank', 'averageProfit', 'registMoney'];
         for (var i = 0; i < tmp_list.length; i++) {
             var length1 = tmp1[tmp_list[i]] / (tmp1[tmp_list[i]] + tmp2[tmp_list[i]]);
             var length2 = tmp2[tmp_list[i]] / (tmp1[tmp_list[i]] + tmp2[tmp_list[i]]);
