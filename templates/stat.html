@@ -310,7 +310,6 @@ $(document).ready(function() {
     }
     d3.select('#statesvg').selectAll('circle').data(stat['geo']).enter().append('circle').attr({
         cx: function(d){
-            console.log(d['geo']);
         	return sampleData[d['geo']]['x'];
         },
         cy: function(d){
