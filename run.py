@@ -1383,11 +1383,10 @@ def stat():
 
 	tmp = {}
 	dist = {}
-	visit_geo_tmp = []
+	tmp_geo = []
 	for x in xrange(0, len(visit_geo)):
-		if visit_geo[x]['geo'].find(u'美国') >= 0:
+		if visit_geo[x]['geo'].find('中国') == -1:
 			continue
-		print visit_geo[x]['geo']
 		visit_geo[x]['geo'] = visit_geo[x]['geo'].split(' ')[1]
 		if not tmp.has_key(visit_geo[x]['geo']):
 			tmp[visit_geo[x]['geo']] = 0
@@ -1399,14 +1398,13 @@ def stat():
 			if visit_stat[y]['ip'] == visit_geo[x]['ip'] and float(visit_stat[y]['accesstime']) == visit_geo[x]['accesstime']:
 				visit_geo[x]['part'] = visit_stat[y]['part']
 				break
-		visit_geo_tmp.append(visit_geo[x])
+		tmp_geo.append(visit_geo[x])
 	maxcount = 0
 	for k, v in tmp.items():
 		if v > maxcount:
 			maxcount = v
 
-	stat['geo'] = visit_geo_tmp
-
+	stat['geo'] = tmp_geo
 	stat['begintime'] = float(begintime)
 	stat['endtime'] = float(endtime)
 	stat['maxcount'] = maxcount
