@@ -9,7 +9,8 @@
 
 #main .state {
     fill: none;
-    stroke: #323C48;
+    /*stroke: #323C48;*/
+    stroke: #506782;
     stroke-width: 1px;
 }
 
@@ -59,7 +60,7 @@
     <svg width="560" height="480" id="statesvg">		
     </svg>
 </div>
-<div style="text-align:center;">
+<div style="text-align:center;margin-top:10px;">
 	<svg width="1000" height="200" id="timeline">
 		<g></g>
 	</svg>
@@ -330,7 +331,7 @@ $(document).ready(function() {
 	    			sampleData[d['geo']]['count'] = 0;
 	    		}
 	    		sampleData[d['geo']]['count'] += 1;
-	    		var opacity = Math.sqrt(sampleData[d['geo']]['count'] / parseFloat(stat['maxcount']));
+	    		var opacity = Math.sqrt(Math.sqrt(sampleData[d['geo']]['count'] / parseFloat(stat['maxcount'])));
     			$('#statesvg path[name="' + d['geo'] + '"]').css('fill', 'rgba(192, 70, 77, ' + opacity + ')');
     		}, interval * parseFloat(d['accesstime'] - stat['begintime']) / parseFloat(stat['endtime'] - stat['begintime']));
     		return 30;
