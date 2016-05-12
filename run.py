@@ -1385,7 +1385,7 @@ def stat():
 	dist = {}
 	visit_geo_tmp = []
 	for x in xrange(0, len(visit_geo)):
-		if len(visit_geo[x]['geo'].split(' ')) == 1 or (not visit_geo[x]['geo'].split(' ')[0] == '中国'):
+		if visit_geo[x]['geo'].find('美国') >= 0:
 			continue
 		visit_geo[x]['geo'] = visit_geo[x]['geo'].split(' ')[1]
 		if not tmp.has_key(visit_geo[x]['geo']):
@@ -1405,6 +1405,7 @@ def stat():
 			maxcount = v
 
 	stat['geo'] = visit_geo_tmp
+
 	stat['begintime'] = float(begintime)
 	stat['endtime'] = float(endtime)
 	stat['maxcount'] = maxcount
