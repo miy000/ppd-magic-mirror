@@ -57,6 +57,7 @@
 {% endblock %} {% block body %}
 <div id="tooltip"></div>
 <div style="text-align:center;">
+    <div id="number" style="margin-bottom:-30px;color:#ddd;">共计 <span style="color:rgb(192,70,77);font-size:20px;">0</span> 次访问</div>
     <svg width="560" height="480" id="statesvg">		
     </svg>
 </div>
@@ -331,6 +332,7 @@ $(document).ready(function() {
 	    			sampleData[d['geo']]['count'] = 0;
 	    		}
 	    		sampleData[d['geo']]['count'] += 1;
+                $('#number span').text(parseInt($('#number span').text()) + 1);
 	    		var opacity = Math.sqrt(Math.sqrt(sampleData[d['geo']]['count'] / parseFloat(stat['maxcount'])));
     			$('#statesvg path[name="' + d['geo'] + '"]').css('fill', 'rgba(192, 70, 77, ' + opacity + ')');
     		}, interval * parseFloat(d['accesstime'] - stat['begintime']) / parseFloat(stat['endtime'] - stat['begintime']));

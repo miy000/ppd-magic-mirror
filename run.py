@@ -1371,7 +1371,7 @@ def stat():
 		cursor.execute('insert into visit_geo(ip,accesstime,geo,cz88,latitude,longitude) values(%s,%s,%s,%s,%s,%s)',[ip,accesstime,geo[0],geo[1],geo[2],geo[3]])
 
 	stat = {}
-	cursor.execute("select * from visit_geo where geo like %s%%",['中国'])
+	cursor.execute("select * from visit_geo where geo like %s",['中国%'])
 	visit_geo = list(cursor.fetchall())
 	visit_geo.sort(lambda x,y:cmp(int(x['accesstime']),int(y['accesstime'])))
 	begintime = np.min([int(x['accesstime']) for x in visit_geo])
