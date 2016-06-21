@@ -1385,7 +1385,7 @@ def stat():
 	dist = {}
 	tmp_geo = []
 	for x in xrange(0, len(visit_geo)):
-		if visit_geo[x]['geo'].find('中国') == -1:
+		if visit_geo[x]['geo'].find('中国 ') == -1:
 			continue
 		if len(visit_geo[x]['geo'].split(' ')) == 1:
 			continue
